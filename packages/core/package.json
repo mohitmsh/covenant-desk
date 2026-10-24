@@ -1,0 +1,23 @@
+{
+  "name": "@covenant-desk/core",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./types": "./src/types/index.ts",
+    "./text": "./src/utils/text.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.11",
+    "effect": "^4.0.6",
+    "pdfjs-dist": "^6.4.299",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.23.1"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  }
+}
