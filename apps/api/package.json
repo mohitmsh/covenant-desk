@@ -1,0 +1,18 @@
+{
+  "name": "@covenant-desk/api",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=../../.env src/main.ts"
+  },
+  "dependencies": {
+    "@covenant-desk/core": "*",
+    "@hono/node-server": "^2.1.5",
+    "hono": "^4.13.13",
+    "@covenant-desk/agent": "*",
+    "@covenant-desk/fixtures": "*"
+  }
+}
