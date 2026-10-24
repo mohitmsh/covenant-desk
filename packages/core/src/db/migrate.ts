@@ -31,3 +31,13 @@ export const migrate = Effect.gen(function* () {
     )
   }
 })
+
+/** Empties every application table, keeping the schema. Used to restore a hosted demo to its seeded state. */
+export const truncateAll = Effect.gen(function* () {
+  const db = yield* Db
+  const tables = yield* db.query<{ name: string }>(
+    `select tablename as name from pg_tables where schemaname = 'public' and tablename <> 'schema_migrations'`
+  )
+  if (tables.length === 0) return
+  yield* db.exec(`truncate table ${tables.map((t) => `"${t.name}"`).join(", ")} cascade`)
+})

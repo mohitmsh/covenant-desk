@@ -4,6 +4,7 @@ import type { CovenantResult } from "#types/covenants"
 import type { JsonValue } from "#types/db"
 import type { VerifiedFigure } from "#types/figures"
 import type { BorrowerId, DocumentId, RunId } from "#types/ids"
+import type { Issue } from "#types/issues"
 
 export type RunStatus = (typeof RUN_STATUSES)[number]
 
@@ -87,6 +88,7 @@ export interface RunDetail {
   readonly covenants: ReadonlyArray<CovenantResult>
   readonly certificateClaims: ReadonlyArray<VerifiedCertificateClaim>
   readonly certificateComparisons: ReadonlyArray<CertificateComparison>
+  readonly issues: ReadonlyArray<Issue>
   readonly note: Note | null
   readonly approval: Approval | null
   readonly events: ReadonlyArray<AuditEvent>

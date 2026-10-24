@@ -34,6 +34,7 @@ const claim = (overrides: Partial<VerifiedCertificateClaim>): VerifiedCertificat
   claimsCompliance: false,
   page: 6,
   quote: "Net leverage ratio 4.06",
+  box: null,
   ...overrides
 })
 

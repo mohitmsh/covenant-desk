@@ -1,5 +1,6 @@
 export * from "./covenants"
 export * from "./db"
+export * from "./issues"
 export * from "./pdf"
 export * from "./runs"
 export * from "./storage"

@@ -6,6 +6,7 @@ import { FigureClaimSchema } from "#schemas/figures"
 import type { CertificateClaim, VerifiedCertificateClaim } from "#types/certificate"
 import type { FigureClaim, VerifiedFigure } from "#types/figures"
 import type { PdfText } from "#types/pdf"
+import { locateQuote } from "#utils/layout"
 import { parseNumbers, sameMagnitude } from "#utils/numbers"
 import { canonicalText, countLetters } from "#utils/text"
 
@@ -49,16 +50,20 @@ export const verifySource = (claim: SourceClaim, pdf: PdfText) =>
     }
   })
 
-/** Verifies a figure claim against the source document and converts it to whole dollars. */
+const sourceBox = (claim: SourceClaim, pdf: PdfText) => locateQuote(pdf.layout[claim.page - 1] ?? [], claim.quote)
+
+/** Verifies a figure claim against the source document, converts it to whole dollars and locates it. */
 export const verifyFigure = (claim: FigureClaim, pdf: PdfText) =>
   Effect.as(verifySource(claim, pdf), {
     ...claim,
-    value: Math.abs(claim.reported) * claim.scale
+    value: Math.abs(claim.reported) * claim.scale,
+    box: sourceBox(claim, pdf)
   } satisfies VerifiedFigure)
 
-/** Verifies a certificate claim against the source document. */
+/** Verifies a certificate claim against the source document and locates it. */
 export const verifyCertificateClaim = (claim: CertificateClaim, pdf: PdfText) =>
   Effect.as(verifySource(claim, pdf), {
     ...claim,
-    value: Math.abs(claim.reported) * claim.scale
+    value: Math.abs(claim.reported) * claim.scale,
+    box: sourceBox(claim, pdf)
   } satisfies VerifiedCertificateClaim)

@@ -14,10 +14,20 @@ export const recordFigure = (runId: RunId, figure: VerifiedFigure, actor: string
       const db = yield* Db
       yield* requireRunStatus(runId, ["extracting"], "record figures")
       yield* db.query(
-        `insert into figures (run_id, key, reported, scale, value, page, quote) values ($1, $2, $3, $4, $5, $6, $7)
+        `insert into figures (run_id, key, reported, scale, value, page, quote, box)
+         values ($1, $2, $3, $4, $5, $6, $7, $8)
        on conflict (run_id, key) do update set reported = excluded.reported, scale = excluded.scale,
-         value = excluded.value, page = excluded.page, quote = excluded.quote, recorded_at = now()`,
-        [runId, figure.key, figure.reported, figure.scale, figure.value, figure.page, figure.quote]
+         value = excluded.value, page = excluded.page, quote = excluded.quote, box = excluded.box, recorded_at = now()`,
+        [
+          runId,
+          figure.key,
+          figure.reported,
+          figure.scale,
+          figure.value,
+          figure.page,
+          figure.quote,
+          JSON.stringify(figure.box)
+        ]
       )
       yield* appendEvent(runId, actor, AUDIT_EVENT_KINDS.FIGURE_VERIFIED, figure)
     })
@@ -36,7 +46,7 @@ export const listFigures = (runId: RunId) =>
   Effect.gen(function* () {
     const db = yield* Db
     return yield* db.query<VerifiedFigure>(
-      `select key, reported::float8 as reported, scale::float8 as scale, value::float8 as value, page, quote
+      `select key, reported::float8 as reported, scale::float8 as scale, value::float8 as value, page, quote, box
        from figures where run_id = $1 order by key`,
       [runId]
     )

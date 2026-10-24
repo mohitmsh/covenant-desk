@@ -1,5 +1,6 @@
 import type { CertificateClaimSchema } from "#schemas/certificate"
 import type { CovenantStatus, Metric } from "#types/covenants"
+import type { PageBox } from "#types/pdf"
 
 export type CertificateClaim = typeof CertificateClaimSchema.Type
 
@@ -7,6 +8,8 @@ export type CertificateClaim = typeof CertificateClaimSchema.Type
 export interface VerifiedCertificateClaim extends CertificateClaim {
   /** `reported × scale`: a ratio, or whole dollars. */
   readonly value: number
+  /** Where the quote sits on its page; null when the text layer cannot place it. */
+  readonly box: PageBox | null
 }
 
 export type CertificateDisagreement = "value" | "compliance"

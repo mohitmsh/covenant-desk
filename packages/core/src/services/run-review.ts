@@ -5,6 +5,7 @@ import { getBorrower } from "#repositories/borrowers"
 import { listCertificateClaims } from "#repositories/certificate-claims"
 import { getCovenantResults } from "#repositories/covenant-results"
 import { getDocument } from "#repositories/documents"
+import { listIssues } from "#repositories/issues"
 import { listFigures } from "#repositories/figures"
 import { getLatestNote } from "#repositories/notes"
 import { getRunDocumentId, getRunSummary } from "#repositories/runs"
@@ -17,16 +18,18 @@ export const getRunDetail = (runId: RunId) =>
   Effect.gen(function* () {
     const run = yield* getRunSummary(runId)
     const documentId = yield* getRunDocumentId(runId)
-    const [borrower, document, figures, covenants, certificateClaims, note, approval, events] = yield* Effect.all([
-      getBorrower(run.borrowerId),
-      getDocument(documentId),
-      listFigures(runId),
-      getCovenantResults(runId),
-      listCertificateClaims(runId),
-      getLatestNote(runId),
-      getApproval(runId),
-      listEvents(runId)
-    ])
+    const [borrower, document, figures, covenants, certificateClaims, issues, note, approval, events] =
+      yield* Effect.all([
+        getBorrower(run.borrowerId),
+        getDocument(documentId),
+        listFigures(runId),
+        getCovenantResults(runId),
+        listCertificateClaims(runId),
+        listIssues(runId),
+        getLatestNote(runId),
+        getApproval(runId),
+        listEvents(runId)
+      ])
     return {
       run,
       borrower,
@@ -35,6 +38,7 @@ export const getRunDetail = (runId: RunId) =>
       covenants,
       certificateClaims,
       certificateComparisons: compareCertificates(covenants, certificateClaims),
+      issues,
       note,
       approval,
       events

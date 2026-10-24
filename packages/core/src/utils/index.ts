@@ -1,6 +1,7 @@
 export * from "./errors"
 export * from "./format"
 export * from "./hash"
+export * from "./layout"
 export * from "./numbers"
 export * from "./paths"
 export * from "./text"

@@ -12,7 +12,11 @@ export const AUDIT_EVENT_KINDS = {
   RUN_FAILED: "run.failed",
   CERTIFICATE_VERIFIED: "certificate.verified",
   CERTIFICATE_REJECTED: "certificate.rejected",
-  AGENT_TURN: "agent.turn"
+  AGENT_TURN: "agent.turn",
+  CHECKS_COMPLETED: "checks.completed",
+  ISSUE_DECIDED: "issue.decided",
+  ISSUE_REMEMBERED: "issue.remembered",
+  ISSUE_REOPENED: "issue.reopened"
 } as const
 
 /** Window in which an unfinished agent run blocks a new one, in minutes. */

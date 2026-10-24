@@ -9,7 +9,8 @@ export const verifiedFigure = (key: FigureKey, value: number, page = 3): Verifie
   reported: value / DEFAULT_SCALE,
   scale: DEFAULT_SCALE,
   page,
-  quote: `${key} ${value / DEFAULT_SCALE}`
+  quote: `${key} ${value / DEFAULT_SCALE}`,
+  box: null
 })
 
 /** Builds a figure set from whole-dollar values. */

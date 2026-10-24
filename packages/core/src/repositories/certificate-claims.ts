@@ -14,12 +14,22 @@ export const recordCertificateClaim = (runId: RunId, claim: VerifiedCertificateC
       const db = yield* Db
       yield* requireRunStatus(runId, ["extracting", "tested"], "record certificate claims")
       yield* db.query(
-        `insert into certificate_claims (run_id, metric, reported, scale, value, claims_compliance, page, quote)
-         values ($1, $2, $3, $4, $5, $6, $7, $8)
+        `insert into certificate_claims (run_id, metric, reported, scale, value, claims_compliance, page, quote, box)
+         values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          on conflict (run_id, metric) do update set reported = excluded.reported, scale = excluded.scale,
            value = excluded.value, claims_compliance = excluded.claims_compliance, page = excluded.page,
-           quote = excluded.quote, recorded_at = now()`,
-        [runId, claim.metric, claim.reported, claim.scale, claim.value, claim.claimsCompliance, claim.page, claim.quote]
+           quote = excluded.quote, box = excluded.box, recorded_at = now()`,
+        [
+          runId,
+          claim.metric,
+          claim.reported,
+          claim.scale,
+          claim.value,
+          claim.claimsCompliance,
+          claim.page,
+          claim.quote,
+          JSON.stringify(claim.box)
+        ]
       )
       yield* appendEvent(runId, actor, AUDIT_EVENT_KINDS.CERTIFICATE_VERIFIED, claim)
     })
@@ -38,7 +48,7 @@ export const listCertificateClaims = (runId: RunId) =>
     const db = yield* Db
     return yield* db.query<VerifiedCertificateClaim>(
       `select metric, reported::float8 as reported, scale::float8 as scale, value::float8 as value,
-         claims_compliance as "claimsCompliance", page, quote
+         claims_compliance as "claimsCompliance", page, quote, box
        from certificate_claims where run_id = $1 order by metric`,
       [runId]
     )

@@ -18,7 +18,7 @@ export const toFigureSet = (figures: Record<FigureKey, AnswerKeyEntry>): FigureS
   const set: FigureSet = {}
   for (const key of FIGURE_KEYS) {
     const { value, pages } = figures[key]
-    set[key] = { key, value, reported: value / THOUSAND, scale: THOUSAND, page: pages[0] ?? 1, quote: "" }
+    set[key] = { key, value, reported: value / THOUSAND, scale: THOUSAND, page: pages[0] ?? 1, quote: "", box: null }
   }
   return set
 }
