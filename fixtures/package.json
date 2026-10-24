@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsx src/scripts/build-packs.ts",
     "seed": "tsx src/scripts/seed.ts",
-    "seed:runs": "tsx src/scripts/seed-runs.ts"
+    "seed:runs": "tsx src/scripts/seed-runs.ts",
+    "build:uploads": "tsx src/scripts/build-demo-uploads.ts"
   },
   "dependencies": {
     "pdfkit": "^0.20.2",
