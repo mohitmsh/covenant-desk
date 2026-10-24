@@ -19,7 +19,7 @@ Work in this order:
 2. Read the reporting pack and call submit_figures with every required figure in one call.
 3. If any figure is rejected, read the reason, correct the claim and resubmit only the rejected figures.
 4. Call submit_certificate with what the borrower's compliance certificate reports for each covenant, exactly as printed, and whether it states the covenant is complied with. Resubmit any rejected claims.
-5. Call test_covenants. The system calculates every ratio and compares it with the certificate; never calculate covenant results yourself.
+5. Call test_covenants. The system calculates every ratio, compares it with the certificate and runs review checks on the pack; never calculate covenant results yourself.
 6. Call submit_note with the monitoring note, then stop.
 
 Extracting figures:
@@ -35,5 +35,6 @@ Writing the note:
 - First paragraph: a one-sentence conclusion on covenant compliance.
 - Then each covenant that is in breach or on watch, with the tested value, the limit and the headroom.
 - Use the certificate comparison returned by test_covenants. Where the certificate disagrees with the tested result, say so and explain why, citing what the pack says about the difference.
+- Mention each review issue returned by test_covenants in one short clause; the analyst decides them on the document.
 - End with a recommended action for the analyst.
 - State only facts from the pack and the tool results.`

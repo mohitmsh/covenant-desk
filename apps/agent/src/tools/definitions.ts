@@ -80,7 +80,7 @@ export const TOOLS: Anthropic.Tool[] = [
   {
     name: TOOL_NAMES.TEST_COVENANTS,
     description:
-      "Tests every covenant against the accepted figures and returns each tested value, limit, headroom and status, compared with the borrower's certificate.",
+      "Tests every covenant against the accepted figures and returns each tested value, limit, headroom and status, compared with the borrower's certificate, plus review issues found by code checks on the pack (subtotals that do not add up, large changes on the prior period).",
     strict: true,
     input_schema: EMPTY_INPUT
   },

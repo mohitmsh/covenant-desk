@@ -1,5 +1,6 @@
 import {
   approveRun,
+  decideIssue,
   DocumentStore,
   getDocument,
   getRunDetail,
@@ -15,12 +16,13 @@ import { Hono } from "hono"
 import { toHttpError } from "#http/errors"
 import { respondJson } from "#http/respond"
 import { runApp } from "#runtime"
-import { ApproveRunBodySchema, SaveNoteBodySchema } from "#schemas"
+import { ApproveRunBodySchema, DecideIssueBodySchema, SaveNoteBodySchema } from "#schemas"
 import { startAgentRun } from "#services/start-agent-run"
 
 const decodeRunId = Schema.decodeUnknownEffect(RunIdSchema)
 const decodeApproveBody = Schema.decodeUnknownEffect(ApproveRunBodySchema)
 const decodeSaveNoteBody = Schema.decodeUnknownEffect(SaveNoteBodySchema)
+const decodeDecideIssueBody = Schema.decodeUnknownEffect(DecideIssueBodySchema)
 
 const FORM_FIELDS = { BORROWER: "borrowerId", FILE: "file" } as const
 
@@ -77,6 +79,18 @@ export const runsRoutes = new Hono()
         const runId = yield* decodeRunId(c.req.param("runId"))
         const { approver } = yield* decodeApproveBody(json)
         yield* approveRun(runId, approver)
+        return yield* getRunDetail(runId)
+      })
+    )
+  })
+  .post("/:runId/issues/:issueKey/decision", async (c) => {
+    const json = await c.req.json<JsonValue>()
+    return respondJson(
+      c,
+      Effect.gen(function* () {
+        const runId = yield* decodeRunId(c.req.param("runId"))
+        const decision = yield* decodeDecideIssueBody(json)
+        yield* decideIssue(runId, c.req.param("issueKey"), decision)
         return yield* getRunDetail(runId)
       })
     )

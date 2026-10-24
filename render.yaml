@@ -11,3 +11,5 @@ services:
         sync: false
       - key: DAILY_AGENT_RUN_LIMIT
         value: "20"
+      - key: RESET_DEMO_ON_START
+        value: "true"

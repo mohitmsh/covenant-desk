@@ -7,6 +7,7 @@ import {
   recordCertificateClaim,
   recordRejectedCertificateClaim,
   recordCovenantResults,
+  runChecks,
   recordFigure,
   recordRejectedFigure,
   saveNote,
@@ -87,6 +88,7 @@ const testCovenants = (ctx: RunContext) =>
   Effect.gen(function* () {
     const results = yield* testAll(ctx.covenants, yield* getFigures(ctx.runId))
     yield* recordCovenantResults(ctx.runId, results, AGENT_ACTOR)
+    const findings = yield* runChecks(ctx.runId, ctx.pdf, AGENT_ACTOR)
     const comparisons = compareCertificates(results, yield* listCertificateClaims(ctx.runId))
     return ok({
       certificateComparison: comparisons.map((c) => ({
@@ -107,7 +109,8 @@ const testCovenants = (ctx: RunContext) =>
         limit: r.limit,
         headroomPercent: Number((r.headroom * 100).toFixed(1)),
         status: r.status
-      }))
+      })),
+      reviewIssues: findings.map((f) => ({ page: f.page, issue: f.title, detail: f.detail }))
     })
   }).pipe(
     Effect.catchTags({

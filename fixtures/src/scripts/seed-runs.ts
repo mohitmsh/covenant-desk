@@ -10,11 +10,13 @@ import {
   recordCertificateClaim,
   recordCovenantResults,
   recordFigure,
+  runChecks,
   registerDocument,
   saveNote,
   startRun,
   storageLayerFromEnv,
   testAll,
+  truncateAll,
   upsertBorrower,
   verifyCertificateClaim,
   verifyFigure
@@ -96,6 +98,7 @@ const seedRun = (spec: PackSpec) =>
     const { covenants } = yield* getMonitoringContext(spec.borrower.id)
     const results = yield* testAll(covenants, yield* getFigures(runId))
     yield* recordCovenantResults(runId, results, SEED_ACTOR)
+    yield* runChecks(runId, pdf, SEED_ACTOR)
     yield* saveNote(runId, DEMO_NOTES[spec.borrower.id] ?? "", SEED_ACTOR)
 
     console.log(`Seeded run for ${spec.borrower.name}: ${results.map((r) => `${r.name} ${r.status}`).join(", ")}`)
@@ -103,6 +106,10 @@ const seedRun = (spec: PackSpec) =>
 
 const program = Effect.gen(function* () {
   yield* migrate
+  if (process.env.RESET_DEMO_ON_START === "true") {
+    yield* truncateAll
+    console.log("Reset demo data")
+  }
   const existing = new Set((yield* listRuns).map((run) => `${run.borrowerId}/${run.period}`))
   for (const spec of PACKS) {
     yield* upsertBorrower(spec.borrower, spec.covenants, COVENANTS_EFFECTIVE_FROM)

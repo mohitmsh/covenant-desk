@@ -19,6 +19,7 @@ const CLIENT_ERRORS: Readonly<Record<string, ContentfulStatusCode>> = {
   RunLimitReached: HTTP_STATUS.TOO_MANY_REQUESTS,
   SchemaError: HTTP_STATUS.UNPROCESSABLE,
   InvalidUpload: HTTP_STATUS.UNPROCESSABLE,
+  InvalidDecision: HTTP_STATUS.UNPROCESSABLE,
   PdfUnreadable: HTTP_STATUS.UNPROCESSABLE,
   AgentUnavailable: HTTP_STATUS.SERVICE_UNAVAILABLE
 }
