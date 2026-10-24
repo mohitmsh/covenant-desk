@@ -1,0 +1,46 @@
+.meter {
+  position: relative;
+  height: 6px;
+  border-radius: var(--radius-pill);
+}
+
+.meter[data-status="pass"] {
+  background: var(--meter-pass-track);
+}
+
+.meter[data-status="watch"] {
+  background: var(--meter-watch-track);
+}
+
+.meter[data-status="breach"] {
+  background: var(--meter-breach-track);
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-pill);
+}
+
+.meter[data-status="pass"] .fill {
+  background: var(--status-pass);
+}
+
+.meter[data-status="watch"] .fill {
+  background: var(--status-watch);
+}
+
+.meter[data-status="breach"] .fill {
+  background: var(--status-breach);
+}
+
+.limit {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px var(--tile);
+}

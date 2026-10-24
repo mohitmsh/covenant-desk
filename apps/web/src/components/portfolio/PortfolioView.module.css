@@ -1,0 +1,104 @@
+.scroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.content {
+  display: grid;
+  gap: 28px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 36px 40px 64px;
+}
+
+.title {
+  font-size: var(--fs-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+}
+
+.table th {
+  padding: 0 12px 10px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  font-weight: 400;
+  text-align: left;
+}
+
+.table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: 0;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover td {
+  background: var(--paper-2);
+}
+
+.borrower {
+  display: block;
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+.facility {
+  display: block;
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.monitoring,
+.covenantValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.covenant {
+  display: grid;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mismatch {
+  justify-self: start;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--status-breach-wash);
+  color: var(--status-breach);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.empty {
+  color: var(--faint);
+}

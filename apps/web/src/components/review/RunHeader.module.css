@@ -1,0 +1,55 @@
+.header {
+  display: grid;
+  gap: 18px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.title {
+  margin-top: 2px;
+  font-size: var(--fs-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--fs-body);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.facts dt {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.facts dd {
+  margin: 3px 0 0;
+  font-size: var(--fs-small);
+}
+
+.analyst {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

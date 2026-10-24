@@ -1,0 +1,18 @@
+export const API_BASE = "/api"
+
+export const API_ROUTES = {
+  borrowers: `${API_BASE}/borrowers`,
+  portfolio: `${API_BASE}/portfolio`,
+  runs: `${API_BASE}/runs`,
+  run: (runId: string) => `${API_BASE}/runs/${runId}`,
+  runDocument: (runId: string) => `${API_BASE}/runs/${runId}/document`,
+  runNotes: (runId: string) => `${API_BASE}/runs/${runId}/notes`,
+  runApprove: (runId: string) => `${API_BASE}/runs/${runId}/approve`
+} as const
+
+export const QUERY_KEYS = {
+  borrowers: ["borrowers"],
+  portfolio: ["portfolio"],
+  runs: ["runs"],
+  run: (runId: string) => ["runs", runId]
+} as const

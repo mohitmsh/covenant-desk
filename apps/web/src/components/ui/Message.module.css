@@ -1,0 +1,25 @@
+.message {
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  min-height: 112px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: var(--tile);
+  text-align: center;
+}
+
+.title {
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+.body {
+  max-width: 44ch;
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.message[data-tone="error"] .title {
+  color: var(--status-breach);
+}

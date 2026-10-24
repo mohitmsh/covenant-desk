@@ -1,0 +1,30 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pill[data-tone="neutral"] {
+  background: var(--neutral-wash);
+  color: var(--muted);
+}
+
+.pill[data-tone="accent"] {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.pill[data-tone="positive"] {
+  background: var(--status-pass-wash);
+  color: var(--status-pass);
+}
+
+.pill[data-tone="negative"] {
+  background: var(--status-breach-wash);
+  color: var(--status-breach);
+}

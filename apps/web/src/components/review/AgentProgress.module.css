@@ -1,0 +1,66 @@
+.steps {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--tile);
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: var(--fs-small);
+}
+
+.marker {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: var(--faint);
+}
+
+.step[data-tone="positive"] .marker {
+  background: var(--status-pass);
+}
+
+.step[data-tone="negative"] .marker {
+  background: var(--status-breach);
+}
+
+.step[data-tone="negative"] {
+  color: var(--status-breach);
+}
+
+.step[data-tone="pending"] .marker {
+  background: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.detail {
+  color: var(--muted);
+}
+
+.step[data-tone="negative"] .detail {
+  color: var(--status-breach);
+}
+
+.pending {
+  color: var(--muted);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step[data-tone="pending"] .marker {
+    animation: none;
+  }
+}

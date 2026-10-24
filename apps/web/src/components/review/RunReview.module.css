@@ -1,0 +1,38 @@
+.review {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 44%);
+  height: 100%;
+}
+
+.scroll {
+  overflow-y: auto;
+}
+
+.content {
+  display: grid;
+  align-content: start;
+  gap: 36px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 32px 36px 64px;
+}
+
+.document {
+  min-height: 0;
+}
+
+@media (max-width: 1180px) {
+  .review {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 70vh;
+    overflow-y: auto;
+  }
+
+  .scroll {
+    overflow: visible;
+  }
+
+  .content {
+    padding: 24px 20px 40px;
+  }
+}

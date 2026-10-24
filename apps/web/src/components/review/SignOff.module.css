@@ -1,0 +1,65 @@
+.form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-lg);
+  background: var(--accent-tint);
+}
+
+.controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.field {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+  max-width: 280px;
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.field input {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--fs-small);
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.detail {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.error {
+  color: var(--status-breach);
+  font-size: var(--fs-caption);
+}
+
+.approved {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--status-pass-wash);
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.signedOff {
+  color: var(--status-pass);
+  font-weight: 500;
+}

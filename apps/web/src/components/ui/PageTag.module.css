@@ -1,0 +1,22 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border: none;
+  border-radius: var(--radius-marker);
+  background: transparent;
+  color: var(--accent);
+  font-size: var(--fs-small);
+  white-space: nowrap;
+}
+
+.tag:hover {
+  background: var(--accent-tint);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.tag[data-active="true"] {
+  background: var(--accent-wash);
+  font-weight: 500;
+}

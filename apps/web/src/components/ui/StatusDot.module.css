@@ -1,0 +1,20 @@
+.dot {
+  display: inline-block;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: var(--status-neutral);
+}
+
+.dot[data-status="pass"] {
+  background: var(--status-pass);
+}
+
+.dot[data-status="watch"] {
+  background: var(--status-watch);
+}
+
+.dot[data-status="breach"] {
+  background: var(--status-breach);
+}

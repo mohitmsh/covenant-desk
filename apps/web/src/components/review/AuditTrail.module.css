@@ -1,0 +1,53 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event {
+  position: relative;
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.event:not(:last-child)::before {
+  position: absolute;
+  top: 18px;
+  bottom: -6px;
+  left: 3px;
+  width: 1px;
+  background: var(--rule);
+  content: "";
+}
+
+.marker {
+  width: 7px;
+  height: 7px;
+  margin-top: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--faint);
+}
+
+.event[data-kind="figure.rejected"] .marker {
+  background: var(--status-breach);
+}
+
+.event[data-kind="run.approved"] .marker {
+  background: var(--status-pass);
+}
+
+.title {
+  font-size: var(--fs-small);
+}
+
+.summary {
+  margin-left: 8px;
+  color: var(--muted);
+}
+
+.meta {
+  color: var(--faint);
+  font-size: var(--fs-caption);
+}
