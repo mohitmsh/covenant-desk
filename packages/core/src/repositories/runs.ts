@@ -13,7 +13,8 @@ const RUN_SUMMARY_SELECT = `
   select r.id, r.borrower_id as "borrowerId", b.name as "borrowerName", r.period, r.status,
     r.started_by as "startedBy", ${isoTimestamp("r.created_at")} as "createdAt",
     count(c.*) filter (where c.status = 'breach')::int as breaches,
-    count(c.*) filter (where c.status = 'watch')::int as watches
+    count(c.*) filter (where c.status = 'watch')::int as watches,
+    (select count(*) from review_issues i where i.run_id = r.id and i.status = 'open')::int as "openIssues"
   from runs r
   join borrowers b on b.id = r.borrower_id
   left join covenant_results c on c.run_id = r.id`

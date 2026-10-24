@@ -110,3 +110,8 @@
   color: var(--faint);
   font-size: var(--fs-micro);
 }
+
+.issues {
+  color: var(--status-watch);
+  font-weight: 500;
+}

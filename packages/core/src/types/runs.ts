@@ -77,6 +77,8 @@ export interface RunSummary {
   readonly createdAt: IsoTimestamp
   readonly breaches: number
   readonly watches: number
+  /** Review issues still awaiting an analyst decision. */
+  readonly openIssues: number
 }
 
 /** Everything needed to review and sign off a run. */
@@ -108,6 +110,7 @@ export interface PortfolioTotals {
   readonly breaches: number
   readonly watches: number
   readonly certificateMismatches: number
+  readonly openIssues: number
   readonly awaitingSignoff: number
 }
 

@@ -76,7 +76,15 @@ export function RunList({ runs, selectedRunId, onSelect, onNewRun, isPortfolioOp
                 onClick={() => onSelect(run.id)}
               >
                 <span className={styles.name}>{run.borrowerName}</span>
-                <span className={styles.source}>{formatRunOrigin(run.startedBy, run.createdAt)}</span>
+                <span className={styles.source}>
+                  {formatRunOrigin(run.startedBy, run.createdAt)}
+                  {run.openIssues > 0 && (
+                    <span className={styles.issues}>
+                      {" "}
+                      · {run.openIssues} issue{run.openIssues === 1 ? "" : "s"}
+                    </span>
+                  )}
+                </span>
                 <span className={styles.meta}>
                   <StatusDot status={runOutcome(run)} />
                   {outcomeLabel(run)}

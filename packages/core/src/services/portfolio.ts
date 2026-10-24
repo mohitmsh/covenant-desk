@@ -17,6 +17,7 @@ const totalsFor = (rows: ReadonlyArray<PortfolioRow>): PortfolioTotals => ({
     (sum, row) => sum + count(row.certificateComparisons, (c) => c.disagreements.length > 0),
     0
   ),
+  openIssues: rows.reduce((sum, row) => sum + (row.run?.openIssues ?? 0), 0),
   awaitingSignoff: count(rows, (row) => row.run?.status === "awaiting_signoff")
 })
 

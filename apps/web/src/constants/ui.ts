@@ -12,4 +12,7 @@ export const IN_PROGRESS_RUN_STATUSES = ["extracting", "tested"] as const
 
 export const RUN_POLL_INTERVAL_MS = 1_000
 
+/** How often lists refresh while nothing is running, so changes from other sessions appear. */
+export const LIVE_REFRESH_INTERVAL_MS = 10_000
+
 export const AGENT_LABEL = "Claude Haiku 5.5"

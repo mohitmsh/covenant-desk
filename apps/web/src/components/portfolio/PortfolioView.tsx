@@ -76,6 +76,12 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
             tone={totals.certificateMismatches > 0 ? "breach" : "neutral"}
             detail="Borrower-reported results the tests contradict"
           />
+          <StatTile
+            label="Open review issues"
+            value={totals.openIssues}
+            tone={totals.openIssues > 0 ? "watch" : "neutral"}
+            detail="Decisions needed before sign-off"
+          />
           <StatTile label="Awaiting sign-off" value={totals.awaitingSignoff} />
         </div>
 
@@ -108,9 +114,16 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
                     <Avatar name={row.borrower.analyst} />
                   </td>
                   <td>
-                    <span className={styles.monitoring}>
-                      <StatusDot status={monitoring.tone === "neutral" ? "neutral" : monitoring.tone} />
-                      {monitoring.label}
+                    <span className={styles.monitoringCell}>
+                      <span className={styles.monitoring}>
+                        <StatusDot status={monitoring.tone === "neutral" ? "neutral" : monitoring.tone} />
+                        {monitoring.label}
+                      </span>
+                      {row.run !== null && row.run.openIssues > 0 && (
+                        <span className={styles.issues}>
+                          {row.run.openIssues} open issue{row.run.openIssues === 1 ? "" : "s"}
+                        </span>
+                      )}
                     </span>
                   </td>
                   {METRICS.map((metric) => (
