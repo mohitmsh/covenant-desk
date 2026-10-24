@@ -102,8 +102,9 @@ const renderBalanceSheet = (layout: PackLayout, spec: PackSpec) => {
     spec.rcfDrawn - COMPARATIVE_BALANCE_SHEET.rcfReduction,
     COMPARATIVE_BALANCE_SHEET.drift
   )
+  const printed = (key: keyof typeof current) => current[key] + (spec.misprint?.row === key ? spec.misprint.delta : 0)
   const row = (label: string, key: keyof typeof current, total = false): TableRow => ({
-    cells: [label, fmt(current[key]), fmt(prior[key])],
+    cells: [label, fmt(printed(key)), fmt(prior[key])],
     bold: total,
     rule: total
   })

@@ -19,6 +19,8 @@ export interface PackSpec {
   readonly cashLastQuarter: number
   /** EBITDA used on the borrower's compliance certificate, where it differs from reported EBITDA. */
   readonly certificateEbitda?: { readonly value: number; readonly addBacks: string }
+  /** A deliberate error in the current balance sheet column, for the subtotal check to find. */
+  readonly misprint?: { readonly row: keyof BalanceSheetColumn; readonly delta: number }
   readonly commentary: ReadonlyArray<string>
   /** Expected covenant outcome, keyed by covenant id. */
   readonly expectedStatus: Readonly<Record<string, CovenantStatus>>

@@ -62,6 +62,8 @@ export const PACKS: ReadonlyArray<PackSpec> = [
     rcfDrawn: 4_850,
     cash: 3_420,
     cashLastQuarter: 2_980,
+    // Receivables printed as 5,438 rather than 5,348, so total assets no longer adds up.
+    misprint: { row: "receivables", delta: 90 },
     commentary: [
       "Volumes on the Melbourne–Sydney linehaul were up 6% on the prior month, helped by the onboarding of two new retail customers in August. Fuel costs eased slightly and the fuel levy was passed through in full.",
       "Trading for the twelve months to September remains ahead of last year, with EBITDA of approximately $7.9m on revenue of $48.6m. Management expects the December quarter to be seasonally stronger.",
