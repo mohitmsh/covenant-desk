@@ -1,11 +1,11 @@
-import { useRef } from "react"
+import { useRef, type ReactNode } from "react"
 import { PDF_PAGE_GUTTER } from "@/constants"
 import { useElementWidth } from "@/hooks/use-element-width"
 import { usePdfDocument } from "@/hooks/use-pdf-document"
 import type { DocumentRecord, SourceFocus } from "@/types"
 import { Button } from "@/components/ui/Button"
 import { Message } from "@/components/ui/Message"
-import { PdfPage } from "./PdfPage"
+import { PdfPage, type PageMarker } from "./PdfPage"
 import styles from "./DocumentViewer.module.css"
 
 interface DocumentViewerProps {
@@ -13,9 +13,22 @@ interface DocumentViewerProps {
   readonly document: DocumentRecord
   readonly focus: SourceFocus
   readonly onPageChange: (page: number) => void
+  /** Issue boxes for every page; only the current page's are drawn. */
+  readonly markers: ReadonlyArray<PageMarker & { readonly page: number }>
+  readonly onSelectMarker: (key: string) => void
+  /** Docked below the page in place of the source caption, e.g. the issue being reviewed. */
+  readonly footer?: ReactNode
 }
 
-export function DocumentViewer({ url, document, focus, onPageChange }: DocumentViewerProps) {
+export function DocumentViewer({
+  url,
+  document,
+  focus,
+  onPageChange,
+  markers,
+  onSelectMarker,
+  footer
+}: DocumentViewerProps) {
   const bodyRef = useRef<HTMLDivElement>(null)
   const bodyWidth = useElementWidth(bodyRef)
   const state = usePdfDocument(url)
@@ -67,16 +80,19 @@ export function DocumentViewer({ url, document, focus, onPageChange }: DocumentV
             width={pageWidth}
             quote={focus.quote}
             reported={focus.reported}
+            markers={markers.filter((marker) => marker.page === focus.page)}
+            onSelectMarker={onSelectMarker}
           />
         )}
       </div>
 
-      {focus.quote && (
-        <div className={styles.caption}>
-          <span className={styles.captionLabel}>Verified to source</span>
-          <q className={styles.quote}>{focus.quote}</q>
-        </div>
-      )}
+      {footer ??
+        (focus.quote && (
+          <div className={styles.caption}>
+            <span className={styles.captionLabel}>Verified to source</span>
+            <q className={styles.quote}>{focus.quote}</q>
+          </div>
+        ))}
     </div>
   )
 }

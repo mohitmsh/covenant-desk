@@ -1,4 +1,4 @@
-import type { CovenantStatus, Metric, Operator, RunStatus } from "@/types"
+import type { CovenantStatus, IssueKind, IssueStatus, Metric, Operator, RunStatus } from "@/types"
 
 export const RUN_STATUS_LABELS = {
   extracting: "Extracting",
@@ -29,8 +29,25 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
   "run.failed": "Run failed",
   "certificate.verified": "Certificate figure verified",
   "certificate.rejected": "Certificate figure rejected",
-  "agent.turn": "Agent step"
+  "agent.turn": "Agent step",
+  "checks.completed": "Review checks run",
+  "issue.decided": "Issue decided",
+  "issue.remembered": "Issue decided from memory",
+  "issue.reopened": "Issue reopened"
 }
+
+export const ISSUE_KIND_LABELS = {
+  certificate_mismatch: "Certificate mismatch",
+  subtotal: "Subtotal error",
+  variance: "Large change"
+} as const satisfies Record<IssueKind, string>
+
+export const ISSUE_STATUS_LABELS = {
+  open: "To review",
+  accepted: "Accepted",
+  overridden: "Overridden",
+  queried: "Query drafted"
+} as const satisfies Record<IssueStatus, string>
 
 export const METRIC_LABELS = {
   net_leverage: "Net leverage",

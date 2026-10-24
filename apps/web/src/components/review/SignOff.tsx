@@ -12,9 +12,11 @@ interface SignOffProps {
   readonly note: Note | null
   readonly approval: Approval | null
   readonly defaultApprover: string
+  readonly openIssues: number
+  readonly onReviewIssues: () => void
 }
 
-export function SignOff({ runId, status, note, approval, defaultApprover }: SignOffProps) {
+export function SignOff({ runId, status, note, approval, defaultApprover, openIssues, onReviewIssues }: SignOffProps) {
   const [approver, setApprover] = useState(defaultApprover)
   const approve = useApproveRun(runId)
 
@@ -29,7 +31,7 @@ export function SignOff({ runId, status, note, approval, defaultApprover }: Sign
     )
   }
 
-  const ready = status === "awaiting_signoff" && note !== null
+  const ready = status === "awaiting_signoff" && note !== null && openIssues === 0
 
   return (
     <Section title="Sign-off">
@@ -41,9 +43,18 @@ export function SignOff({ runId, status, note, approval, defaultApprover }: Sign
         }}
       >
         <p className={styles.detail}>
-          {ready
-            ? `Approval records your name against note version ${note.version} and closes the run.`
-            : "A monitoring note is required before this run can be approved."}
+          {ready ? (
+            `Approval records your name against note version ${note.version} and closes the run.`
+          ) : openIssues > 0 ? (
+            <>
+              Decide the {openIssues} open review issue{openIssues === 1 ? "" : "s"} before approving.{" "}
+              <button type="button" className={styles.link} onClick={onReviewIssues}>
+                Review issues
+              </button>
+            </>
+          ) : (
+            "A monitoring note is required before this run can be approved."
+          )}
         </p>
         <div className={styles.controls}>
           <label className={styles.field}>

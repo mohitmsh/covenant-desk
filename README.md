@@ -12,7 +12,8 @@ The borrowers, lender and documents are fictional.
 2. **Verifies** every quote against the page text before the figure is accepted. A figure the model can't ground is rejected and sent back.
 3. **Tests** net leverage, interest cover and minimum liquidity against the facility's covenants, with headroom and a watch band.
 4. **Checks the compliance certificate.** It reads what the borrower claims and flags any claim that disagrees with the tested result, such as EBITDA flattered by add-backs that hide a breach.
-5. **Drafts a monitoring note** for the analyst to edit and approve. Every step is recorded in an audit trail.
+5. **Runs review checks in code** after extraction: certificate claims that disagree with the tested results, subtotals that don't add up, and lines that moved more than 25% on the prior period. Each issue is boxed on the PDF, and the analyst steps through them like a signing flow: accept, override with a reason, draft a query to the borrower (held, never sent), or remember the decision for the borrower's next pack. Sign-off stays locked until every issue is decided.
+6. **Drafts a monitoring note** for the analyst to edit and approve. Every step is recorded in an audit trail.
 
 ## Run it locally
 
@@ -51,5 +52,6 @@ Locally the database is embedded PGlite under `.data/`. Set `DATABASE_URL` to us
 - `ANTHROPIC_API_KEY`
 - `DATABASE_URL`: any Postgres, for example a free Neon database
 - `DAILY_AGENT_RUN_LIMIT`: agent runs allowed per 24 hours (20 by default), so a public link can't run up API spend
+- `RESET_DEMO_ON_START`: when `true`, empties the database on start so every boot is a clean demo
 
 On start it applies migrations and seeds the demo runs if they aren't there yet.

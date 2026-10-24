@@ -1,5 +1,5 @@
 import { API_ROUTES } from "@/constants"
-import type { RunDetail, RunSummary } from "@/types"
+import type { IssueDecision, RunDetail, RunSummary } from "@/types"
 import { requestJson } from "./client"
 
 export const fetchRuns = () => requestJson<ReadonlyArray<RunSummary>>(API_ROUTES.runs)
@@ -25,3 +25,10 @@ export const startAgentRun = (borrowerId: string, file: File | null) => {
   if (file) form.set("file", file)
   return requestJson<{ runId: string }>(API_ROUTES.runs, { method: "POST", body: form })
 }
+
+/** Records an analyst's decision on a review issue and returns the updated run. */
+export const decideIssue = (runId: string, issueKey: string, decision: IssueDecision) =>
+  requestJson<RunDetail>(API_ROUTES.issueDecision(runId, issueKey), {
+    method: "POST",
+    body: JSON.stringify(decision)
+  })

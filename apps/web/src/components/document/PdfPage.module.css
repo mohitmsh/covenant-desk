@@ -23,3 +23,68 @@
   background: var(--highlight);
   box-shadow: 0 0 0 1.5px var(--highlight-line);
 }
+
+.marker {
+  position: absolute;
+  padding: 0;
+  border: 1.5px solid var(--marker-line);
+  border-radius: var(--radius-marker);
+  background: var(--marker-wash);
+  cursor: pointer;
+  transition:
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.marker[data-tone="breach"] {
+  --marker-line: var(--status-breach);
+  --marker-wash: var(--status-breach-wash);
+}
+
+.marker[data-tone="watch"] {
+  --marker-line: var(--status-watch);
+  --marker-wash: var(--status-watch-wash);
+}
+
+.marker[data-tone="decided"] {
+  --marker-line: var(--status-pass);
+  --marker-wash: transparent;
+  border-style: dashed;
+}
+
+.marker:hover,
+.marker[data-active="true"] {
+  box-shadow: 0 0 0 4px var(--marker-wash);
+}
+
+.marker[data-active="true"] {
+  border-width: 2px;
+}
+
+.markerTag {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--marker-line);
+  color: var(--on-accent);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  transform: translateY(-50%);
+}
+
+.marker[data-active="true"] .markerTag::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  border: 5px solid transparent;
+  border-left-color: var(--marker-line);
+  transform: translateY(-50%);
+}

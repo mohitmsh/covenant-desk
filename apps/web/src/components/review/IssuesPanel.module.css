@@ -1,0 +1,131 @@
+.clear {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.clear span {
+  margin-right: 4px;
+  color: var(--status-pass);
+  font-weight: 500;
+}
+
+.progress {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.bar {
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--neutral-wash);
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--status-pass);
+  transition: width 0.3s ease;
+}
+
+.count {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--tile);
+  text-align: left;
+  transition: border-color 0.15s ease;
+}
+
+.item:hover {
+  border-color: var(--border);
+}
+
+.item[aria-current="true"] {
+  border-color: var(--accent-line);
+  background: var(--accent-tint);
+}
+
+.item[data-tone="breach"] {
+  --item-line: var(--status-breach);
+}
+
+.item[data-tone="watch"] {
+  --item-line: var(--status-watch);
+}
+
+.item[data-tone="decided"] {
+  --item-line: var(--status-pass);
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--item-line);
+  color: var(--on-accent);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+}
+
+.body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.status {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+  white-space: nowrap;
+}
+
+.status[data-status="open"] {
+  color: var(--item-line);
+  font-weight: 500;
+}
+
+.status[data-status="accepted"],
+.status[data-status="overridden"] {
+  color: var(--status-pass);
+}
+
+.status[data-status="queried"] {
+  color: var(--status-watch);
+}

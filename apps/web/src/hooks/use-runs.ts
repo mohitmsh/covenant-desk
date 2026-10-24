@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { fetchBorrowers } from "@/api/borrowers"
 import { fetchPortfolio } from "@/api/portfolio"
-import { approveRun, fetchRun, fetchRuns, saveRunNote, startAgentRun } from "@/api/runs"
+import { approveRun, decideIssue, fetchRun, fetchRuns, saveRunNote, startAgentRun } from "@/api/runs"
 import { QUERY_KEYS, RUN_POLL_INTERVAL_MS } from "@/constants"
+import type { IssueDecision } from "@/types"
 import { isRunInProgress } from "@/utils/runs"
 
 export const useRuns = () =>
@@ -64,5 +65,14 @@ export const useSaveNote = (runId: string) => {
   return useMutation({
     mutationFn: ({ body, author }: { body: string; author: string }) => saveRunNote(runId, body, author),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.run(runId) })
+  })
+}
+
+export const useDecideIssue = (runId: string) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ issueKey, decision }: { issueKey: string; decision: IssueDecision }) =>
+      decideIssue(runId, issueKey, decision),
+    onSuccess: (detail) => queryClient.setQueryData(QUERY_KEYS.run(runId), detail)
   })
 }

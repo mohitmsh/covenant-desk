@@ -7,7 +7,9 @@ export const API_ROUTES = {
   run: (runId: string) => `${API_BASE}/runs/${runId}`,
   runDocument: (runId: string) => `${API_BASE}/runs/${runId}/document`,
   runNotes: (runId: string) => `${API_BASE}/runs/${runId}/notes`,
-  runApprove: (runId: string) => `${API_BASE}/runs/${runId}/approve`
+  runApprove: (runId: string) => `${API_BASE}/runs/${runId}/approve`,
+  issueDecision: (runId: string, issueKey: string) =>
+    `${API_BASE}/runs/${runId}/issues/${encodeURIComponent(issueKey)}/decision`
 } as const
 
 export const QUERY_KEYS = {

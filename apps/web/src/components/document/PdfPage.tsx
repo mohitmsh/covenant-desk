@@ -1,8 +1,20 @@
 import type { PDFDocumentProxy } from "pdfjs-dist"
 import { useEffect, useRef, useState } from "react"
 import { PDF_RENDER_SCALE_MAX } from "@/constants"
+import type { PageBox } from "@/types"
+import type { IssueTone } from "@/utils/issues"
 import { findQuoteRuns, isReportedValue, type TextRun } from "@/utils/text-layer"
 import styles from "./PdfPage.module.css"
+
+/** A numbered box drawn over the page, like a field in a signing app. */
+export interface PageMarker {
+  readonly key: string
+  readonly number: number
+  readonly label: string
+  readonly box: PageBox
+  readonly tone: IssueTone
+  readonly active: boolean
+}
 
 interface PdfPageProps {
   readonly pdf: PDFDocumentProxy
@@ -10,6 +22,8 @@ interface PdfPageProps {
   readonly width: number
   readonly quote: string | null
   readonly reported: number | null
+  readonly markers: ReadonlyArray<PageMarker>
+  readonly onSelectMarker: (key: string) => void
 }
 
 interface Highlight {
@@ -23,10 +37,14 @@ interface Highlight {
 
 const HIGHLIGHT_PADDING = 2
 
+const MARKER_PADDING = 4
+
 /** Renders one PDF page at the given CSS width and highlights `quote` when present. */
-export function PdfPage({ pdf, pageNumber, width, quote, reported }: PdfPageProps) {
+export function PdfPage({ pdf, pageNumber, width, quote, reported, markers, onSelectMarker }: PdfPageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const primaryRef = useRef<HTMLDivElement>(null)
+  const activeMarkerRef = useRef<HTMLButtonElement>(null)
+  const activeMarker = markers.find((marker) => marker.active)?.key ?? null
   const [height, setHeight] = useState(0)
   const [highlights, setHighlights] = useState<ReadonlyArray<Highlight>>([])
 
@@ -98,6 +116,12 @@ export function PdfPage({ pdf, pageNumber, width, quote, reported }: PdfPageProp
     if (highlights.length > 0) primaryRef.current?.scrollIntoView({ block: "center", behavior: "smooth" })
   }, [highlights])
 
+  useEffect(() => {
+    if (activeMarker !== null && height > 0) {
+      activeMarkerRef.current?.scrollIntoView({ block: "center", behavior: "smooth" })
+    }
+  }, [activeMarker, height])
+
   return (
     <div className={styles.page} style={{ width, height }}>
       <canvas ref={canvasRef} className={styles.canvas} style={{ width, height }} />
@@ -110,6 +134,28 @@ export function PdfPage({ pdf, pageNumber, width, quote, reported }: PdfPageProp
           style={{ left: highlight.left, top: highlight.top, width: highlight.width, height: highlight.height }}
         />
       ))}
+      {height > 0 &&
+        markers.map((marker) => (
+          <button
+            key={marker.key}
+            type="button"
+            ref={marker.active ? activeMarkerRef : undefined}
+            className={styles.marker}
+            data-tone={marker.tone}
+            data-active={marker.active}
+            aria-label={`Issue ${marker.number}: ${marker.label}`}
+            aria-pressed={marker.active}
+            onClick={() => onSelectMarker(marker.key)}
+            style={{
+              left: marker.box.x * width - MARKER_PADDING,
+              top: marker.box.y * height - MARKER_PADDING,
+              width: marker.box.width * width + MARKER_PADDING * 2,
+              height: marker.box.height * height + MARKER_PADDING * 2
+            }}
+          >
+            <span className={styles.markerTag}>{marker.number}</span>
+          </button>
+        ))}
     </div>
   )
 }
