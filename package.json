@@ -1,0 +1,33 @@
+{
+  "name": "covenant-desk",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "fixtures"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p . && tsc -p apps/web",
+    "fixtures": "npm run build -w fixtures",
+    "db:seed": "npm run seed -w fixtures",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:seed-runs": "npm run seed:runs -w fixtures",
+    "db:reset": "rm -rf .data",
+    "dev": "concurrently -k -n api,web -c auto \"npm run dev -w @covenant-desk/api\" \"npm run dev -w @covenant-desk/web\"",
+    "demo:reset": "npm run db:reset && npm run db:seed-runs",
+    "agent": "npm run start -w @covenant-desk/agent --",
+    "eval": "npm run eval -w @covenant-desk/agent"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "concurrently": "^10.0.6",
+    "playwright-core": "^1.64.1",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  }
+}
