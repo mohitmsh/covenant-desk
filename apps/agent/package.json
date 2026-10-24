@@ -1,0 +1,21 @@
+{
+  "name": "@covenant-desk/agent",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "scripts": {
+    "start": "tsx --env-file=../../.env src/scripts/run.ts",
+    "eval": "tsx --env-file=../../.env src/scripts/eval.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "@covenant-desk/core": "*",
+    "@covenant-desk/fixtures": "*"
+  },
+  "exports": {
+    "./run": "./src/run-monitoring.ts",
+    "./constants": "./src/constants.ts"
+  }
+}
