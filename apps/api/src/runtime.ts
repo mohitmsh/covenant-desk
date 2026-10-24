@@ -1,10 +1,8 @@
-import { dbLayerFromEnv, fileDocumentStoreLayer, migrate } from "@covenant-desk/core"
+import { migrate, storageLayerFromEnv } from "@covenant-desk/core"
 import { Effect, Layer, ManagedRuntime } from "effect"
 
 /** Application services, with migrations applied before the first request. */
-const AppLayer = Layer.effectDiscard(migrate).pipe(
-  Layer.provideMerge(Layer.mergeAll(dbLayerFromEnv(), fileDocumentStoreLayer()))
-)
+const AppLayer = Layer.effectDiscard(migrate).pipe(Layer.provideMerge(storageLayerFromEnv()))
 
 export const runtime = ManagedRuntime.make(AppLayer)
 

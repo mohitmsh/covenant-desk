@@ -1,6 +1,6 @@
-import { dbLayerFromEnv, fileDocumentStoreLayer, migrate, upsertBorrower } from "@covenant-desk/core"
+import { migrate, storageLayerFromEnv, upsertBorrower } from "@covenant-desk/core"
 import { COVENANTS_EFFECTIVE_FROM } from "@covenant-desk/fixtures/constants"
-import { Effect, Layer } from "effect"
+import { Effect } from "effect"
 import { AGENT_MODEL } from "#constants"
 import { runMonitoring } from "#run-monitoring"
 import { findPack, packFilename, readPack } from "#utils/packs"
@@ -32,9 +32,7 @@ const program = Effect.gen(function* () {
   )
 })
 
-Effect.runPromise(program.pipe(Effect.provide(Layer.mergeAll(dbLayerFromEnv(), fileDocumentStoreLayer())))).catch(
-  (error: Error) => {
-    console.error(error)
-    process.exit(1)
-  }
-)
+Effect.runPromise(program.pipe(Effect.provide(storageLayerFromEnv()))).catch((error: Error) => {
+  console.error(error)
+  process.exit(1)
+})

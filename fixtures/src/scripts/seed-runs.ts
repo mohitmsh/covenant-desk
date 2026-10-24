@@ -1,9 +1,7 @@
 import { readFile } from "node:fs/promises"
 import {
-  dbLayerFromEnv,
   DocumentStore,
   FIGURE_KEYS,
-  fileDocumentStoreLayer,
   getFigures,
   getMonitoringContext,
   listRuns,
@@ -15,12 +13,13 @@ import {
   registerDocument,
   saveNote,
   startRun,
+  storageLayerFromEnv,
   testAll,
   upsertBorrower,
   verifyCertificateClaim,
   verifyFigure
 } from "@covenant-desk/core"
-import { Effect, Layer } from "effect"
+import { Effect } from "effect"
 import {
   CERTIFICATE_LABELS,
   COVENANTS_EFFECTIVE_FROM,
@@ -115,4 +114,4 @@ const program = Effect.gen(function* () {
   }
 })
 
-Effect.runPromise(program.pipe(Effect.provide(Layer.mergeAll(dbLayerFromEnv(), fileDocumentStoreLayer()))))
+Effect.runPromise(program.pipe(Effect.provide(storageLayerFromEnv())))

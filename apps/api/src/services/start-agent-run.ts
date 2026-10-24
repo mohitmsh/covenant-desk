@@ -1,11 +1,11 @@
 import { readFile } from "node:fs/promises"
 import { driveAgent, prepareRun } from "@covenant-desk/agent/run"
-import { hasActiveAgentRun, NotFound } from "@covenant-desk/core"
+import { countRecentAgentRuns, hasActiveAgentRun, NotFound } from "@covenant-desk/core"
 import { PACKS_DIR } from "@covenant-desk/fixtures/constants"
 import { PACKS } from "@covenant-desk/fixtures/data"
 import { Effect } from "effect"
-import { MAX_UPLOAD_BYTES, PDF_SIGNATURE } from "#constants"
-import { AgentBusy, AgentUnavailable, InvalidUpload } from "#errors"
+import { DAILY_AGENT_RUN_LIMIT, MAX_UPLOAD_BYTES, PDF_SIGNATURE } from "#constants"
+import { AgentBusy, AgentUnavailable, InvalidUpload, RunLimitReached } from "#errors"
 import { runtime } from "#runtime"
 
 export interface UploadedPack {
@@ -40,6 +40,11 @@ export const startAgentRun = (borrowerId: string, upload: UploadedPack | null) =
   Effect.gen(function* () {
     if (!process.env.ANTHROPIC_API_KEY) {
       return yield* new AgentUnavailable({ reason: "ANTHROPIC_API_KEY is not set on the server" })
+    }
+    if ((yield* countRecentAgentRuns) >= DAILY_AGENT_RUN_LIMIT) {
+      return yield* new RunLimitReached({
+        reason: `This demo allows ${DAILY_AGENT_RUN_LIMIT} agent runs a day, and they have been used. The seeded runs can still be reviewed.`
+      })
     }
     if (yield* hasActiveAgentRun) {
       return yield* new AgentBusy({ reason: "Another agent run is in progress. Try again when it finishes." })

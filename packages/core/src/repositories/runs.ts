@@ -107,3 +107,14 @@ export const hasActiveAgentRun = Effect.gen(function* () {
   )
   return row?.active ?? false
 })
+
+/** Agent runs started in the last 24 hours. */
+export const countRecentAgentRuns = Effect.gen(function* () {
+  const db = yield* Db
+  const [row] = yield* db.query<{ count: number }>(
+    `select count(*)::int as count from runs
+     where started_by like 'agent:%' and created_at > now() - interval '24 hours'`,
+    []
+  )
+  return row?.count ?? 0
+})

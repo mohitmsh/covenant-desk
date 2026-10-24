@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: covenant-desk
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/portfolio
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DAILY_AGENT_RUN_LIMIT
+        value: "20"

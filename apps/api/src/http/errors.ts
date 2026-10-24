@@ -16,6 +16,7 @@ const CLIENT_ERRORS: Readonly<Record<string, ContentfulStatusCode>> = {
   NotFound: HTTP_STATUS.NOT_FOUND,
   RunNotReady: HTTP_STATUS.CONFLICT,
   AgentBusy: HTTP_STATUS.CONFLICT,
+  RunLimitReached: HTTP_STATUS.TOO_MANY_REQUESTS,
   SchemaError: HTTP_STATUS.UNPROCESSABLE,
   InvalidUpload: HTTP_STATUS.UNPROCESSABLE,
   PdfUnreadable: HTTP_STATUS.UNPROCESSABLE,
