@@ -1,0 +1,59 @@
+{
+  "borrowerId": "wattle-grove",
+  "period": "2026-09",
+  "file": "wattle-grove-2026-09.pdf",
+  "sha256": "f68c5fa99b42aab36c93c29fa8ddf676c141481131d87b1b088071b4c4398483",
+  "figures": {
+    "revenue_ttm": {
+      "value": 29750000,
+      "pages": [
+        3
+      ]
+    },
+    "ebitda_ttm": {
+      "value": 3880000,
+      "pages": [
+        3
+      ]
+    },
+    "interest_expense_ttm": {
+      "value": 1720000,
+      "pages": [
+        3
+      ]
+    },
+    "total_debt": {
+      "value": 16400000,
+      "pages": [
+        5
+      ]
+    },
+    "cash": {
+      "value": 640000,
+      "pages": [
+        4,
+        5
+      ]
+    },
+    "undrawn_facility": {
+      "value": 900000,
+      "pages": [
+        5
+      ]
+    }
+  },
+  "covenants": {
+    "wattle-grove-net-leverage": {
+      "status": "breach",
+      "actual": 4.061855670103093
+    },
+    "wattle-grove-interest-cover": {
+      "status": "pass",
+      "actual": 2.255813953488372
+    },
+    "wattle-grove-liquidity": {
+      "status": "watch",
+      "actual": 1540000
+    }
+  }
+}

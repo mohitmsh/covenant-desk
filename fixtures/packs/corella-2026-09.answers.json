@@ -1,0 +1,59 @@
+{
+  "borrowerId": "corella",
+  "period": "2026-09",
+  "file": "corella-2026-09.pdf",
+  "sha256": "11ea9692a6ef672947debea7b555be957742767ba23ecc21c1ab13101e12c88a",
+  "figures": {
+    "revenue_ttm": {
+      "value": 61300000,
+      "pages": [
+        3
+      ]
+    },
+    "ebitda_ttm": {
+      "value": 5210000,
+      "pages": [
+        3
+      ]
+    },
+    "interest_expense_ttm": {
+      "value": 2140000,
+      "pages": [
+        3
+      ]
+    },
+    "total_debt": {
+      "value": 18900000,
+      "pages": [
+        5
+      ]
+    },
+    "cash": {
+      "value": 1150000,
+      "pages": [
+        4,
+        5
+      ]
+    },
+    "undrawn_facility": {
+      "value": 2300000,
+      "pages": [
+        5
+      ]
+    }
+  },
+  "covenants": {
+    "corella-net-leverage": {
+      "status": "watch",
+      "actual": 3.4069097888675626
+    },
+    "corella-interest-cover": {
+      "status": "watch",
+      "actual": 2.4345794392523366
+    },
+    "corella-liquidity": {
+      "status": "pass",
+      "actual": 3450000
+    }
+  }
+}

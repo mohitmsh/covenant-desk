@@ -1,0 +1,27 @@
+{
+  "name": "@covenant-desk/fixtures",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsx src/scripts/build-packs.ts",
+    "seed": "tsx src/scripts/seed.ts",
+    "seed:runs": "tsx src/scripts/seed-runs.ts"
+  },
+  "dependencies": {
+    "pdfkit": "^0.20.2",
+    "@covenant-desk/core": "*"
+  },
+  "devDependencies": {
+    "@types/pdfkit": "^0.17.7"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "exports": {
+    "./constants": "./src/constants.ts",
+    "./data": "./src/data/borrowers.ts",
+    "./types": "./src/types.ts",
+    "./answer-key": "./src/utils/answer-key.ts",
+    "./financials": "./src/utils/financials.ts"
+  }
+}

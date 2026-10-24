@@ -1,0 +1,59 @@
+{
+  "borrowerId": "harbourline",
+  "period": "2026-09",
+  "file": "harbourline-2026-09.pdf",
+  "sha256": "5d16b38f3818a35b1a0b3e7ecb0afd5b6d754a71ee382cf9f0ac01399a678cc8",
+  "figures": {
+    "revenue_ttm": {
+      "value": 48620000,
+      "pages": [
+        3
+      ]
+    },
+    "ebitda_ttm": {
+      "value": 7940000,
+      "pages": [
+        3
+      ]
+    },
+    "interest_expense_ttm": {
+      "value": 1310000,
+      "pages": [
+        3
+      ]
+    },
+    "total_debt": {
+      "value": 19850000,
+      "pages": [
+        5
+      ]
+    },
+    "cash": {
+      "value": 3420000,
+      "pages": [
+        4,
+        5
+      ]
+    },
+    "undrawn_facility": {
+      "value": 4000000,
+      "pages": [
+        5
+      ]
+    }
+  },
+  "covenants": {
+    "harbourline-net-leverage": {
+      "status": "pass",
+      "actual": 2.0692695214105794
+    },
+    "harbourline-interest-cover": {
+      "status": "pass",
+      "actual": 6.061068702290076
+    },
+    "harbourline-liquidity": {
+      "status": "pass",
+      "actual": 7420000
+    }
+  }
+}
