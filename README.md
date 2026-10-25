@@ -57,6 +57,6 @@ Locally the database is embedded PGlite under `.data/`. Set `DATABASE_URL` to us
 - `ANTHROPIC_API_KEY`
 - `DATABASE_URL`: any Postgres, for example a free Neon database
 - `DAILY_AGENT_RUN_LIMIT`: agent runs allowed per 24 hours (20 by default), so a public link can't run up API spend
-- `RESET_DEMO_ON_START`: when `true`, empties the database on start so every boot is a clean demo
+- `RESET_DEMO_ON_START`: when `true`, resets the database on start if the recorded runs or packs have changed since it was last seeded. Seeding runs under a database lock, so instances starting together during a deploy cannot interleave
 
 On start it applies migrations and seeds the demo runs if they aren't there yet.

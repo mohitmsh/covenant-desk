@@ -8,10 +8,14 @@ import { toError } from "#utils/errors"
 import { sha256 } from "#utils/hash"
 import { fromRepositoryRoot } from "#utils/paths"
 
+/**
+ * Stores documents. Operations may use the ambient database connection, so a
+ * store backed by the database takes part in the caller's transaction.
+ */
 export interface DocumentStoreApi {
   /** Stores a file under its SHA-256 digest and returns the storage key. */
-  readonly put: (bytes: Uint8Array) => Effect.Effect<string, DocumentStoreError>
-  readonly get: (key: string) => Effect.Effect<Uint8Array<ArrayBuffer>, DocumentStoreError>
+  readonly put: (bytes: Uint8Array) => Effect.Effect<string, DocumentStoreError, Db>
+  readonly get: (key: string) => Effect.Effect<Uint8Array<ArrayBuffer>, DocumentStoreError, Db>
 }
 
 export class DocumentStore extends Context.Service<DocumentStore, DocumentStoreApi>()("DocumentStore") {}
@@ -42,32 +46,33 @@ export const fileDocumentStoreLayer = (directory = fromRepositoryRoot(DOCUMENTS_
   })
 
 /** Content-addressed document store in the database, for hosts whose filesystem does not persist. */
-export const dbDocumentStoreLayer = Layer.effect(
-  DocumentStore,
-  Effect.gen(function* () {
-    const db = yield* Db
-    return {
-      put: (bytes) => {
-        const key = `${sha256(bytes)}.pdf`
-        return db
-          .query("insert into document_blobs (key, bytes) values ($1, $2) on conflict (key) do nothing", [key, bytes])
-          .pipe(
-            Effect.as(key),
-            Effect.mapError((error) => new DocumentStoreError({ key, cause: error.cause }))
-          )
-      },
-      get: (key) =>
-        db.query<{ bytes: Uint8Array }>("select bytes from document_blobs where key = $1", [key]).pipe(
-          Effect.mapError((error) => new DocumentStoreError({ key, cause: error.cause })),
-          Effect.flatMap(([row]) =>
-            row
-              ? Effect.succeed(new Uint8Array(row.bytes))
-              : Effect.fail(new DocumentStoreError({ key, cause: new Error("Document not found") }))
-          )
-        )
-    }
-  })
-)
+/**
+ * Content-addressed document store in the database, for hosts whose filesystem
+ * does not persist. Each operation uses the connection in context, so inside a
+ * transaction it never waits on locks that transaction holds.
+ */
+export const dbDocumentStoreLayer = Layer.succeed(DocumentStore, {
+  put: (bytes) => {
+    const key = `${sha256(bytes)}.pdf`
+    return Effect.gen(function* () {
+      const db = yield* Db
+      yield* db.query("insert into document_blobs (key, bytes) values ($1, $2) on conflict (key) do nothing", [
+        key,
+        bytes
+      ])
+      return key
+    }).pipe(Effect.mapError((error) => new DocumentStoreError({ key, cause: error.cause })))
+  },
+  get: (key) =>
+    Effect.gen(function* () {
+      const db = yield* Db
+      const [row] = yield* db
+        .query<{ bytes: Uint8Array }>("select bytes from document_blobs where key = $1", [key])
+        .pipe(Effect.mapError((error) => new DocumentStoreError({ key, cause: error.cause })))
+      if (!row) return yield* new DocumentStoreError({ key, cause: new Error("Document not found") })
+      return new Uint8Array(row.bytes)
+    })
+})
 
 /**
  * Database and document store. With `DATABASE_URL` set, documents are kept in
@@ -75,5 +80,5 @@ export const dbDocumentStoreLayer = Layer.effect(
  */
 export const storageLayerFromEnv = () =>
   process.env.DATABASE_URL
-    ? Layer.provideMerge(dbDocumentStoreLayer, dbLayerFromEnv())
+    ? Layer.mergeAll(dbLayerFromEnv(), dbDocumentStoreLayer)
     : Layer.mergeAll(dbLayerFromEnv(), fileDocumentStoreLayer())

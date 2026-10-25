@@ -1,19 +1,25 @@
 import {
   appendEvent,
   AUDIT_EVENT_KINDS,
+  getDemoVersion,
   listRuns,
+  lockDemoSeed,
   migrate,
+  setDemoVersion,
+  sha256,
   storageLayerFromEnv,
   truncateAll,
+  withTransaction,
   upsertBorrower
 } from "@covenant-desk/core"
-import { COVENANTS_EFFECTIVE_FROM } from "@covenant-desk/fixtures/constants"
+import { readdir, readFile } from "node:fs/promises"
+import { COVENANTS_EFFECTIVE_FROM, PACKS_DIR, RECORDINGS_DIR } from "@covenant-desk/fixtures/constants"
 import type { PackSpec } from "@covenant-desk/fixtures/types"
 import { Effect } from "effect"
 import { AGENT_ACTOR } from "#constants"
 import { driveAgent, prepareRun, recordingResponder } from "#run-monitoring"
 import { packFilename, PACKS, readPack } from "#utils/packs"
-import { formatUsd } from "#utils/pricing"
+import { formatUsd } from "@covenant-desk/core/format"
 import { loadRecording } from "#utils/recordings"
 
 /**
@@ -47,21 +53,44 @@ const replayPack = (spec: PackSpec) =>
     console.log(`Replayed agent run for ${spec.borrower.name}: ${report.turns} turns · ${formatUsd(report.costUsd)}`)
   })
 
+/** Fingerprint of the recordings and packs the demo is seeded from. */
+const demoDataVersion = Effect.promise(async () => {
+  const files = [
+    ...(await readdir(RECORDINGS_DIR)).filter((f) => f.endsWith(".json")).map((f) => RECORDINGS_DIR + f),
+    ...PACKS.map((spec) => PACKS_DIR + packFilename(spec))
+  ].sort()
+  const contents = await Promise.all(files.map((file) => readFile(file)))
+  return sha256(new Uint8Array(Buffer.concat(contents)))
+})
+
+/**
+ * Seeds the demo inside one transaction under a lock, so instances starting
+ * together cannot interleave. With RESET_DEMO_ON_START, the data is reset only
+ * when the recordings or packs differ from those it was last seeded from.
+ */
 const program = Effect.gen(function* () {
-  yield* migrate
-  if (process.env.RESET_DEMO_ON_START === "true") {
-    yield* truncateAll
-    console.log("Reset demo data")
-  }
-  const existing = new Set((yield* listRuns).map((run) => `${run.borrowerId}/${run.period}`))
-  for (const spec of PACKS) {
-    yield* upsertBorrower(spec.borrower, spec.covenants, COVENANTS_EFFECTIVE_FROM)
-    if (existing.has(`${spec.borrower.id}/${spec.period}`)) {
-      console.log(`Skipped ${spec.borrower.name}: run already exists`)
-      continue
-    }
-    yield* replayPack(spec)
-  }
+  const version = yield* demoDataVersion
+  yield* withTransaction(
+    Effect.gen(function* () {
+      // Taken before migrating, so a second instance waits instead of racing to create the same tables.
+      yield* lockDemoSeed
+      yield* migrate
+      if (process.env.RESET_DEMO_ON_START === "true" && (yield* getDemoVersion) !== version) {
+        yield* truncateAll
+        console.log("Reset demo data for a new demo version")
+      }
+      const existing = new Set((yield* listRuns).map((run) => `${run.borrowerId}/${run.period}`))
+      for (const spec of PACKS) {
+        yield* upsertBorrower(spec.borrower, spec.covenants, COVENANTS_EFFECTIVE_FROM)
+        if (existing.has(`${spec.borrower.id}/${spec.period}`)) {
+          console.log(`Skipped ${spec.borrower.name}: run already exists`)
+          continue
+        }
+        yield* replayPack(spec)
+      }
+      yield* setDemoVersion(version)
+    })
+  )
 })
 
 Effect.runPromise(program.pipe(Effect.provide(storageLayerFromEnv()))).catch((error: Error) => {
