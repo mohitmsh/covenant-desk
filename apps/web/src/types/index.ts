@@ -14,6 +14,7 @@ export type {
   EbitdaGap,
   EvalCaseResult,
   EvalCheck,
+  EvalOutput,
   EvalReport,
   DocumentRecord,
   FigureKey,

@@ -16,6 +16,7 @@ import {
   upsertBorrower,
   type EvalCaseResult,
   type EvalCheck,
+  type EvalOutput,
   type EvalReport,
   type IssueKind,
   type PdfText
@@ -177,7 +178,19 @@ const evaluate = (expected: EvalExpectation, pdf: PdfText, runId: Parameters<typ
         unsupported.length === 0 ? "all found" : `not in pack: ${unsupported.join(", ")}`
       )
     )
-    return checks
+    const output: EvalOutput = {
+      covenants: covenants.map((c) => ({
+        name: c.name,
+        metric: c.metric,
+        actual: c.actual,
+        limit: c.limit,
+        operator: c.operator,
+        status: c.status
+      })),
+      issues: issues.map((issue) => ({ title: issue.title, category: issue.category })),
+      note: note?.body ?? null
+    }
+    return { checks, output }
   })
 
 const runCase = (expected: EvalExpectation) =>
@@ -196,6 +209,9 @@ const runCase = (expected: EvalExpectation) =>
     const base = {
       id: expected.id,
       name: expected.name,
+      borrowerId: evalCase.spec.borrower.id,
+      borrowerName: evalCase.spec.borrower.name,
+      pack: expected.pack,
       category: expected.category,
       description: expected.description
     }
@@ -208,7 +224,8 @@ const runCase = (expected: EvalExpectation) =>
         recordedAt: null,
         costUsd: 0,
         turns: 0,
-        error: null
+        error: null,
+        output: null
       } satisfies EvalCaseResult
     }
 
@@ -247,13 +264,15 @@ const runCase = (expected: EvalExpectation) =>
           recordedAt,
           costUsd: 0,
           turns: live ? turns.length : (recording?.turns.length ?? 0),
-          error: outcome.failure._tag
+          error: outcome.failure._tag,
+          output: null
         } satisfies EvalCaseResult
       }
       const report = outcome.success
+      const evaluated = yield* evaluate(expected, pdf, report.runId)
       const checks = [
         check("run", "agent completed", true, "a note awaiting sign-off", "completed"),
-        ...(yield* evaluate(expected, pdf, report.runId))
+        ...evaluated.checks
       ]
       return {
         ...base,
@@ -263,7 +282,8 @@ const runCase = (expected: EvalExpectation) =>
         recordedAt,
         costUsd: report.costUsd,
         turns: report.turns,
-        error: null
+        error: null,
+        output: evaluated.output
       } satisfies EvalCaseResult
     }).pipe(Effect.provide(Layer.mergeAll(Layer.fresh(pgliteLayer()), fileDocumentStoreLayer())))
   })

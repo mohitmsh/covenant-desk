@@ -3,7 +3,8 @@ import styles from "./MonitoringNote.module.css"
 
 interface NoteTextProps {
   readonly body: string
-  readonly onShowPage: (page: number) => void
+  /** Without it, page references are shown as plain text. */
+  readonly onShowPage?: (page: number) => void
 }
 
 type Block = { readonly type: "paragraph"; readonly text: string } | { readonly type: "list"; readonly items: string[] }
@@ -33,7 +34,7 @@ const parseBlocks = (body: string): Block[] =>
 /** `**bold**`, and page references such as `page 6`, `(p. 4)` or `pages 3`, which become links into the PDF. */
 const INLINE = /\*\*(.+?)\*\*|\b(pages?|p\.)\s?(\d{1,2})\b/gi
 
-const renderInline = (text: string, onShowPage: (page: number) => void): ReactNode[] => {
+const renderInline = (text: string, onShowPage: ((page: number) => void) | undefined): ReactNode[] => {
   const nodes: ReactNode[] = []
   let last = 0
   for (const match of text.matchAll(INLINE)) {
@@ -42,7 +43,9 @@ const renderInline = (text: string, onShowPage: (page: number) => void): ReactNo
     const [whole, bold, , page] = match
     if (bold !== undefined) {
       nodes.push(<strong key={index}>{bold}</strong>)
-    } else if (page !== undefined) {
+    } else if (page !== undefined && onShowPage === undefined) {
+      nodes.push(whole)
+    } else if (page !== undefined && onShowPage) {
       const pageNumber = Number(page)
       nodes.push(
         <button key={index} type="button" className={styles.pageLink} onClick={() => onShowPage(pageNumber)}>

@@ -1,6 +1,19 @@
 import { useState } from "react"
-import type { EvalCaseResult, EvalCheck, EvalReport } from "@/types"
-import { formatDateTime } from "@/utils/format"
+import { METRICS } from "@covenant-desk/core/constants"
+import { COVENANT_STATUS_LABELS, ISSUE_CATEGORY_LABELS, OPERATOR_SYMBOLS } from "@/constants"
+import type {
+  CovenantStatus,
+  EvalCaseResult,
+  EvalCheck,
+  EvalOutput,
+  EvalReport,
+  IssueCategory,
+  Metric,
+  Operator
+} from "@/types"
+import { formatDateTime, formatMetric } from "@/utils/format"
+import { StatusDot } from "@/components/ui/StatusDot"
+import { NoteText } from "@/components/review/NoteText"
 import { formatUsd } from "@/utils/runs"
 import { StatTile } from "@/components/ui/StatTile"
 import styles from "./EvalsView.module.css"
@@ -38,6 +51,62 @@ const MODE_LABELS: Readonly<Record<EvalCaseResult["mode"], string>> = {
 const outcomeLabel = (result: EvalCaseResult) =>
   !result.passed ? "Failed" : result.category === "injection" ? "Blocked" : "Passed"
 
+const isStatus = (value: string): value is CovenantStatus => value in COVENANT_STATUS_LABELS
+const isOperator = (value: string): value is Operator => value in OPERATOR_SYMBOLS
+const isMetric = (value: string): value is Metric => METRICS.some((metric) => metric === value)
+const isCategory = (value: string): value is IssueCategory => value in ISSUE_CATEGORY_LABELS
+
+/** What the agent pipeline produced for the case: covenant results, review issues and the note. */
+function CaseOutput({ output }: { readonly output: EvalOutput }) {
+  return (
+    <div className={styles.output}>
+      <p className={styles.outputTitle}>What the agent produced</p>
+      <table className={styles.covenants}>
+        <tbody>
+          {output.covenants.map((covenant) => (
+            <tr key={covenant.metric}>
+              <td>{covenant.name}</td>
+              <td className={styles.numeric}>
+                {isMetric(covenant.metric) ? formatMetric(covenant.metric, covenant.actual) : covenant.actual}
+              </td>
+              <td className={styles.limit}>
+                limit {isOperator(covenant.operator) ? OPERATOR_SYMBOLS[covenant.operator] : ""}{" "}
+                {isMetric(covenant.metric) ? formatMetric(covenant.metric, covenant.limit) : covenant.limit}
+              </td>
+              <td>
+                {isStatus(covenant.status) && (
+                  <span className={styles.status}>
+                    <StatusDot status={covenant.status} />
+                    {COVENANT_STATUS_LABELS[covenant.status]}
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {output.issues.length > 0 && (
+        <ul className={styles.issues}>
+          {output.issues.map((issue) => (
+            <li key={issue.title}>
+              <span className={styles.issueCategory} data-category={issue.category}>
+                {isCategory(issue.category) ? ISSUE_CATEGORY_LABELS[issue.category] : issue.category}
+              </span>{" "}
+              {issue.title}
+            </li>
+          ))}
+        </ul>
+      )}
+      {output.note && (
+        <details className={styles.note}>
+          <summary>Monitoring note</summary>
+          <NoteText body={output.note} />
+        </details>
+      )}
+    </div>
+  )
+}
+
 function CaseRow({ result }: { readonly result: EvalCaseResult }) {
   const [open, setOpen] = useState(!result.passed)
   const passed = result.checks.filter((check) => check.passed).length
@@ -54,6 +123,7 @@ function CaseRow({ result }: { readonly result: EvalCaseResult }) {
           {result.name}
           <span className={styles.category}>{CATEGORY_LABELS[result.category] ?? result.category}</span>
         </span>
+        <span className={styles.client}>{result.borrowerName}</span>
         <span className={`${styles.numeric} tabular`}>
           {passed}/{result.checks.length}
         </span>
@@ -67,6 +137,9 @@ function CaseRow({ result }: { readonly result: EvalCaseResult }) {
       {open && (
         <div className={styles.detail}>
           <p className={styles.description}>{result.description}</p>
+          <p className={styles.pack}>
+            {result.borrowerName} · <code>{result.pack}</code>
+          </p>
           <table className={styles.checks}>
             <thead>
               <tr>
@@ -97,6 +170,7 @@ function CaseRow({ result }: { readonly result: EvalCaseResult }) {
               </tbody>
             ))}
           </table>
+          {result.output && <CaseOutput output={result.output} />}
           <p className={styles.meta}>
             {MODE_LABELS[result.mode]}
             {result.recordedAt && ` · recorded ${formatDateTime(result.recordedAt)}`}
@@ -112,6 +186,9 @@ function CaseRow({ result }: { readonly result: EvalCaseResult }) {
 export function EvalsView({ report }: EvalsViewProps) {
   const { totals } = report
   const failed = report.cases.filter((c) => !c.passed)
+  const [client, setClient] = useState<string | null>(null)
+  const clients = [...new Map(report.cases.map((c) => [c.borrowerId, c.borrowerName])).entries()]
+  const shown = report.cases.filter((c) => client === null || c.borrowerId === client)
 
   return (
     <div className={styles.scroll}>
@@ -147,17 +224,33 @@ export function EvalsView({ report }: EvalsViewProps) {
           </p>
         )}
 
+        <div className={styles.filters} role="group" aria-label="Filter by client">
+          <button type="button" aria-pressed={client === null} onClick={() => setClient(null)}>
+            All clients
+          </button>
+          {clients.map(([id, name]) => (
+            <button key={id} type="button" aria-pressed={client === id} onClick={() => setClient(id)}>
+              {name}
+              <span className={styles.filterCount}>
+                {report.cases.filter((c) => c.borrowerId === id && c.passed).length}/
+                {report.cases.filter((c) => c.borrowerId === id).length}
+              </span>
+            </button>
+          ))}
+        </div>
+
         <div>
           <div className={styles.columns} aria-hidden>
             <span>Result</span>
             <span>Case</span>
+            <span>Client</span>
             <span className={styles.numeric}>Checks</span>
             <span className={styles.numeric}>Turns</span>
             <span className={styles.numeric}>Cost</span>
             <span />
           </div>
           <ol className={styles.cases}>
-            {report.cases.map((result) => (
+            {shown.map((result) => (
               <CaseRow key={result.id} result={result} />
             ))}
           </ol>

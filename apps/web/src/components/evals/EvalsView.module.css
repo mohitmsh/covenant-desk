@@ -51,7 +51,7 @@
 .columns,
 .caseHeader {
   display: grid;
-  grid-template-columns: 96px minmax(0, 1fr) 72px 56px 80px 20px;
+  grid-template-columns: 96px minmax(0, 1.3fr) minmax(0, 1fr) 64px 48px 72px 16px;
   align-items: center;
   gap: 12px;
 }
@@ -141,6 +141,7 @@
   display: grid;
   gap: 12px;
   padding: 4px 8px 18px 116px;
+  max-width: 100%;
 }
 
 .description {
@@ -191,4 +192,115 @@ tr[data-passed="false"] .mark {
 .meta {
   color: var(--faint);
   font-size: var(--fs-caption);
+}
+
+.client {
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--fs-caption);
+}
+
+.filters button[aria-pressed="true"] {
+  border-color: var(--ink);
+}
+
+.filterCount {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pack {
+  color: var(--muted);
+  font-size: var(--fs-caption);
+}
+
+.pack code {
+  font-family: inherit;
+}
+
+.output {
+  display: grid;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.outputTitle {
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.covenants {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+}
+
+.covenants td {
+  padding: 5px 12px 5px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.limit {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.issues {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding-left: 18px;
+  font-size: var(--fs-small);
+}
+
+.issueCategory {
+  font-weight: 500;
+}
+
+.issueCategory[data-category="discrepancy"] {
+  color: var(--status-breach);
+}
+
+.issueCategory[data-category="explanation"],
+.issueCategory[data-category="verify"] {
+  color: var(--status-watch);
+}
+
+.note {
+  font-size: var(--fs-small);
+}
+
+.note summary {
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.note > div {
+  margin-top: 8px;
 }

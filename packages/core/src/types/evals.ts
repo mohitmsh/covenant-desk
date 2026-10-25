@@ -9,9 +9,27 @@ export interface EvalCheck {
   readonly actual: string
 }
 
+/** What the agent pipeline produced for a case, to show alongside its checks. */
+export interface EvalOutput {
+  readonly covenants: ReadonlyArray<{
+    readonly name: string
+    readonly metric: string
+    readonly actual: number
+    readonly limit: number
+    readonly operator: string
+    readonly status: string
+  }>
+  readonly issues: ReadonlyArray<{ readonly title: string; readonly category: string }>
+  readonly note: string | null
+}
+
 export interface EvalCaseResult {
   readonly id: string
   readonly name: string
+  readonly borrowerId: string
+  readonly borrowerName: string
+  /** The pack file the case runs on. */
+  readonly pack: string
   readonly category: string
   readonly description: string
   readonly passed: boolean
@@ -22,6 +40,8 @@ export interface EvalCaseResult {
   readonly costUsd: number
   readonly turns: number
   readonly error: string | null
+  /** Null when the case did not run. */
+  readonly output: EvalOutput | null
 }
 
 /** One run of the eval suite, as shown on the test results page. */
