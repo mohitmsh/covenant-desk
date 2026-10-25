@@ -161,3 +161,14 @@ export const CONFLICT_CHECKS = [
   "Ask the borrower which page is correct",
   "Check which figure the covenant test used, and re-test if it was the wrong one"
 ] as const
+
+/** Issues are listed worst first: discrepancies, then questions to verify, then movements to explain. */
+export const ISSUE_CATEGORY_ORDER = { discrepancy: 0, verify: 1, explanation: 2 } as const
+
+export const ISSUE_SEVERITY_ORDER = { high: 0, medium: 1 } as const
+
+/** Average month length, for telling a monthly comparative from a quarterly or annual one. */
+export const AVERAGE_MONTH_MS = 30.44 * 24 * 60 * 60 * 1000
+
+/** Where a pack's cover states its period: `reporting for September 2026`, `month ended 30 September 2026`. */
+export const STATED_PERIOD_PATTERN = /(?:reporting for|month ended \d{1,2})\s+([A-Z][a-z]+ \d{4})/

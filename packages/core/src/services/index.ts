@@ -1,5 +1,5 @@
 export * from "./certificate"
-export * from "./checks"
+export * from "./checks/index"
 export * from "./covenants"
 export * from "./document-store"
 export * from "./pdf"

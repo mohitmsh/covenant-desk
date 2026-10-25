@@ -1,5 +1,7 @@
 import type { ISSUE_ACTIONS, ISSUE_CATEGORIES, ISSUE_KINDS, ISSUE_STATUSES } from "#constants/issues"
-import type { PageBox } from "#types/pdf"
+import type { VerifiedCertificateClaim } from "#types/certificate"
+import type { CovenantResult } from "#types/covenants"
+import type { PageBox, PdfText, TableCell } from "#types/pdf"
 import type { IsoTimestamp } from "#types/runs"
 
 export type IssueKind = (typeof ISSUE_KINDS)[number]
@@ -68,4 +70,21 @@ export interface IssueDecision {
   readonly reason?: string | undefined
   readonly draft?: string | undefined
   readonly remember?: boolean | undefined
+}
+
+/** What the post-extraction checks read: the pack, the period tested, and the tested and certified results. */
+export interface CheckInput {
+  readonly pdf: PdfText
+  /** `YYYY-MM` period the run tests. */
+  readonly period: string
+  readonly covenants: ReadonlyArray<CovenantResult>
+  readonly claims: ReadonlyArray<VerifiedCertificateClaim>
+}
+
+/** A row's current and prior amounts, and how far apart they are in words. */
+export interface PeriodComparison {
+  readonly current: TableCell
+  readonly prior: TableCell
+  /** `prior month`, `prior quarter` or `prior year`. */
+  readonly priorWord: string
 }

@@ -33,3 +33,6 @@ export const CERTIFICATE_RATIO_DECIMALS = 2
 
 /** Relative difference within which a certificate's dollar amount agrees with the tested amount. */
 export const CERTIFICATE_DOLLAR_TOLERANCE = 0.005
+
+/** How a limit is described: a maximum for `lte` covenants, a minimum for `gte`. */
+export const LIMIT_WORDS = { lte: "maximum", gte: "minimum" } as const
