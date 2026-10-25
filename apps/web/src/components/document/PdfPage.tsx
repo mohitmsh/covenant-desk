@@ -35,6 +35,8 @@ interface PdfPageProps {
   readonly onSelectMarker: (key: string) => void
   readonly fields: ReadonlyArray<PageField>
   readonly onSelectField: (key: string) => void
+  /** A single place to point at, e.g. a value behind an issue. */
+  readonly spotlight: PageBox | null
 }
 
 interface Highlight {
@@ -62,11 +64,13 @@ export function PdfPage({
   markers,
   onSelectMarker,
   fields,
-  onSelectField
+  onSelectField,
+  spotlight
 }: PdfPageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const primaryRef = useRef<HTMLDivElement>(null)
   const activeMarkerRef = useRef<HTMLButtonElement>(null)
+  const spotlightRef = useRef<HTMLDivElement>(null)
   const activeMarker = markers.find((marker) => marker.active)?.key ?? null
   const [height, setHeight] = useState(0)
   const [highlights, setHighlights] = useState<ReadonlyArray<Highlight>>([])
@@ -140,6 +144,10 @@ export function PdfPage({
   }, [highlights])
 
   useEffect(() => {
+    if (spotlight !== null && height > 0) spotlightRef.current?.scrollIntoView({ block: "center", behavior: "smooth" })
+  }, [spotlight, height])
+
+  useEffect(() => {
     if (activeMarker !== null && height > 0) {
       activeMarkerRef.current?.scrollIntoView({ block: "center", behavior: "smooth" })
     }
@@ -157,6 +165,19 @@ export function PdfPage({
           style={{ left: highlight.left, top: highlight.top, width: highlight.width, height: highlight.height }}
         />
       ))}
+      {height > 0 && spotlight && (
+        <div
+          ref={spotlightRef}
+          className={styles.highlight}
+          data-primary
+          style={{
+            left: spotlight.x * width - HIGHLIGHT_PADDING,
+            top: spotlight.y * height - HIGHLIGHT_PADDING,
+            width: spotlight.width * width + HIGHLIGHT_PADDING * 2,
+            height: spotlight.height * height + HIGHLIGHT_PADDING * 2
+          }}
+        />
+      )}
       {height > 0 &&
         fields.map((field) => (
           <button

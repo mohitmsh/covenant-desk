@@ -129,3 +129,20 @@
 .status[data-status="queried"] {
   color: var(--status-watch);
 }
+
+.category {
+  font-weight: 500;
+}
+
+.category[data-category="discrepancy"] {
+  color: var(--status-breach);
+}
+
+.category[data-category="explanation"],
+.category[data-category="verify"] {
+  color: var(--status-watch);
+}
+
+.status[data-status="extraction_error"] {
+  color: var(--ink-soft);
+}

@@ -138,6 +138,7 @@ export function DocumentViewer({
             width={pageWidth}
             quote={focus.quote}
             reported={focus.reported}
+            spotlight={focus.quote === null ? focus.box : null}
             markers={markers.filter((marker) => marker.page === focus.page)}
             onSelectMarker={onSelectMarker}
             fields={pageFields}

@@ -1,4 +1,4 @@
-import type { CovenantStatus, IssueKind, IssueStatus, Metric, Operator, RunStatus } from "@/types"
+import type { CovenantStatus, IssueCategory, IssueKind, IssueStatus, Metric, Operator, RunStatus } from "@/types"
 
 export const RUN_STATUS_LABELS = {
   extracting: "Extracting",
@@ -40,14 +40,22 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
 export const ISSUE_KIND_LABELS = {
   certificate_mismatch: "Certificate mismatch",
   subtotal: "Subtotal error",
-  variance: "Large change"
+  variance: "Large change",
+  period: "Wrong period"
 } as const satisfies Record<IssueKind, string>
+
+export const ISSUE_CATEGORY_LABELS = {
+  discrepancy: "Discrepancy",
+  explanation: "Needs explanation",
+  verify: "Verify"
+} as const satisfies Record<IssueCategory, string>
 
 export const ISSUE_STATUS_LABELS = {
   open: "To review",
   accepted: "Accepted",
   overridden: "Overridden",
-  queried: "Query drafted"
+  queried: "Query drafted",
+  extraction_error: "Extraction error"
 } as const satisfies Record<IssueStatus, string>
 
 export const METRIC_LABELS = {

@@ -10,25 +10,31 @@ import { requireRunStatus } from "#repositories/runs"
 import type { BorrowerId, RunId } from "#types/ids"
 import type { Issue, IssueDecision, IssueFinding, IssueResolution, IssueStatus } from "#types/issues"
 
-const ISSUE_COLUMNS = `key, fingerprint, kind, severity, title, detail, page, box, status, resolution`
+const ISSUE_COLUMNS = `key, fingerprint, kind, category, severity, title, detail, page, box, status, resolution`
+
+const ISSUE_SELECT = `${ISSUE_COLUMNS}, context->'evidence' as evidence, context->>'impact' as impact,
+  context->'checks' as checks`
 
 const insertIssue = (runId: RunId, finding: IssueFinding, status: IssueStatus, resolution: IssueResolution | null) =>
   Effect.gen(function* () {
     const db = yield* Db
     yield* db.query(
-      `insert into review_issues (run_id, ${ISSUE_COLUMNS}) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      `insert into review_issues (run_id, ${ISSUE_COLUMNS}, context)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
       [
         runId,
         finding.key,
         finding.fingerprint,
         finding.kind,
+        finding.category,
         finding.severity,
         finding.title,
         finding.detail,
         finding.page,
         JSON.stringify(finding.box),
         status,
-        JSON.stringify(resolution)
+        JSON.stringify(resolution),
+        JSON.stringify({ evidence: finding.evidence, impact: finding.impact, checks: finding.checks })
       ]
     )
   })
@@ -91,7 +97,7 @@ export const listIssues = (runId: RunId) =>
   Effect.gen(function* () {
     const db = yield* Db
     return yield* db.query<Issue>(
-      `select ${ISSUE_COLUMNS} from review_issues where run_id = $1
+      `select ${ISSUE_SELECT} from review_issues where run_id = $1
        order by page, (box->>'y')::float8 nulls last, key`,
       [runId]
     )
@@ -111,8 +117,9 @@ export const countOpenIssues = (runId: RunId) =>
 const blank = (text: string | undefined) => (text ?? "").trim() === ""
 
 /**
- * Records an analyst's decision on an issue: accept it, override it with a
- * reason, draft a query to the borrower (held, not sent), or reopen it.
+ * Records an analyst's decision on an issue: accept it (optionally with a note),
+ * override it with a reason, draft a query to the borrower (held, not sent),
+ * mark it as caused by an extraction error, or reopen it.
  * Accepted and overridden decisions can be remembered for the borrower's later packs.
  */
 export const decideIssue = (runId: RunId, key: string, decision: IssueDecision) =>

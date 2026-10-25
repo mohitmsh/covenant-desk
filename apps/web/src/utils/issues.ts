@@ -1,11 +1,11 @@
 import type { Issue } from "@/types"
 import { formatPeriod } from "./format"
 
-/** Colour an issue is drawn in: by severity while open, settled once decided. */
+/** Colour an issue is drawn in: red for a discrepancy, amber otherwise, settled once decided. */
 export type IssueTone = "breach" | "watch" | "decided"
 
 export const issueTone = (issue: Issue): IssueTone =>
-  issue.status !== "open" ? "decided" : issue.severity === "high" ? "breach" : "watch"
+  issue.status !== "open" ? "decided" : issue.category === "discrepancy" ? "breach" : "watch"
 
 export const countOpen = (issues: ReadonlyArray<Issue>): number => issues.filter((i) => i.status === "open").length
 

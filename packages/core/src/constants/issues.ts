@@ -1,14 +1,19 @@
-export const ISSUE_KINDS = ["certificate_mismatch", "subtotal", "variance"] as const
+import type { Metric } from "#types/covenants"
 
-export const ISSUE_STATUSES = ["open", "accepted", "overridden", "queried"] as const
+export const ISSUE_KINDS = ["certificate_mismatch", "subtotal", "variance", "period"] as const
 
-export const ISSUE_ACTIONS = ["accept", "override", "query", "reopen"] as const
+export const ISSUE_CATEGORIES = ["discrepancy", "explanation", "verify"] as const
+
+export const ISSUE_STATUSES = ["open", "accepted", "overridden", "queried", "extraction_error"] as const
+
+export const ISSUE_ACTIONS = ["accept", "override", "query", "mark_extraction_error", "reopen"] as const
 
 /** Status each analyst action moves an issue to. */
 export const ISSUE_ACTION_STATUS = {
   accept: "accepted",
   override: "overridden",
   query: "queried",
+  mark_extraction_error: "extraction_error",
   reopen: "open"
 } as const
 
@@ -104,3 +109,47 @@ export const VARIANCE_LINES = ["Revenue", "EBITDA", "Interest expense", "Cash at
  * such as balance sheets, compare the latest date with the one before it.
  */
 export const VARIANCE_COLUMNS: ReadonlyArray<readonly [current: string, prior: string]> = [["TTM Actual", "Prior TTM"]]
+
+/** Covenant metrics each varying line feeds, so the issue can say why the movement matters. */
+export const VARIANCE_METRICS: Readonly<Record<(typeof VARIANCE_LINES)[number], ReadonlyArray<Metric>>> = {
+  Revenue: [],
+  EBITDA: ["net_leverage", "interest_cover"],
+  "Interest expense": ["interest_cover"],
+  "Cash at bank": ["minimum_liquidity", "net_leverage"],
+  "Trade receivables": []
+}
+
+/** What to look for when a line moves sharply. */
+export const VARIANCE_CHECKS: Readonly<Record<(typeof VARIANCE_LINES)[number], ReadonlyArray<string>>> = {
+  Revenue: [
+    "Lost or new customers, or price changes, in the commentary",
+    "A change in revenue recognition or one-off sales"
+  ],
+  EBITDA: [
+    "Margin pressure or one-off costs explained in the commentary",
+    "Whether the period's add-backs are permitted"
+  ],
+  "Interest expense": ["New drawings or a change in rates", "Fees or hedging costs booked to interest"],
+  "Cash at bank": [
+    "Debt repayments, capex or distributions in the period",
+    "Cash moved to restricted or offset accounts",
+    "Timing of receipts around the period end, which the commentary may explain"
+  ],
+  "Trade receivables": ["Slower collections or a large overdue customer", "Factoring or debtor finance arrangements"]
+}
+
+export const SUBTOTAL_CHECKS = [
+  "Compare each line with the prior period to find the misstated one",
+  "Ask the borrower to confirm the line and reissue the page"
+] as const
+
+export const CERTIFICATE_CHECKS = [
+  "Compare the EBITDA used on the certificate with the profit and loss",
+  "Check whether its add-backs are permitted by the facility's EBITDA definition",
+  "Request a corrected certificate if the facility definition was not followed"
+] as const
+
+export const PERIOD_CHECKS = [
+  "Confirm which period the borrower meant to send",
+  "Request the pack for the period being tested before relying on these figures"
+] as const

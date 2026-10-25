@@ -234,6 +234,10 @@ export function RunReview({ detail }: RunReviewProps) {
                 borrowerName={borrower.name}
                 period={run.period}
                 onSelect={openIssue}
+                onShowEvidence={(evidence) =>
+                  evidence.page !== null &&
+                  setFocus({ page: evidence.page, quote: null, reported: null, box: evidence.box })
+                }
                 onDecided={advance}
                 onClose={() => setActiveIssueKey(null)}
               />

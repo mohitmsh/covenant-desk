@@ -1,4 +1,4 @@
-import type { ISSUE_ACTIONS, ISSUE_KINDS, ISSUE_STATUSES } from "#constants/issues"
+import type { ISSUE_ACTIONS, ISSUE_CATEGORIES, ISSUE_KINDS, ISSUE_STATUSES } from "#constants/issues"
 import type { PageBox } from "#types/pdf"
 import type { IsoTimestamp } from "#types/runs"
 
@@ -10,6 +10,22 @@ export type IssueAction = (typeof ISSUE_ACTIONS)[number]
 
 export type IssueSeverity = "high" | "medium"
 
+/**
+ * What the analyst is being asked: `discrepancy` when two sources disagree,
+ * `explanation` when figures are consistent but the movement is unusual, and
+ * `verify` when units, period or mapping need a human to confirm.
+ */
+export type IssueCategory = (typeof ISSUE_CATEGORIES)[number]
+
+/** A value behind an issue, linked to where it was read. */
+export interface IssueEvidence {
+  readonly label: string
+  readonly value: string
+  /** Null for values computed rather than read, such as a tested ratio. */
+  readonly page: number | null
+  readonly box: PageBox | null
+}
+
 /** A problem found by a code check, before any analyst decision. */
 export interface IssueFinding {
   /** Unique within a run. */
@@ -17,17 +33,23 @@ export interface IssueFinding {
   /** Stable across a borrower's packs, so a remembered decision can be reapplied. */
   readonly fingerprint: string
   readonly kind: IssueKind
+  readonly category: IssueCategory
   readonly severity: IssueSeverity
   readonly title: string
   readonly detail: string
   readonly page: number
   readonly box: PageBox | null
+  readonly evidence: ReadonlyArray<IssueEvidence>
+  /** Why it matters, tied to the covenants it affects. */
+  readonly impact: string | null
+  /** What the analyst could look at to resolve it. */
+  readonly checks: ReadonlyArray<string>
 }
 
 export interface IssueResolution {
   readonly by: string
   readonly at: IsoTimestamp
-  /** Required for an override; the remembered reason for an automatic decision. */
+  /** Required for an override, optional note otherwise; the remembered reason for an automatic decision. */
   readonly reason: string | null
   /** Draft query to the borrower, held until approved. */
   readonly draft: string | null

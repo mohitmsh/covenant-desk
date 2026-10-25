@@ -1,4 +1,4 @@
-import { ISSUE_KIND_LABELS, ISSUE_STATUS_LABELS } from "@/constants"
+import { ISSUE_CATEGORY_LABELS, ISSUE_KIND_LABELS, ISSUE_STATUS_LABELS } from "@/constants"
 import type { Issue } from "@/types"
 import { formatPage } from "@/utils/format"
 import { countOpen, issueTone } from "@/utils/issues"
@@ -69,6 +69,9 @@ export function IssuesPanel({ issues, activeKey, onStart, onSelect }: IssuesPane
               <span className={styles.body}>
                 <span className={styles.title}>{issue.title}</span>
                 <span className={styles.meta}>
+                  <span className={styles.category} data-category={issue.category}>
+                    {ISSUE_CATEGORY_LABELS[issue.category]}
+                  </span>{" "}
                   {ISSUE_KIND_LABELS[issue.kind]} · {formatPage(issue.page)}
                 </span>
               </span>

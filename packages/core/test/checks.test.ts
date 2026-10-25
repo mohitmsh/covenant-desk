@@ -48,7 +48,7 @@ describe("verifyFigure", () => {
 
 describe("computeIssues", () => {
   it("finds a total that does not add up", () => {
-    const issues = computeIssues({ pdf: harbourline, covenants: [], claims: [] })
+    const issues = computeIssues({ pdf: harbourline, period: "2026-09", covenants: [], claims: [] })
     expect(issues.map((i) => i.key)).toEqual(["subtotal:p4:Total assets"])
     expect(issues[0]?.detail).toBe(
       "30 Sep 2026: printed $34,050k, but its lines come to $34,140k, a difference of $90k."
@@ -57,7 +57,7 @@ describe("computeIssues", () => {
   })
 
   it("flags large changes on the prior period, and accepts bracketed negative totals", () => {
-    const issues = computeIssues({ pdf: wattle, covenants: [], claims: [] })
+    const issues = computeIssues({ pdf: wattle, period: "2026-09", covenants: [], claims: [] })
     expect(issues.map((i) => i.key)).toEqual(["variance:p4:Cash at bank"])
     expect(issues[0]?.title).toBe("Cash at bank down 51% on the prior period")
   })
@@ -65,6 +65,7 @@ describe("computeIssues", () => {
   it("raises a certificate claim that disagrees with the tested result", () => {
     const issues = computeIssues({
       pdf: wattle,
+      period: "2026-09",
       covenants: [
         {
           covenantId: "lev",
@@ -96,5 +97,46 @@ describe("computeIssues", () => {
     const certificate = issues.find((i) => i.kind === "certificate_mismatch")
     expect(certificate).toMatchObject({ key: "certificate:net_leverage", severity: "high", page: 6 })
     expect(certificate?.title).toBe("Certificate says net leverage complies; tested result is a breach")
+  })
+
+  it("asks for verification when the pack is for a different period", () => {
+    const issues = computeIssues({ pdf: harbourline, period: "2026-08", covenants: [], claims: [] })
+    const period = issues.find((i) => i.kind === "period")
+    expect(period).toMatchObject({ category: "verify", page: 1 })
+    expect(period?.title).toBe("Pack is for September 2026, not the August 2026 period being tested")
+    expect(period?.box).not.toBeNull()
+  })
+
+  it("links a large change to both source cells and the covenants it feeds", () => {
+    const [cash] = computeIssues({
+      pdf: wattle,
+      period: "2026-09",
+      covenants: [
+        {
+          covenantId: "liq",
+          covenantVersion: 1,
+          name: "Minimum liquidity",
+          formula: "",
+          inputs: {},
+          metric: "minimum_liquidity",
+          operator: "gte",
+          limit: 1_500_000,
+          actual: 1_540_000,
+          headroom: 0.027,
+          status: "watch"
+        }
+      ],
+      claims: []
+    })
+    expect(cash?.category).toBe("explanation")
+    expect(cash?.evidence.map((e) => [e.label, e.value, e.page])).toEqual([
+      ["30 Jun 2026", "$1,310k", 4],
+      ["30 Sep 2026", "$640k", 4]
+    ])
+    expect(cash?.evidence.every((e) => e.box !== null)).toBe(true)
+    expect(cash?.impact).toBe(
+      "Feeds a covenant: Minimum liquidity $1.54m against a $1.50m minimum (2.7% headroom, watch)."
+    )
+    expect(cash?.checks.length).toBeGreaterThan(0)
   })
 })

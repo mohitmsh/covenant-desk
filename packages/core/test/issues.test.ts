@@ -20,11 +20,15 @@ const finding: IssueFinding = {
   key: "subtotal:p4:Total assets",
   fingerprint: "subtotal:Total assets",
   kind: "subtotal",
+  category: "discrepancy",
   severity: "high",
   title: "Total assets does not add up",
   detail: "30 Sep 2026: printed $27,000k, but the lines = $26,910k (over by $90k).",
   page: 4,
-  box: { x: 0.09, y: 0.26, width: 0.82, height: 0.02 }
+  box: { x: 0.09, y: 0.26, width: 0.82, height: 0.02 },
+  evidence: [{ label: "Total assets as printed", value: "$27,000k", page: 4, box: null }],
+  impact: "The page contradicts itself.",
+  checks: ["Ask the borrower to reissue the page"]
 }
 
 /** A run awaiting sign-off, with the finding recorded. */
