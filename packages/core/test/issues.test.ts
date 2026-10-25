@@ -140,4 +140,15 @@ describe("review issues", () => {
     )
     expect(issues[0]).toMatchObject({ status: "open", resolution: null })
   })
+
+  it("does not let the analyst approve their own run", async () => {
+    const error = await runWithDb(
+      Effect.gen(function* () {
+        const runId = yield* runAwaitingSignoff()
+        yield* decideIssue(runId, finding.key, { action: "accept", actor: TEST_APPROVER })
+        return yield* Effect.flip(approveRun(runId, testBorrower.analyst))
+      })
+    )
+    expect(error).toMatchObject({ _tag: "RunNotReady" })
+  })
 })

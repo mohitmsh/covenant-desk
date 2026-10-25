@@ -42,8 +42,18 @@ export function RunList({
   isEvalsOpen,
   onOpenEvals
 }: RunListProps) {
-  const pending = runs.filter((run) => run.status !== "approved")
-  const approved = runs.filter((run) => run.status === "approved")
+  // Runs arrive newest first, so the first per borrower and period is current and the rest are superseded.
+  const seen = new Set<string>()
+  const superseded = new Set<string>()
+  for (const run of runs) {
+    const slot = `${run.borrowerId}/${run.period}`
+    if (seen.has(slot) && run.status !== "failed") superseded.add(run.id)
+    if (run.status !== "failed") seen.add(slot)
+  }
+  const current = runs.filter((run) => !superseded.has(run.id))
+  const pending = current.filter((run) => run.status !== "approved")
+  const approved = current.filter((run) => run.status === "approved")
+  const older = runs.filter((run) => superseded.has(run.id))
 
   const newRunButton = (
     <>
@@ -116,6 +126,7 @@ export function RunList({
       {newRunButton}
       {renderGroup(RUN_STATUS_LABELS.awaiting_signoff, pending)}
       {renderGroup(RUN_STATUS_LABELS.approved, approved)}
+      {renderGroup("Superseded by a later run", older)}
     </nav>
   )
 }

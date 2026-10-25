@@ -4,6 +4,7 @@ import type { Note } from "@/types"
 import { formatDateTime } from "@/utils/format"
 import { Button } from "@/components/ui/Button"
 import { Section } from "@/components/ui/Section"
+import { NoteText } from "./NoteText"
 import styles from "./MonitoringNote.module.css"
 
 interface MonitoringNoteProps {
@@ -11,9 +12,10 @@ interface MonitoringNoteProps {
   readonly note: Note | null
   readonly author: string
   readonly editable: boolean
+  readonly onShowPage: (page: number) => void
 }
 
-export function MonitoringNote({ runId, note, author, editable }: MonitoringNoteProps) {
+export function MonitoringNote({ runId, note, author, editable, onShowPage }: MonitoringNoteProps) {
   const [draft, setDraft] = useState<string | null>(null)
   const saveNote = useSaveNote(runId)
 
@@ -59,11 +61,7 @@ export function MonitoringNote({ runId, note, author, editable }: MonitoringNote
           </>
         ) : note ? (
           <>
-            <div className={styles.text}>
-              {note.body.split("\n\n").map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
+            <NoteText body={note.body} onShowPage={onShowPage} />
             {editable && <p className={styles.meta}>{meta}</p>}
           </>
         ) : (

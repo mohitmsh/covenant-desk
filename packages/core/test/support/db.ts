@@ -14,6 +14,7 @@ import { Effect, Layer, Schema } from "effect"
 
 export const TEST_ACTOR = "agent:test"
 export const TEST_APPROVER = "Amelia Moreau"
+export const TEST_ANALYST = "Jonah Okafor"
 export const TEST_PERIOD = "2026-09"
 
 export const testBorrower: Borrower = {
@@ -21,7 +22,7 @@ export const testBorrower: Borrower = {
   name: "Acme Pty Ltd",
   facilityName: "Term loan",
   facilityLimit: 10_000_000,
-  analyst: TEST_APPROVER
+  analyst: TEST_ANALYST
 }
 
 export const testCovenants: ReadonlyArray<CovenantDefinition> = [

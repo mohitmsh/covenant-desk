@@ -77,7 +77,7 @@ export function App() {
         {run.error.message}
       </Message>
     ) : (
-      <RunReview key={run.data.run.id} detail={run.data} />
+      <RunReview key={run.data.run.id} detail={run.data} onOpenRun={openRun} />
     )
 
   return (

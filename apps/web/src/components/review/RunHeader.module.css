@@ -58,3 +58,27 @@
   color: var(--faint);
   font-size: var(--fs-caption);
 }
+
+.pending {
+  color: var(--muted);
+}
+
+.rerun {
+  margin-left: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+}
+
+.rerun:hover:not(:disabled) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rerunError {
+  display: block;
+  color: var(--status-breach);
+  font-size: var(--fs-caption);
+}

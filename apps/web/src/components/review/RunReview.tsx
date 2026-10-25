@@ -24,11 +24,12 @@ import styles from "./RunReview.module.css"
 
 interface RunReviewProps {
   readonly detail: RunDetail
+  readonly onOpenRun: (runId: string) => void
 }
 
 const INITIAL_FOCUS: SourceFocus = { page: 1, quote: null, reported: null, box: null }
 
-export function RunReview({ detail }: RunReviewProps) {
+export function RunReview({ detail, onOpenRun }: RunReviewProps) {
   const {
     run,
     borrower,
@@ -42,7 +43,8 @@ export function RunReview({ detail }: RunReviewProps) {
     approval,
     events
   } = detail
-  const [focus, setFocus] = useState<SourceFocus>(INITIAL_FOCUS)
+  // Open the document where the most serious issue is, rather than on its cover.
+  const [focus, setFocus] = useState<SourceFocus>(() => ({ ...INITIAL_FOCUS, page: issues[0]?.page ?? 1 }))
   const [focusedKey, setFocusedKey] = useState<string | null>(null)
   const [activeIssueKey, setActiveIssueKey] = useState<string | null>(null)
   const [tab, setTab] = useState<"review" | "audit">("review")
@@ -50,6 +52,11 @@ export function RunReview({ detail }: RunReviewProps) {
   const showProgress = isRunInProgress(run.status) || run.status === "failed"
   const showIssues = run.status === "awaiting_signoff" || run.status === "approved"
   const activeIssue = issues.find((issue) => issue.key === activeIssueKey) ?? null
+  const { ebitdaGap } = detail
+  const pendingAddBacks =
+    ebitdaGap !== null &&
+    covenants.some((c) => c.status === "breach" && ebitdaGap.metrics.includes(c.metric)) &&
+    issues.some((issue) => issue.kind === "certificate_mismatch" && issue.status === "open")
 
   const openIssue = (key: string) => {
     const issue = issues.find((i) => i.key === key)
@@ -97,7 +104,14 @@ export function RunReview({ detail }: RunReviewProps) {
     <div className={styles.review}>
       <div className={styles.scroll}>
         <div className={styles.content}>
-          <RunHeader run={run} borrower={borrower} covenants={covenants} events={events} />
+          <RunHeader
+            run={run}
+            borrower={borrower}
+            covenants={covenants}
+            events={events}
+            pendingAddBacks={pendingAddBacks}
+            onOpenRun={onOpenRun}
+          />
 
           <div className={styles.tabs} role="tablist" aria-label="Run sections">
             <button type="button" role="tab" aria-selected={tab === "review"} onClick={() => setTab("review")}>
@@ -156,6 +170,7 @@ export function RunReview({ detail }: RunReviewProps) {
                 note={note}
                 author={borrower.analyst}
                 editable={run.status === "awaiting_signoff"}
+                onShowPage={changePage}
               />
 
               <div ref={signOffRef}>
@@ -165,7 +180,7 @@ export function RunReview({ detail }: RunReviewProps) {
                   status={run.status}
                   note={note}
                   approval={approval}
-                  defaultApprover={borrower.analyst}
+                  analyst={borrower.analyst}
                   openIssues={issues.filter((issue) => issue.status === "open").length}
                   onReviewIssues={startReview}
                 />

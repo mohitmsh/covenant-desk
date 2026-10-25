@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { OPERATOR_SYMBOLS } from "@/constants"
 import type { CertificateComparison, CovenantResult, VerifiedCertificateClaim, VerifiedFigure } from "@/types"
-import { CERTIFICATE_VERDICTS, comparisonFor, describeCertificateClaim, disagreementLevel } from "@/utils/certificate"
+import { CERTIFICATE_VERDICTS, comparisonFor, disagreementLevel, type DisagreementLevel } from "@/utils/certificate"
 import { sortCovenants } from "@/utils/covenants"
 import { formatMetric, formatPercent } from "@/utils/format"
 import { PageTag } from "@/components/ui/PageTag"
@@ -9,6 +9,9 @@ import { StatusBadge } from "@/components/ui/StatusBadge"
 import { CalculationPopover } from "./CalculationPopover"
 import { HeadroomMeter } from "./HeadroomMeter"
 import styles from "./CovenantTiles.module.css"
+
+/** ✕ the certificate reaches a different outcome, ≠ a different figure, ✓ it agrees. */
+const VERDICT_MARKS = { compliance: "✕", value: "≠", none: "✓" } as const satisfies Record<DisagreementLevel, string>
 
 interface CovenantTilesProps {
   readonly covenants: ReadonlyArray<CovenantResult>
@@ -41,6 +44,7 @@ export function CovenantTiles({
           <div
             key={covenant.covenantId}
             className={styles.anchor}
+            data-open={isOpen}
             data-popover-align={index === sorted.length - 1 ? "end" : "start"}
           >
             <button
@@ -68,15 +72,19 @@ export function CovenantTiles({
               </span>
             </button>
             {comparison && claim && (
-              <div className={styles.certificate} data-disagrees={disagreementLevel(comparison)}>
-                <span className={styles.certificateLabel}>{CERTIFICATE_VERDICTS[disagreementLevel(comparison)]}</span>
-                <span className={styles.certificateValue}>{describeCertificateClaim(comparison)}</span>
+              <p className={styles.certificate} title={CERTIFICATE_VERDICTS[disagreementLevel(comparison)]}>
+                Certificate {formatMetric(comparison.metric, comparison.certificateValue)}{" "}
+                <span className={styles.verdict} data-level={disagreementLevel(comparison)}>
+                  {VERDICT_MARKS[disagreementLevel(comparison)]}
+                </span>
+                <span className={styles.srOnly}>{CERTIFICATE_VERDICTS[disagreementLevel(comparison)]}</span>
+                {" · "}
                 <PageTag
                   page={claim.page}
                   active={focusedKey === `certificate:${claim.metric}`}
                   onClick={() => onFocusClaim(claim)}
                 />
-              </div>
+              </p>
             )}
             {isOpen && (
               <CalculationPopover

@@ -17,6 +17,18 @@ export const approveRun = (runId: RunId, approver: string) =>
     Effect.gen(function* () {
       const db = yield* Db
       yield* requireRunStatus(runId, ["awaiting_signoff"], "approve")
+      const [owner] = yield* db.query<{ analyst: string }>(
+        "select b.analyst from runs r join borrowers b on b.id = r.borrower_id where r.id = $1",
+        [runId]
+      )
+      // Four eyes: whoever reviewed the borrower cannot also sign off their own run.
+      if (owner && owner.analyst.trim().toLowerCase() === approver.trim().toLowerCase()) {
+        return yield* new RunNotReady({
+          runId,
+          status: "awaiting_signoff",
+          reason: "The analyst cannot approve their own run. A second reviewer must sign off."
+        })
+      }
       const openIssues = yield* countOpenIssues(runId)
       if (openIssues > 0) {
         return yield* new RunNotReady({
