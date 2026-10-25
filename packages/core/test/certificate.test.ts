@@ -1,4 +1,9 @@
-import { compareCertificate, type CovenantResult, type VerifiedCertificateClaim } from "@covenant-desk/core"
+import {
+  certificateEbitdaGap,
+  compareCertificate,
+  type CovenantResult,
+  type VerifiedCertificateClaim
+} from "@covenant-desk/core"
 import { describe, expect, it } from "vitest"
 
 const leverage: CovenantResult = {
@@ -62,5 +67,39 @@ describe("compareCertificate", () => {
       claim({ metric: "minimum_liquidity", reported: 1540, scale: 1000, value: 1_540_000, claimsCompliance: true })
     )
     expect(comparison.disagreements).toEqual([])
+  })
+})
+
+describe("certificateEbitdaGap", () => {
+  const inputs = { total_debt: 16_400_000, cash: 640_000, ebitda_ttm: 3_880_000, interest_expense_ttm: 1_720_000 }
+  const tested = (metric: "net_leverage" | "interest_cover", actual: number, status: "pass" | "breach") => ({
+    ...leverage,
+    covenantId: metric,
+    metric,
+    actual,
+    status,
+    inputs
+  })
+
+  it("traces both certificate ratios back to one EBITDA with add-backs", () => {
+    const gap = certificateEbitdaGap(
+      [tested("net_leverage", 4.06, "breach"), tested("interest_cover", 2.26, "pass")],
+      [
+        claim({ metric: "net_leverage", reported: 3.62, value: 3.62, claimsCompliance: true }),
+        claim({ metric: "interest_cover", reported: 2.53, value: 2.53, claimsCompliance: true })
+      ]
+    )
+    expect(gap).toEqual({
+      certificate: 4_350_000,
+      reported: 3_880_000,
+      difference: 470_000,
+      metrics: ["net_leverage", "interest_cover"]
+    })
+  })
+
+  it("is null when the certificate agrees", () => {
+    expect(
+      certificateEbitdaGap([tested("net_leverage", 4.06, "breach")], [claim({ claimsCompliance: false })])
+    ).toBeNull()
   })
 })

@@ -19,15 +19,17 @@ const saveDismissed = () => {
   }
 }
 
-/** First-visit guide to the featured run's story. */
+/** Dismissible guide to reviewing the featured run. Dismissal is remembered in this browser. */
 export function StartHere() {
   const [dismissed, setDismissed] = useState(readDismissed)
   if (dismissed) return null
 
   return (
-    <aside className={styles.guide} aria-label="Start here">
+    <aside className={styles.guide} aria-labelledby="start-here-heading">
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Start here</p>
+        <h2 id="start-here-heading" className={styles.heading}>
+          How to review this run
+        </h2>
         <Button
           variant="ghost"
           aria-label="Dismiss guide"
@@ -39,16 +41,12 @@ export function StartHere() {
           ✕
         </Button>
       </div>
-      <p className={styles.lead}>
-        The borrower certifies that every covenant complies. The agent's verified figures say net leverage is in breach.
-      </p>
       <ol className={styles.steps}>
-        <li>In the red banner, click a page link to see the borrower's own claim highlighted in the PDF.</li>
+        <li>Click a page link (e.g. p. 6) to see the borrower's claim highlighted in the PDF.</li>
         <li>
-          Click <strong>Start review</strong> to step through the issues the checks found, deciding each one on the
-          document.
+          Click <strong>Start review</strong> to step through each issue and decide it against the document.
         </li>
-        <li>Sign off at the bottom once every issue is decided. Every step lands in the audit trail.</li>
+        <li>Sign off once every issue is decided. Each step is recorded in the audit trail.</li>
       </ol>
     </aside>
   )

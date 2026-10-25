@@ -11,6 +11,7 @@ export type {
   Borrower,
   CovenantResult,
   CovenantStatus,
+  EbitdaGap,
   DocumentRecord,
   FigureKey,
   Issue,

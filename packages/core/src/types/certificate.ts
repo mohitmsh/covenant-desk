@@ -23,3 +23,13 @@ export interface CertificateComparison {
   readonly testedStatus: CovenantStatus
   readonly disagreements: ReadonlyArray<CertificateDisagreement>
 }
+
+/** EBITDA the borrower's certificate implies, against EBITDA reported in the accounts. Whole dollars. */
+export interface EbitdaGap {
+  readonly certificate: number
+  readonly reported: number
+  /** Positive when the certificate uses more EBITDA than reported, e.g. through add-backs. */
+  readonly difference: number
+  /** Covenants whose certificate figure is explained by the gap. */
+  readonly metrics: ReadonlyArray<Metric>
+}

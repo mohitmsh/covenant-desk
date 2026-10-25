@@ -1,5 +1,5 @@
 import type { RUN_STATUSES } from "#constants/runs"
-import type { CertificateComparison, VerifiedCertificateClaim } from "#types/certificate"
+import type { CertificateComparison, EbitdaGap, VerifiedCertificateClaim } from "#types/certificate"
 import type { CovenantResult } from "#types/covenants"
 import type { JsonValue } from "#types/db"
 import type { VerifiedFigure } from "#types/figures"
@@ -90,6 +90,8 @@ export interface RunDetail {
   readonly covenants: ReadonlyArray<CovenantResult>
   readonly certificateClaims: ReadonlyArray<VerifiedCertificateClaim>
   readonly certificateComparisons: ReadonlyArray<CertificateComparison>
+  /** Why the certificate's figures differ, when one EBITDA explains them. */
+  readonly ebitdaGap: EbitdaGap | null
   readonly issues: ReadonlyArray<Issue>
   readonly note: Note | null
   readonly approval: Approval | null

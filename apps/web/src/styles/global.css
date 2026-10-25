@@ -14,7 +14,7 @@ body,
 
 body {
   margin: 0;
-  background: var(--paper-2);
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--fs-body);
@@ -46,6 +46,8 @@ button {
   outline-offset: 2px;
 }
 
-.tabular {
+.tabular,
+td,
+th {
   font-variant-numeric: tabular-nums;
 }

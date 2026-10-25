@@ -33,11 +33,9 @@
   min-width: 0;
   overflow: hidden;
   margin: 0 10px 10px 0;
+  border: 1px solid var(--rule);
   border-radius: var(--radius-lg);
   background: var(--paper);
-  box-shadow:
-    0 0 0 1px var(--rule),
-    0 1px 3px rgba(20, 8, 12, 0.04);
 }
 
 @media (max-width: 960px) {

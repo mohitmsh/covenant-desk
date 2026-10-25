@@ -1,84 +1,99 @@
-.banner {
-  --banner-tone: var(--status-breach);
-  --banner-wash: var(--status-breach-wash);
+.card {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
+  gap: 10px;
   padding: 14px 16px;
-  border: 1px solid color-mix(in srgb, var(--banner-tone) 20%, transparent);
+  border: 1px solid var(--rule);
   border-radius: var(--radius-lg);
-  background: var(--banner-wash);
-}
-
-.icon {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--radius-pill);
-  background: var(--banner-tone);
-  color: var(--on-accent);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.body {
-  display: grid;
-  gap: 8px;
+  background: var(--paper);
 }
 
 .title {
-  color: var(--banner-tone);
-  font-weight: 500;
-}
-
-.items {
-  display: grid;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.item {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 4px 8px;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: var(--status-pass);
+}
+
+.dot[data-level="compliance"] {
+  background: var(--status-breach);
+}
+
+.dot[data-level="value"] {
+  background: var(--status-watch);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
   font-size: var(--fs-small);
 }
 
-.name {
-  min-width: 112px;
+.table th {
+  padding: 0 12px 6px 0;
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: var(--fs-caption);
+  font-weight: 400;
+  text-align: left;
+}
+
+.table td {
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: 0;
+}
+
+.table .numeric {
+  text-align: right;
+}
+
+.table strong {
+  font-weight: 600;
+}
+
+.claim {
   color: var(--muted);
 }
 
-.item strong {
-  font-weight: 500;
+.result {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--status-pass);
 }
 
-.arrow {
-  color: var(--faint);
-}
-
-.banner[data-level="value"] {
-  --banner-tone: var(--status-watch);
-  --banner-wash: var(--status-watch-wash);
-}
-
-.verdict {
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  font-size: var(--fs-micro);
-  font-weight: 500;
-}
-
-.item[data-level="compliance"] .verdict {
-  background: var(--status-breach-wash);
+.result[data-level="compliance"] {
   color: var(--status-breach);
 }
 
-.item[data-level="value"] .verdict {
-  background: var(--status-watch-wash);
+.result[data-level="value"] {
   color: var(--status-watch);
+}
+
+.result[data-level="none"] {
+  color: var(--muted);
+}
+
+.cause {
+  color: var(--muted);
+  font-size: var(--fs-small);
 }

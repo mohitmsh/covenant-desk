@@ -33,7 +33,7 @@
 
 .sha {
   color: var(--faint);
-  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--fs-micro);
 }
 
@@ -129,7 +129,7 @@
 .quote {
   overflow: hidden;
   color: var(--ink-soft);
-  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

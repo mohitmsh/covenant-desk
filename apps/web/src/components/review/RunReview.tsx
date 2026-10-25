@@ -106,6 +106,7 @@ export function RunReview({ detail }: RunReviewProps) {
             comparisons={certificateComparisons}
             covenants={covenants}
             claims={certificateClaims}
+            ebitdaGap={detail.ebitdaGap}
             onShowClaim={focusClaim}
           />
 

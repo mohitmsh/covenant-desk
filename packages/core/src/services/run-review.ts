@@ -9,7 +9,7 @@ import { listIssues } from "#repositories/issues"
 import { listFigures } from "#repositories/figures"
 import { getLatestNote } from "#repositories/notes"
 import { getRunDocumentId, getRunSummary } from "#repositories/runs"
-import { compareCertificates } from "#services/certificate"
+import { certificateEbitdaGap, compareCertificates } from "#services/certificate"
 import type { RunId } from "#types/ids"
 import type { RunDetail } from "#types/runs"
 
@@ -38,6 +38,7 @@ export const getRunDetail = (runId: RunId) =>
       covenants,
       certificateClaims,
       certificateComparisons: compareCertificates(covenants, certificateClaims),
+      ebitdaGap: certificateEbitdaGap(covenants, certificateClaims),
       issues,
       note,
       approval,
