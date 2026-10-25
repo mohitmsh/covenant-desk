@@ -3,6 +3,7 @@ import { serveStatic } from "@hono/node-server/serve-static"
 import { Hono } from "hono"
 import { API_PORT, API_PREFIX, WEB_DIST_DIR } from "#constants"
 import { borrowersRoutes } from "#routes/borrowers"
+import { evalsRoutes } from "#routes/evals"
 import { portfolioRoutes } from "#routes/portfolio"
 import { runsRoutes } from "#routes/runs"
 import { runtime } from "#runtime"
@@ -12,6 +13,7 @@ const app = new Hono()
   .route("/runs", runsRoutes)
   .route("/borrowers", borrowersRoutes)
   .route("/portfolio", portfolioRoutes)
+  .route("/evals", evalsRoutes)
 
 const root = new Hono().route("/", app)
 if (WEB_DIST_DIR) {

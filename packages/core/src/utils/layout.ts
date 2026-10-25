@@ -74,7 +74,15 @@ export interface TableRow {
   readonly label: string
   readonly cells: ReadonlyArray<TableCell>
   readonly box: PageBox
+  /** Whole dollars per printed unit, from the table's heading: 1,000 for `$'000`, 1,000,000 for `$m`. */
+  readonly scale: number
+  /** Smallest printed step, in printed units: 1 for `$'000`, 0.01 for `$m` to two decimals. */
+  readonly precision: number
 }
+
+/** Reads a table's unit from its heading, e.g. `$'000` or `$m`. Defaults to thousands, as packs usually print. */
+const unitOf = (heading: string): { readonly scale: number; readonly precision: number } =>
+  /\$\s*m\b|millions/i.test(heading) ? { scale: 1_000_000, precision: 0.01 } : { scale: 1_000, precision: 1 }
 
 const rightEdge = (box: PageBox) => box.x + box.width
 
@@ -98,6 +106,7 @@ const groupLines = (items: ReadonlyArray<PositionedText>): PositionedText[][] =>
 export const readTableRows = (items: ReadonlyArray<PositionedText>): TableRow[] => {
   const rows: TableRow[] = []
   let headers: PositionedText[] = []
+  let unit = unitOf("")
 
   for (const line of groupLines(items)) {
     const amounts = line.filter((item) => parseAmount(item.text) !== null)
@@ -105,6 +114,7 @@ export const readTableRows = (items: ReadonlyArray<PositionedText>): TableRow[] 
     const isHeader = amounts.length === 0 && labelItems.length > 1
     if (isHeader) {
       headers = labelItems.slice(1)
+      unit = unitOf(labelItems[0]?.text ?? "")
       continue
     }
     if (amounts.length === 0 || labelItems.length === 0) continue
@@ -112,6 +122,7 @@ export const readTableRows = (items: ReadonlyArray<PositionedText>): TableRow[] 
     const box = unionBox(line.map((item) => item.box))
     if (!box) continue
     rows.push({
+      ...unit,
       label: labelItems.map((item) => item.text.trim()).join(" "),
       cells: amounts.map((item) => ({
         value: parseAmount(item.text) ?? 0,

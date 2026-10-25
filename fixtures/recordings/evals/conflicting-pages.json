@@ -1,0 +1,349 @@
+{
+  "model": "claude-haiku-5-5",
+  "recordedAt": "2026-10-25T11:46:45.499Z",
+  "pack": "evals/packs/conflicting-pages.pdf",
+  "sha256": "66042b43c3caf51ca7a666a0d1f8b146a468e04561f9201a1e8f8ea9ceed854f",
+  "turns": [
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNuAaAX29SnRAGmPeXbQ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQSjAUKEAgTGAI4AUIIdGhpbmtpbmcSDMNx2UobwabsDBAQTBoMxJ0DD5+ZMwLM0kuQIjCchMANrVc6qxXR86FM3IN875CpF7B00nAKpI0oT8S1AP/GeEeVsdVXF9c2/wnCHWwqqQQ+pt2P4tayFhBEkmV3BF7/txWc8UiEmNIUgDtu6KMZtiMrE66nhkUS560icMf4kTgcCPV++EEHFNSTWR1XakcU26Wy7NOAxyKWLJVsPYjguA4km5BPH30iF49sYo9Ia0RXQkW8cFdAOLr4SYx7wBSe3U22+bcR6J/e9BhA2vzEDLtS3S5RuqUlIQ2cDjZe/HFzvj1HUS6Qq4pT4ETrMqlNCg5uasNHsMM98ViNGC5mrPbq6J66BrCuzrDu+aJoI3rcrP6cM04SD1ThKwqLqFUHpICDCXX5KRYq07OUlloHnmC8jEHul4HnQsqKwRW/Ix5X/0lI7B2pVu/AvF069mozbymcUj+9xCTZ2l8Qzk1298BDLh6fBsO+pcZnBnCsIs6DRBtbXvRSrddRI1a8t1igo+eDjgaTSs4NKM3WTmVvx0+BVDYpPqWUWhhX3MhFD5e2sIPX76ulI9Y3wL0JAHFtQ+3J8CEr6FvqiTjQN2id2x/m1qCzHgMpcVCDMDPNtgwdpSkfnJqe4bqf+1FnSkXahBV11IA9qpZ1RoHeykm8g61+9caUgc13odh2BRsaH7fuuMPnRUKDMpFX/SLPLC/oxHQnMqigD9tv3qb4s0nq6qS0ttYBd332brBuoyiARJ2Jh21zDp9SAJIm1A4NhJ8wcfK3RYX7TUrsNMjGHyMk/E7sdHxMyGv2M3lzU67Ef+5+Ve67rOKdmfjM/wDbZ2GXBBygpRWRQ4cMGAE="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01RkbQouHCeBKkaSuyfvKe4p",
+            "name": "get_monitoring_context",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 66,
+          "cache_creation_input_tokens": 13355,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 13355,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 50,
+          "output_tokens_details": {
+            "thinking_tokens": 18
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1837
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNuAhN7eK79o7cVGrJJA",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "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"
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01MzLc2eKqN6QDYQsEaKLk19",
+            "name": "submit_figures",
+            "input": {
+              "figures": [
+                {
+                  "key": "revenue_ttm",
+                  "reported": 61300,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Revenue 5,262 5,466 15,632 61,300 57,009"
+                },
+                {
+                  "key": "ebitda_ttm",
+                  "reported": 5210,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "EBITDA 408 469 1,250 5,210 5,054"
+                },
+                {
+                  "key": "interest_expense_ttm",
+                  "reported": 2140,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Interest expense (182) (175) (540) (2,140) (1,926)"
+                },
+                {
+                  "key": "total_debt",
+                  "reported": 18900,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Total debt 21,200 18,900 2,300"
+                },
+                {
+                  "key": "cash",
+                  "reported": 1150,
+                  "scale": 1000,
+                  "page": 4,
+                  "quote": "Cash at bank 1,150 1,870"
+                },
+                {
+                  "key": "undrawn_facility",
+                  "reported": 2300,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Revolving credit facility 7,200 4,900 2,300"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_014bQu3xgwvA5fBj6KtEGGFu",
+            "name": "submit_certificate",
+            "input": {
+              "claims": [
+                {
+                  "metric": "net_leverage",
+                  "reported": 3.41,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Net leverage ratio 3.41x max 3.50x Complies"
+                },
+                {
+                  "metric": "interest_cover",
+                  "reported": 2.43,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Interest cover ratio 2.43x min 2.25x Complies"
+                },
+                {
+                  "metric": "minimum_liquidity",
+                  "reported": 3450,
+                  "scale": 1000,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Minimum liquidity ($'000) 3,450 min 3,000 Complies"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 559,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 1317,
+          "output_tokens_details": {
+            "thinking_tokens": 656
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 5551
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNuB7EoWPFfHuBnRTLmi",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_012CavLULDJagBopJLAfFXpr",
+            "name": "test_covenants",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2084,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 28,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1491
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNuBFFWQa9M7vrfMxbsj",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQSygsKEAgTGAI4AUIIdGhpbmtpbmcSDGUqryBRPCfbY5TdbxoM3HONrXOwZ8v/PfiGIjDSmZmJvNEImpA9m4Y4WnOrz1F4rQqukjglRfgib+UJG8v06ZLMEnyXcJ7rEq0ROpgq5wou8hH7Ziw1Ix5r80Bco2N42YR5dHSVZkEK3L0npQTpv+dNtqx9UcXjDLLNcCGFcTdE8vdK5suR7roJH0UCoTsb34Tqlm6KHp8M0rEC5KfzLUFufpXTVJvRM1WBvYdYMC2GxGCRh9Z8lg9r5s8pFEntFNFIYkRL/NQevJKjCv+aoO5Z7RP3Ii7YtthNyfHiavJVllOwToD2yWlsNGEGwRN6AK3LWydWN+GcpVPEXe0T0zDvsR17jn074KHmyAV/iRIifVj6/jMl+WwOB83oCf5zLFL8fIA+gGWZ7DIECuzTufi9J1qddrumU+viDHJHEact1lVYoNaJmGlUahVxwbbLt3/nHefLvyKH4azEcV7e8aKB5WozmwldqeI6CrAWm4AQ4Klpy8cu8tBh3YufOS1UkSoZ6TmwHtjldv41KXEnF+lTyN6mUHeUA+BT3VVfMl7be3ZA7odreZ61oqLA2D7ohMxb5R6HjvIX0jF+C+6tdITdyj6tzfqaY+Z48rPP87oTFtuJBGJOauprS8bXFIcCSnsamwsQGLw+zjIG88xe/luBOnkQfqJ/Qjd7Lajx0ZPWbs5U9zm5ckbgJLVD0RPG+CjPg3hOwa4Ad4xxAnU4JDsK+soezKEqiGbLkaGx4kZ3Lf21EeehFKmRo/y9qfqMF+m8qh+1f9ULg0WzyyXjh5G9hP/K5OqSgnyabl9MY/LdmWlFY8+QDWL4OAOHWb6rDxQbvUK6ku33D2NpSfHywpR6+TyCw8X6nkAYP4UqnQYpc4TKk34xzYEGbYxwLcY6Jv/QEg32UgzKWGXCyrABkyFfyAfRJnuRLKpxFAsuv9r966dhnZFnNXfXekcfHHPIiKxYOxg4ePK7CH+FTCD10DsOROwalmZ1pAIKrdUkXVgf9zgX2Cr7fVg/JZlSrqQAuu90KHCQ6k5Lhhu3Yl3mUff/lEFmcJZbWQDNRMI2tNBKFio+K78yCVRrdf2bpWP1pR5+bO1nMOCkTLao4zUHlW+DtPlMkK2BPQWWexk5ohZJW74FPM+8oAYk4XQ0mHH2LlQaw/FacEp4tgTEwfNc8D9KMRk9eB9uicSJ4JvmJuyXPmbhxLuC70lAQk3on9y2q5dxzvTq+jlXpYYU0knv2Ym7Q1A5BrVYexe54jFII8xqrw9uLT1yRioWEDikr4x4qSV+yTQkzI+6LKfrEYPQp6RPlBa3CDD9BUmfcTEnuDwmjAxZsSL2IvviHWv+hIkv4ZM7l7pD3VLrDb+PNImj6BMPuNg6YtZlOQf7U3m5/vpgd7sXMaEdpsgy+X3mVEeE/ugyOI6IxuSeBV49oShMV5CXmheTYcEIwkG7NwD/y/Wq4mJnAVLkV2ejs/56r351lwxQfzi0dhbdyvvPwCCLu0I6bebqtsbRC8k6DXprdEmUCps+GIEwV5qnK0/1REYJgNORHI3bQMfgvyHkv3FveDCeIzsUxC8GZ7TBW6RLEpBRLZzgEg8R46xlP5XiDZz+5eOeVJCw2il330ddOrE/Lo9/3vk4ct4/H/Shf6kctR0I26qnJNFAxU+yGtowXbSo0m8tkrxo6BXbJG+vGdwSiQvGzEJ03onoc/WQwvExi4L43IbPa/o8OPr78EHK3Uef4npWB8KQtbprrB03KjS8qwecyKDU5glRGNNA0XS45o9Vbajoz85BZ8vAb6ksxyGpNMnEleB3yW4t8BiIoSZjUKiKUv/7A8PPVLoJTf/qdJ4gUDkIk16HZhmbxlC5cQIWxy9Nmi3fts8/MtSLZZryfmxQufbIo+Tb/OzxFM8TPU1sA2izgIkoGAAwVXxY+47GOoGKIsoWsKX8xfHk39mDY3Bt8p1Sox8YAQ=="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01QV2gXyGCx6NasYbCnmHRSn",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd, September 2026: all three covenants are met, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: tested 3.41x against a 3.50x maximum, headroom 2.7%, status watch. The certificate states 3.41x and Complies, which agrees with the test.\n\nInterest cover: tested 2.43x against a 2.25x minimum, headroom 8.2%, status watch. The certificate states 2.43x and Complies, which agrees with the test.\n\nMinimum liquidity: tested $3,450k against a $3,000k minimum, headroom 15%, status pass. The certificate states 3,450 and Complies, which agrees with the test.\n\nPack conflict: cash at 30 Sep 2026 is $1,150k on the balance sheet (page 4) but $1,450k on the debt and liquidity schedule (page 5). I used the balance sheet figure, which the certificate also uses. If the $1,450k figure is correct, liquidity and net leverage would change.\n\nReview issues:\n- Cash at bank differs between page 4 and page 5.\n- Cash at bank fell 39% from $1,870k at 30 June 2026 to $1,150k, with no explanation in the pack beyond the revolver draw and working capital commentary.\n\nContext: management reports TTM EBITDA of $5.2m, a $1.2m revolver draw in August, and a September gross margin that was the lowest this year.\n\nRecommended action: ask the borrower to confirm the correct 30 September cash balance and explain the cash decline, then re-test. Place the account on watch and review the headroom on net leverage and interest cover before the next test date."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2829,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 904,
+          "output_tokens_details": {
+            "thinking_tokens": 303
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 5190
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNuBc7dQcspUEGP7Jkum",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01EimJ21RDBNWsCBQ8joPFzr",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd, September 2026: all three covenants are met, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: tested 3.41x against a 3.50x maximum, headroom 2.7%, status watch. The certificate states 3.41x and Complies, which agrees with the test.\n\nInterest cover: tested 2.43x against a 2.25x minimum, headroom 8.2%, status watch. The certificate states 2.43x and Complies, which agrees with the test.\n\nMinimum liquidity: tested $3,450k against a $3,000k minimum, headroom 15%, status pass. The certificate states 3,450 and Complies, which agrees with the test.\n\nPack conflict: cash at 30 Sep 2026 is $1,150k on the balance sheet (page 4) but $1,450k on the debt schedule (page 5). I used the balance sheet figure, which the certificate also uses. If $1,450k is correct, liquidity and net leverage would change.\n\nReview issues:\n- Cash at bank differs between page 4 and page 5.\n- Cash at bank fell 39% from $1,870k at 30 June 2026 to $1,150k, with no explanation beyond the revolver draw and working capital commentary.\n\nRecommended action: ask the borrower to confirm the correct 30 September cash balance and explain the cash decline, then re-test. Keep the account on watch given thin headroom on net leverage and interest cover."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 3770,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 532,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2689
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNuBofuYrdCuLvxcRLyu",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "The September 2026 monitoring note for Corella Fresh Foods is saved and awaiting analyst sign-off. All three covenants pass on the tested figures, but net leverage and interest cover are on watch.\n\n| Covenant | Tested | Limit | Headroom | Status | Certificate |\n|---|---|---|---|---|---|\n| Net leverage | 3.41x | max 3.50x | 2.7% | Watch | 3.41x, Complies (agrees) |\n| Interest cover | 2.43x | min 2.25x | 8.2% | Watch | 2.43x, Complies (agrees) |\n| Minimum liquidity | $3,450k | min $3,000k | 15% | Pass | 3,450, Complies (agrees) |\n\nThe pack contradicts itself on cash. The balance sheet (page 4) shows $1,150k at 30 September, while the debt schedule (page 5) shows $1,450k. I used the balance sheet figure, which the certificate also uses. If the $1,450k is correct, liquidity and net leverage would both change, so the analyst should have the borrower confirm the balance.\n\nThe tool also flagged that cash fell 39% from $1,870k at 30 June, which the pack does not explain beyond the revolver draw and working capital commentary.\n\nThe note recommends asking the borrower to confirm the cash balance and explain the decline, then re-testing, and keeping the account on watch. The analyst decides on the review issues."
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4344,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 478,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2817
+    }
+  ]
+}

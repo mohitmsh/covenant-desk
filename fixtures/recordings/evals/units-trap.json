@@ -1,0 +1,333 @@
+{
+  "model": "claude-haiku-5-5",
+  "recordedAt": "2026-10-25T11:45:56.573Z",
+  "pack": "evals/packs/units-trap.pdf",
+  "sha256": "b7c67ce8289bed028fa892f8c59188df2e6767d1dfe3a73f6c1e02045108d9f9",
+  "turns": [
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNu7ASfws1h82WdK4xiH",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01BLmoQYB172kfwy9Y5ziE2d",
+            "name": "get_monitoring_context",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 63,
+          "cache_creation_input_tokens": 13358,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 13358,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 31,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2588
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNu7LqG1qX7KPYRwNqaM",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "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"
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_0189LZQBcyEucMQYHFDqTPMS",
+            "name": "submit_figures",
+            "input": {
+              "figures": [
+                {
+                  "key": "revenue_ttm",
+                  "reported": 61300,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Revenue 5,262 5,466 15,632 61,300 57,009"
+                },
+                {
+                  "key": "ebitda_ttm",
+                  "reported": 5210,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "EBITDA 408 469 1,250 5,210 5,054"
+                },
+                {
+                  "key": "interest_expense_ttm",
+                  "reported": 2140,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Interest expense (182) (175) (540) (2,140) (1,926)"
+                },
+                {
+                  "key": "total_debt",
+                  "reported": 18.9,
+                  "scale": 1000000,
+                  "page": 5,
+                  "quote": "Total debt 21.20 18.90 2.30"
+                },
+                {
+                  "key": "cash",
+                  "reported": 1.15,
+                  "scale": 1000000,
+                  "page": 4,
+                  "quote": "Cash at bank 1.15 1.87"
+                },
+                {
+                  "key": "undrawn_facility",
+                  "reported": 2.3,
+                  "scale": 1000000,
+                  "page": 5,
+                  "quote": "Revolving credit facility 7.20 4.90 2.30"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 537,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13358,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 1033,
+          "output_tokens_details": {
+            "thinking_tokens": 633
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 4704
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNu7gvVEnCuutgLQXjjM",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01Jj77euFd1jM6JB4cENquzP",
+            "name": "submit_certificate",
+            "input": {
+              "claims": [
+                {
+                  "metric": "net_leverage",
+                  "reported": 3.41,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Net leverage ratio 3.41x max 3.50x Complies"
+                },
+                {
+                  "metric": "interest_cover",
+                  "reported": 2.43,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Interest cover ratio 2.43x min 2.25x Complies"
+                },
+                {
+                  "metric": "minimum_liquidity",
+                  "reported": 3450,
+                  "scale": 1000,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Minimum liquidity ($'000) 3,450 min 3,000 Complies"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1671,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13358,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 284,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1615
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNu7ox9gvYVPNKy6cHBP",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_013d9NAvUDoCrwGsVE5DrhJj",
+            "name": "test_covenants",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1997,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13358,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 28,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1365
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNu7uwpNY3xNiUB9RhCM",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQSlgoKEAgTGAI4AUIIdGhpbmtpbmcSDPQVSyzN3UxfvbpDCxoMGa0bH2+e+gqFKk8HIjCFZ0CrKHAdvRc/UOADgobsXH/qYG0NgKvmoIzo6a+By7gGC+6PhjunDcu6u540CJMqswkz7TeKzmlwxeZPQ1ed3YT1feufC28c1b5l9USpOv0+divBampzusiiuc5+7oYuAjFkXAzomErKDdZYDW2zEFEc4bnh1Gyqoq9ArS+l1Y3rETGav+YHRCWFUkWbI1wM5PVdR53I5y/CB5Zf049x3OjgC2Xw9/L9lJXTBRLf1lGLaS3gBBhXTOVrls9cmKLv9soMk5cLXbwS8p4YQUAnN3lnKtxXYdkBCUC1Ent7BO4BqBpJ+nCHtNZo7XyBaFwYqo39YjFDId8Y0feudHSwamvILpJOcZ2kce6cWbYNkrzE8lN/5OlP6FQiqnqc4HsGVBsGJHZ1ambs1vaPViZz/drMBcsI/xE/p4uR5r389TqITFnXUlpgycz5V7Wivs1o29VXbPEOcUkvuLK9X4EZOAf9ltbFTq6WHNnsMi7aUbc4OsW5YjrcfEMrgLxnYT/SeX+IKVn131Vfouo1N7pqd3gRneQx+q0mBbwnRBdXm4kgzSn2RZV4inQkzr3nMmLpTaB/HZa6tt6CzMuVb6Bd2OhNWkWSwWlXKe4nZvD7cGq+MBS9Zgh/244xejUqYFj3bsOUMbIY2hESGbr/mBGQwv7id3kX7Z09r9yTIdNIvQ/lUDHQCkV3vIXoV/2yQjZtfI8JoNTnfoBUMvxt48Epf6HN4yuaS8l+j77HOlMWkYW6ZCS5GXtAHqGxHNoPwxnXRCSHbhEGPbATnhNJj+Pru/3h/JyiZw5eX2JKWpnI1Sd1Hk7l/gdJ5G/Q0fBbRlQRXLppuEaClZLdlursoBggs7Hyr8e8Vn1SsB3ZwZiZJR9Sfvx0vzcGizjDT2k2Ie9QhFaWFl403/iMqDjw8E3tbyGdCY4sWY52KJxMMz7zk08ww2XOMjqFFHrlKlZHNPoE4VNEih3cW/5/B0LuyBIQYT6+5EqA5ELpcuSX6CEUEgaaAC1J+Xx9kfUxNd7o57nRpkAue/dLEdOGXC0mZMXeXG2zYqpanTuXRktAvT85jM6hw3vlcan8azEHrYtQVTPKnhb6VtEQjkk+QnzrbW0pKMXPwtgBykp5cMi6wiNSO3ZX3o9a6HXSjis2e/6f+jv4PjvJon/X0G32+si263GWVUX2IHY5eJlQ9jt9jv5UHW+UJWYvREkZjohCDtwSjwrwV/y2cgc8tQ0RaOKMRkAlTj1ZVdkgdBYJGMzUPTuiVbAlnLANUcT0vAbAqX+90jpE2jQE0+fxIgW2512/rSVRI5R91n7RC5R3/G4LXz0j4Y5yhy2v9iPsxyFL+tEGaWI2lK2RebML9XACp/jkBYWiA0F+VRmy4h9wCjBqoo3sKDKUxKt5Syf83cspIQY6gBE2SQIbKxU9SpYNHY5id3l3+e+Z0FK7/JvBn2kqOM7wnplmII7nilcqTfLEzbBY5srIjf9NWz46Hz1KFRwr51WM34frjOOOUh/O54echMoStiTYdPQY8H816wo9gcePeK18pLziAkzHVWlekGr5nbQJTBZm7+mBcSYEUCtIeTLhS/Iy4jUIJGK+k4C/U1h+jjVv3EQQmMTCBPFPui/kj7iaaSxA98SkJdomhSGal3nz9E1pCyZvSFeip4KH+iXT16hzAZuWk7sYAQ=="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01W5UZQqgvukJvJ7efaTee7H",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd passes all three covenants for the test period ending 30 September 2026, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: 3.41x tested against a 3.50x maximum, headroom 2.7%. Calculated as (total debt 18.90m less cash 1.15m) divided by TTM EBITDA of 5.21m.\n\nInterest cover: 2.43x tested against a 2.25x minimum, headroom 8.2%. Calculated as TTM EBITDA of 5.21m divided by TTM interest expense of 2.14m.\n\nMinimum liquidity: 3.45m tested against a 3.00m minimum, headroom 15%. Cash plus undrawn revolver.\n\nThe compliance certificate reports 3.41x, 2.43x and 3,450k, all marked Complies. These agree with the tested values, and no disagreements were found.\n\nReview issue: cash at bank fell 39% from 1.87m (30 June 2026) to 1.15m (30 September 2026). The pack does not explain this beyond the commentary on higher working capital and a 1.2m revolver draw in August.\n\nContext: management says TTM EBITDA is now 5.2m, September gross margin was the lowest this year, and capex has been deferred.\n\nRecommended action: analyst to review the cash movement and request the working capital explanation and November revolver repayment evidence. Consider a forward-looking leverage and interest cover sensitivity, given the watch status."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2654,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13358,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 785,
+          "output_tokens_details": {
+            "thinking_tokens": 241
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 4032
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNu8DBf2xR3ENW8JESLa",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "The September 2026 monitoring run for Corella Fresh Foods is saved as a note for analyst review. All three covenants pass, but net leverage and interest cover are both on watch.\n\n| Covenant | Tested | Limit | Headroom | Status |\n|---|---|---|---|---|\n| Net leverage | 3.41x | max 3.50x | 2.7% | Watch |\n| Interest cover | 2.43x | min 2.25x | 8.2% | Watch |\n| Minimum liquidity | $3.45m | min $3.00m | 15% | Pass |\n\n- **Certificate:** The borrower's compliance certificate reports the same three figures and claims compliance on each. The tested values agree with it.\n- **Review issue:** Cash at bank fell 39%, from $1.87m at 30 June to $1.15m at 30 September. The pack does not explain it beyond the commentary on higher working capital and a $1.2m revolver draw in August.\n- **Recommended action:** The analyst should ask for the working capital explanation and evidence of the November revolver repayment. A forward-looking sensitivity on leverage and interest cover is also worth considering, given how thin the headroom is.\n\nAll six extracted figures were accepted on the first submission, and all three certificate claims were accepted."
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 3481,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13358,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 421,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2635
+    }
+  ]
+}

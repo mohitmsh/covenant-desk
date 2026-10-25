@@ -1,0 +1,25 @@
+{
+  "issuesPresent": ["certificate_mismatch"],
+  "certificateDisagrees": true,
+  "noteMentions": ["breach"],
+  "id": "unseen-resubmission",
+  "name": "Unseen resubmitted pack",
+  "category": "unseen",
+  "description": "A revised Corella pack the agent was never developed against: restated EBITDA puts net leverage in breach while the certificate still claims compliance.",
+  "borrowerId": "corella",
+  "pack": "uploads/corella-2026-09-resubmitted.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 59840000,
+    "ebitda_ttm": 4700000,
+    "interest_expense_ttm": 2000000,
+    "total_debt": 19200000,
+    "cash": 1250000,
+    "undrawn_facility": 2000000
+  },
+  "covenants": {
+    "net_leverage": "breach",
+    "interest_cover": "watch",
+    "minimum_liquidity": "watch"
+  }
+}

@@ -20,8 +20,9 @@
     "start": "npm run db:seed-runs && tsx apps/api/src/main.ts",
     "demo:reset": "npm run db:reset && npm run db:seed-runs",
     "agent": "npm run start -w @covenant-desk/agent --",
-    "eval": "npm run eval -w @covenant-desk/agent",
-    "record": "npm run record -w @covenant-desk/agent"
+    "eval": "npm run eval -w @covenant-desk/agent --",
+    "record": "npm run record -w @covenant-desk/agent --",
+    "evals:build": "npm run build:evals -w fixtures"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

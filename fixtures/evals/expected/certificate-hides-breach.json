@@ -1,0 +1,25 @@
+{
+  "issuesPresent": ["certificate_mismatch", "variance"],
+  "certificateDisagrees": true,
+  "noteMentions": ["breach"],
+  "id": "certificate-hides-breach",
+  "name": "Certificate hides a breach",
+  "category": "normal",
+  "description": "Wattle Grove breaches net leverage, but its certificate claims compliance using EBITDA with $470k of add-backs.",
+  "borrowerId": "wattle-grove",
+  "pack": "packs/wattle-grove-2026-09.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 29750000,
+    "ebitda_ttm": 3880000,
+    "interest_expense_ttm": 1720000,
+    "total_debt": 16400000,
+    "cash": 640000,
+    "undrawn_facility": 900000
+  },
+  "covenants": {
+    "net_leverage": "breach",
+    "interest_cover": "pass",
+    "minimum_liquidity": "watch"
+  }
+}

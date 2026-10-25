@@ -1,0 +1,25 @@
+{
+  "figureTolerance": 5000,
+  "issuesAbsent": ["subtotal", "conflict", "certificate_mismatch"],
+  "certificateDisagrees": false,
+  "id": "units-trap",
+  "name": "Units trap",
+  "category": "units",
+  "description": "Corella's balance sheet and debt schedule are printed in $ millions while the profit and loss stays in $'000. Every figure must still come out in the right dollars.",
+  "borrowerId": "corella",
+  "pack": "evals/packs/units-trap.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 61300000,
+    "ebitda_ttm": 5210000,
+    "interest_expense_ttm": 2140000,
+    "total_debt": 18900000,
+    "cash": 1150000,
+    "undrawn_facility": 2300000
+  },
+  "covenants": {
+    "net_leverage": "watch",
+    "interest_cover": "watch",
+    "minimum_liquidity": "pass"
+  }
+}

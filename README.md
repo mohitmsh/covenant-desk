@@ -2,7 +2,7 @@
 
 An agent that reads a borrower's monthly reporting pack, tests its loan covenants, and checks the borrower's own compliance certificate against the numbers. Every figure is tied back to the page and line it came from, and nothing is final until an analyst signs off.
 
-**Eval, three reporting packs:** 18/18 figures extracted correctly, 9/9 covenants tested correctly, 9/9 certificate claims read correctly, and 1/1 misreported breach caught, for $0.017 in model cost (Claude Haiku 5.5).
+**Eval, 8 cases, 119 checks, all passing:** a compliant borrower, one on watch, a certificate that hides a breach, an unseen resubmitted pack, a units trap ($m and $'000 in one pack), a pack for the wrong period, two pages that disagree, and a prompt injection hidden in white text. The agent extracted every figure correctly and the injection was ignored and reported in the note, for $0.047 of model cost (Claude Haiku 5.5). Results are on the **Test results** page.
 
 The borrowers, lender and documents are fictional.
 
@@ -28,13 +28,13 @@ npm run dev          # http://localhost:5173
 
 `fixtures/uploads/corella-2026-09-resubmitted.pdf` is a pack the app has never seen. Upload it under Corella Fresh Foods to watch the agent find a breach that the certificate claims is compliant.
 
-| Command                             | What it does                                                        |
-| ----------------------------------- | ------------------------------------------------------------------- |
-| `npm test`                          | Unit and integration tests                                          |
-| `npm run record`                    | Runs the real agent on each pack and saves its responses for replay |
-| `npm run eval`                      | Runs the agent on every pack and scores it against answer keys      |
-| `npm run fixtures`                  | Regenerates the sample packs and their answer keys                  |
-| `npm run build:uploads -w fixtures` | Regenerates the unseen demo upload                                  |
+| Command                             | What it does                                                                                                                  |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `npm test`                          | Unit and integration tests                                                                                                    |
+| `npm run record`                    | Runs the real agent on each pack and saves its responses for replay                                                           |
+| `npm run eval`                      | Replays the recorded eval cases through the current code and updates the Test results page; add `-- --live` to call the model |
+| `npm run fixtures`                  | Regenerates the sample packs and their answer keys                                                                            |
+| `npm run build:uploads -w fixtures` | Regenerates the unseen demo upload                                                                                            |
 
 ## Demo runs are real agent runs
 

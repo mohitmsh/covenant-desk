@@ -41,7 +41,8 @@ export const ISSUE_KIND_LABELS = {
   certificate_mismatch: "Certificate mismatch",
   subtotal: "Subtotal error",
   variance: "Large change",
-  period: "Wrong period"
+  period: "Wrong period",
+  conflict: "Pages disagree"
 } as const satisfies Record<IssueKind, string>
 
 export const ISSUE_CATEGORY_LABELS = {

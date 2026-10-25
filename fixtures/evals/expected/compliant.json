@@ -1,0 +1,25 @@
+{
+  "issuesPresent": ["subtotal"],
+  "issuesAbsent": ["certificate_mismatch", "conflict", "period"],
+  "certificateDisagrees": false,
+  "id": "compliant",
+  "name": "Compliant borrower",
+  "category": "normal",
+  "description": "Harbourline passes every covenant. Its balance sheet has one transposed figure for the checks to find.",
+  "borrowerId": "harbourline",
+  "pack": "packs/harbourline-2026-09.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 48620000,
+    "ebitda_ttm": 7940000,
+    "interest_expense_ttm": 1310000,
+    "total_debt": 19850000,
+    "cash": 3420000,
+    "undrawn_facility": 4000000
+  },
+  "covenants": {
+    "net_leverage": "pass",
+    "interest_cover": "pass",
+    "minimum_liquidity": "pass"
+  }
+}

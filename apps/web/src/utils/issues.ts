@@ -40,6 +40,8 @@ export const decisionLabels = (issue: Issue): { readonly confirm: string; readon
       return { confirm: "Mark as explained", override: "Not significant (override)" }
     case "period":
       return { confirm: "Confirm wrong period", override: "Period is right (override)" }
+    case "conflict":
+      return { confirm: "Confirm pages disagree", override: "Figures are consistent (override)" }
   }
 }
 

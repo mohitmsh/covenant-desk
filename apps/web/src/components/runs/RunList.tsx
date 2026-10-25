@@ -15,6 +15,8 @@ interface RunListProps {
   readonly onNewRun: () => void
   readonly isPortfolioOpen: boolean
   readonly onOpenPortfolio: () => void
+  readonly isEvalsOpen: boolean
+  readonly onOpenEvals: () => void
 }
 
 const runOutcome = (run: RunSummary) => {
@@ -30,7 +32,16 @@ const outcomeLabel = (run: RunSummary) => {
   return "All covenants met"
 }
 
-export function RunList({ runs, selectedRunId, onSelect, onNewRun, isPortfolioOpen, onOpenPortfolio }: RunListProps) {
+export function RunList({
+  runs,
+  selectedRunId,
+  onSelect,
+  onNewRun,
+  isPortfolioOpen,
+  onOpenPortfolio,
+  isEvalsOpen,
+  onOpenEvals
+}: RunListProps) {
   const pending = runs.filter((run) => run.status !== "approved")
   const approved = runs.filter((run) => run.status === "approved")
 
@@ -39,6 +50,9 @@ export function RunList({ runs, selectedRunId, onSelect, onNewRun, isPortfolioOp
       <div className={styles.nav}>
         <button type="button" className={styles.navItem} aria-current={isPortfolioOpen} onClick={onOpenPortfolio}>
           Portfolio
+        </button>
+        <button type="button" className={styles.navItem} aria-current={isEvalsOpen} onClick={onOpenEvals}>
+          Test results
         </button>
       </div>
       <div className={styles.actions}>

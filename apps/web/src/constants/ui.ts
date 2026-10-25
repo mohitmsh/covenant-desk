@@ -1,6 +1,9 @@
 /** Query string parameter holding the selected run. */
 export const RUN_QUERY_PARAM = "run"
 
+/** Query string parameter naming a top-level page other than the portfolio. */
+export const VIEW_QUERY_PARAM = "view"
+
 export const PDF_RENDER_SCALE_MAX = 2
 
 export const PDF_PAGE_GUTTER = 24

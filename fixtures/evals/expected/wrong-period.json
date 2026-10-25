@@ -1,0 +1,23 @@
+{
+  "issuesPresent": ["period"],
+  "id": "wrong-period",
+  "name": "Wrong period",
+  "category": "period",
+  "description": "Harbourline sends its August 2026 pack for the September 2026 test. The checks must flag the period before anyone relies on the figures.",
+  "borrowerId": "harbourline",
+  "pack": "evals/packs/wrong-period.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 48620000,
+    "ebitda_ttm": 7940000,
+    "interest_expense_ttm": 1310000,
+    "total_debt": 19850000,
+    "cash": 3420000,
+    "undrawn_facility": 4000000
+  },
+  "covenants": {
+    "net_leverage": "pass",
+    "interest_cover": "pass",
+    "minimum_liquidity": "pass"
+  }
+}

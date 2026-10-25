@@ -1,6 +1,7 @@
 import { Effect } from "effect"
 import {
   CERTIFICATE_CHECKS,
+  CONFLICT_CHECKS,
   PERIOD_CHECKS,
   SUBTOTAL_CHECKS,
   SUBTOTAL_RULES,
@@ -41,6 +42,9 @@ const sameLabel = (a: string, b: string) => canonicalText(a) === canonicalText(b
 
 /** Formats an amount printed in $'000, e.g. `$1,540k` or `−$1,253k`. */
 const thousands = (value: number) => `${value < 0 ? "−" : ""}$${Math.round(Math.abs(value)).toLocaleString("en-AU")}k`
+
+/** A printed amount in $'000, whatever unit its table uses. */
+const inThousands = (row: TableRow, value: number) => (value * row.scale) / 1000
 
 const complianceWord = (complies: boolean) => (complies ? "complies" : "does not comply")
 
@@ -219,7 +223,9 @@ const subtotalFindings = (rows: ReadonlyArray<TableRow>, page: number): IssueFin
       if (cells.some((c) => c === undefined)) return []
       const sum = cells.reduce((acc, c, i) => acc + (c?.value ?? 0) * (parts[i]?.sign ?? 1), 0)
       const difference = cell.value - sum
-      return Math.abs(difference) > SUBTOTAL_TOLERANCE ? [{ cell, sum, difference }] : []
+      // Each printed figure is rounded, so allow a step of rounding for every couple of lines summed.
+      const tolerance = SUBTOTAL_TOLERANCE * total.precision * Math.max(1, Math.ceil(parts.length / 2))
+      return Math.abs(difference) > tolerance ? [{ cell, sum, difference }] : []
     })
     if (mismatches.length === 0) return []
 
@@ -234,8 +240,9 @@ const subtotalFindings = (rows: ReadonlyArray<TableRow>, page: number): IssueFin
         detail: mismatches
           .map(
             ({ cell, sum, difference }) =>
-              `${cell.column ?? "Column"}: printed ${thousands(cell.value)}, but ${partsFormula(rule.parts)} ` +
-              `come to ${thousands(sum)}, a difference of ${thousands(Math.abs(difference))}.`
+              `${cell.column ?? "Column"}: printed ${thousands(inThousands(total, cell.value))}, but ` +
+              `${partsFormula(rule.parts)} come to ${thousands(inThousands(total, sum))}, a difference of ` +
+              `${thousands(inThousands(total, Math.abs(difference)))}.`
           )
           .join(" "),
         page,
@@ -243,11 +250,16 @@ const subtotalFindings = (rows: ReadonlyArray<TableRow>, page: number): IssueFin
         evidence: mismatches.flatMap(({ cell, sum }) => [
           {
             label: `${rule.total} as printed${cell.column ? `, ${cell.column}` : ""}`,
-            value: thousands(cell.value),
+            value: thousands(inThousands(total, cell.value)),
             page,
             box: cell.box
           },
-          { label: `Sum of ${partsFormula(rule.parts)}`, value: thousands(sum), page: null, box: null }
+          {
+            label: `Sum of ${partsFormula(rule.parts)}`,
+            value: thousands(inThousands(total, sum)),
+            page: null,
+            box: null
+          }
         ]),
         impact:
           "The page contradicts itself, so at least one figure on it is wrong. Check whether any covenant input was read from this page.",
@@ -318,18 +330,24 @@ const varianceFindings = (
         kind: "variance",
         category: "explanation",
         severity: "medium",
-        title: `${line} ${change > 0 ? "up" : "down"} ${percent}% on the ${priorWord} (${millions(prior.value)} → ${millions(current.value)})`,
+        title: `${line} ${change > 0 ? "up" : "down"} ${percent}% on the ${priorWord} (${millions(inThousands(row, prior.value))} → ${millions(inThousands(row, current.value))})`,
         detail:
-          `${thousands(Math.abs(current.value))} (${current.column}) against ${thousands(Math.abs(prior.value))} ` +
+          `${thousands(inThousands(row, Math.abs(current.value)))} (${current.column}) against ` +
+          `${thousands(inThousands(row, Math.abs(prior.value)))} ` +
           `(${prior.column}). The figures are consistent, but changes of more than ` +
           `${Math.round(VARIANCE_THRESHOLD * 100)}% need an explanation.`,
         page,
         box: row.box,
         evidence: [
-          { label: prior.column ?? "Prior period", value: thousands(Math.abs(prior.value)), page, box: prior.box },
+          {
+            label: prior.column ?? "Prior period",
+            value: thousands(inThousands(row, Math.abs(prior.value))),
+            page,
+            box: prior.box
+          },
           {
             label: current.column ?? "Current period",
-            value: thousands(Math.abs(current.value)),
+            value: thousands(inThousands(row, Math.abs(current.value))),
             page,
             box: current.box
           }
@@ -341,6 +359,52 @@ const varianceFindings = (
       }
     ]
   })
+
+/**
+ * Flags a line printed on more than one page with different amounts for the
+ * same date, such as cash on the balance sheet and on the debt schedule.
+ */
+const conflictFindings = (rowsByPage: ReadonlyArray<ReadonlyArray<TableRow>>): IssueFinding[] => {
+  const occurrences = rowsByPage.flatMap((rows, index) => rows.map((row) => ({ row, page: index + 1 })))
+  const findings: IssueFinding[] = []
+  const reported = new Set<string>()
+  for (const [i, a] of occurrences.entries()) {
+    for (const b of occurrences.slice(i + 1)) {
+      if (a.page === b.page || !sameLabel(a.row.label, b.row.label) || reported.has(canonicalText(a.row.label)))
+        continue
+      for (const cellA of a.row.cells) {
+        const cellB = b.row.cells.find((cell) => cell.column !== null && cell.column === cellA.column)
+        if (!cellB) continue
+        const valueA = inThousands(a.row, cellA.value)
+        const valueB = inThousands(b.row, cellB.value)
+        const tolerance = Math.max(inThousands(a.row, a.row.precision), inThousands(b.row, b.row.precision))
+        if (Math.abs(valueA - valueB) <= tolerance) continue
+        reported.add(canonicalText(a.row.label))
+        findings.push({
+          key: `conflict:${a.row.label}`,
+          fingerprint: `conflict:${a.row.label}`,
+          kind: "conflict",
+          category: "discrepancy",
+          severity: "high",
+          title: `${a.row.label} differs between page ${a.page} and page ${b.page}`,
+          detail:
+            `${cellA.column}: ${thousands(valueA)} on page ${a.page} but ${thousands(valueB)} on page ${b.page}. ` +
+            "The pack contradicts itself, so any figure read from either page needs confirming.",
+          page: a.page,
+          box: cellA.box,
+          evidence: [
+            { label: `Page ${a.page}, ${cellA.column}`, value: thousands(valueA), page: a.page, box: cellA.box },
+            { label: `Page ${b.page}, ${cellB.column}`, value: thousands(valueB), page: b.page, box: cellB.box }
+          ],
+          impact: "The agent can only have used one of these figures, so the covenants may be tested on the wrong one.",
+          checks: [...CONFLICT_CHECKS]
+        })
+        break
+      }
+    }
+  }
+  return findings
+}
 
 const STATED_PERIOD = /(?:reporting for|month ended \d{1,2})\s+([A-Z][a-z]+ \d{4})/
 
@@ -386,10 +450,14 @@ const periodFindings = ({ pdf, period }: CheckInput): IssueFinding[] => {
  * where they appear in the document.
  */
 export const computeIssues = (input: CheckInput): IssueFinding[] => {
-  const tableFindings = input.pdf.layout.flatMap((items, index) => {
-    const rows = readTableRows(items)
-    return [...subtotalFindings(rows, index + 1), ...varianceFindings(rows, index + 1, input.covenants)]
-  })
+  const rowsByPage = input.pdf.layout.map((items) => readTableRows(items))
+  const tableFindings = [
+    ...conflictFindings(rowsByPage),
+    ...rowsByPage.flatMap((rows, index) => [
+      ...subtotalFindings(rows, index + 1),
+      ...varianceFindings(rows, index + 1, input.covenants)
+    ])
+  ]
   return [...periodFindings(input), ...tableFindings, ...certificateFindings(input)].sort(
     (a, b) =>
       CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category] ||

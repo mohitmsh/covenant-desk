@@ -1,6 +1,6 @@
 import type { Metric } from "#types/covenants"
 
-export const ISSUE_KINDS = ["certificate_mismatch", "subtotal", "variance", "period"] as const
+export const ISSUE_KINDS = ["certificate_mismatch", "subtotal", "variance", "period", "conflict"] as const
 
 export const ISSUE_CATEGORIES = ["discrepancy", "explanation", "verify"] as const
 
@@ -155,4 +155,9 @@ export const CERTIFICATE_CHECKS = [
 export const PERIOD_CHECKS = [
   "Confirm which period the borrower meant to send",
   "Request the pack for the period being tested before relying on these figures"
+] as const
+
+export const CONFLICT_CHECKS = [
+  "Ask the borrower which page is correct",
+  "Check which figure the covenant test used, and re-test if it was the wrong one"
 ] as const

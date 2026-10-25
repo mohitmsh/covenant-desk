@@ -1,0 +1,26 @@
+{
+  "issuesPresent": ["variance"],
+  "issuesAbsent": ["certificate_mismatch", "conflict", "subtotal"],
+  "certificateDisagrees": false,
+  "noteMentions": ["watch"],
+  "id": "watch",
+  "name": "Borrower on watch",
+  "category": "normal",
+  "description": "Corella is inside the watch band on two covenants, and its cash fell 39% over the quarter.",
+  "borrowerId": "corella",
+  "pack": "packs/corella-2026-09.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 61300000,
+    "ebitda_ttm": 5210000,
+    "interest_expense_ttm": 2140000,
+    "total_debt": 18900000,
+    "cash": 1150000,
+    "undrawn_facility": 2300000
+  },
+  "covenants": {
+    "net_leverage": "watch",
+    "interest_cover": "watch",
+    "minimum_liquidity": "pass"
+  }
+}

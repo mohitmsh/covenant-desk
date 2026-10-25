@@ -7,7 +7,8 @@ import { RunList } from "@/components/runs/RunList"
 import { Message } from "@/components/ui/Message"
 import { FEATURED_BORROWER_ID } from "@/constants"
 import { useRoute } from "@/hooks/use-route"
-import { usePortfolio, useRun, useRuns } from "@/hooks/use-runs"
+import { useEvals, usePortfolio, useRun, useRuns } from "@/hooks/use-runs"
+import { EvalsView } from "@/components/evals/EvalsView"
 
 export function App() {
   const { route, navigate } = useRoute()
@@ -15,6 +16,7 @@ export function App() {
   const runs = useRuns()
   const run = useRun(runId)
   const portfolio = usePortfolio()
+  const evals = useEvals()
   const [isNewRunOpen, setNewRunOpen] = useState(false)
 
   const openRun = (id: string) => navigate({ view: "run", runId: id })
@@ -42,11 +44,23 @@ export function App() {
       onNewRun={() => setNewRunOpen(true)}
       isPortfolioOpen={route.view === "portfolio"}
       onOpenPortfolio={() => navigate({ view: "portfolio" })}
+      isEvalsOpen={route.view === "evals"}
+      onOpenEvals={() => navigate({ view: "evals" })}
     />
   )
 
   const main =
-    route.view === "portfolio" ? (
+    route.view === "evals" ? (
+      evals.isPending ? (
+        <Message title="Loading test results" />
+      ) : evals.isError ? (
+        <Message title="Test results could not be loaded" tone="error">
+          {evals.error.message}
+        </Message>
+      ) : (
+        <EvalsView report={evals.data} />
+      )
+    ) : route.view === "portfolio" ? (
       portfolio.isPending ? (
         <Message title="Loading portfolio" />
       ) : portfolio.isError ? (

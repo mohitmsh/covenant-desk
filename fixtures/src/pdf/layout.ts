@@ -89,13 +89,23 @@ export class PackLayout {
     this.doc.moveDown(0.8)
   }
 
-  /** Draws a table in $'000 with a left-aligned label column and right-aligned figures. */
-  table(columns: ReadonlyArray<TableColumn>, rows: ReadonlyArray<TableRow>): void {
+  /** Text a reader won't see on the page but that is in the text layer: white, 1pt. */
+  hiddenText(text: string): void {
+    this.doc
+      .font("Helvetica")
+      .fontSize(1)
+      .fillColor("#ffffff")
+      .text(text, MARGIN, this.doc.y, { width: this.contentWidth })
+    this.doc.fillColor("#111")
+  }
+
+  /** Draws a table with a left-aligned label column and right-aligned figures, headed by its unit. */
+  table(columns: ReadonlyArray<TableColumn>, rows: ReadonlyArray<TableRow>, unit = "$'000"): void {
     const { doc } = this
     const labelWidth = this.contentWidth - columns.reduce((sum, column) => sum + column.width, 0)
     let y = doc.y + 4
 
-    doc.font("Helvetica-Bold").fontSize(8.5).fillColor("#444").text("$'000", MARGIN, y, { width: labelWidth })
+    doc.font("Helvetica-Bold").fontSize(8.5).fillColor("#444").text(unit, MARGIN, y, { width: labelWidth })
     let x = MARGIN + labelWidth
     for (const column of columns) {
       doc.text(column.label, x, y, { width: column.width, align: "right" })

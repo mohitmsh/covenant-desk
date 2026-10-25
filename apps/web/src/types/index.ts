@@ -12,6 +12,9 @@ export type {
   CovenantResult,
   CovenantStatus,
   EbitdaGap,
+  EvalCaseResult,
+  EvalCheck,
+  EvalReport,
   DocumentRecord,
   FigureKey,
   Issue,
@@ -38,7 +41,8 @@ export interface ApiErrorBody {
 }
 
 /** Top-level screen, kept in the URL. */
-export type Route = { readonly view: "portfolio" } | { readonly view: "run"; readonly runId: string }
+export type Route =
+  { readonly view: "portfolio" } | { readonly view: "evals" } | { readonly view: "run"; readonly runId: string }
 
 /** Where the document viewer should look, and what to highlight. */
 export interface SourceFocus {

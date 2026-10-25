@@ -24,6 +24,12 @@ export const COVENANTS_EFFECTIVE_FROM = "2025-07-01"
 
 export const PACKS_DIR = fileURLToPath(new URL("../packs/", import.meta.url))
 
+/** Eval packs, expectations and results. Expectations are kept apart from the packs the agent reads. */
+export const EVALS_DIR = fileURLToPath(new URL("../evals/", import.meta.url))
+
+/** Fixtures root, against which eval pack paths are resolved. */
+export const FIXTURES_DIR = fileURLToPath(new URL("../", import.meta.url))
+
 /** Real agent runs on the packs, saved for replay when seeding the demo. */
 export const RECORDINGS_DIR = fileURLToPath(new URL("../recordings/", import.meta.url))
 

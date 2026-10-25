@@ -1,0 +1,26 @@
+{
+  "issuesPresent": ["conflict"],
+  "figureAlternatives": {
+    "cash": [1150000, 1450000]
+  },
+  "id": "conflicting-pages",
+  "name": "Conflicting pages",
+  "category": "conflict",
+  "description": "Corella's debt schedule prints cash of $1,450k while its balance sheet says $1,150k. The conflict must be raised whichever figure the agent used.",
+  "borrowerId": "corella",
+  "pack": "evals/packs/conflicting-pages.pdf",
+  "runPeriod": "2026-09",
+  "figures": {
+    "revenue_ttm": 61300000,
+    "ebitda_ttm": 5210000,
+    "interest_expense_ttm": 2140000,
+    "total_debt": 18900000,
+    "cash": 1150000,
+    "undrawn_facility": 2300000
+  },
+  "covenants": {
+    "net_leverage": "watch",
+    "interest_cover": "watch",
+    "minimum_liquidity": "pass"
+  }
+}

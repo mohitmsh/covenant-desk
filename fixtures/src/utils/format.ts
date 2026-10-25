@@ -6,3 +6,9 @@ export const formatThousands = (value: number, negative = false): string => {
   const digits = Math.round(Math.abs(value)).toLocaleString("en-AU")
   return negative !== value < 0 ? `(${digits})` : digits
 }
+
+/** Formats an amount held in thousands as $ millions to two decimals, e.g. `16.40`, or `(1.25)` when negative. */
+export const formatMillions = (value: number, negative = false): string => {
+  const digits = (Math.abs(value) / 1000).toFixed(2)
+  return negative !== value < 0 ? `(${digits})` : digits
+}
