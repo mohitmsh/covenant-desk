@@ -28,23 +28,29 @@
   font-size: var(--fs-body);
 }
 
+/* Labels and values in two aligned columns, one fact per row. */
 .facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 32px;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 16px;
   margin: 0;
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid var(--rule);
 }
 
 .facts dt {
   color: var(--muted);
-  font-size: var(--fs-caption);
+  font-size: var(--fs-small);
 }
 
 .facts dd {
-  margin: 3px 0 0;
+  margin: 0;
   font-size: var(--fs-small);
+}
+
+.secondary {
+  color: var(--muted);
 }
 
 .analyst {
@@ -55,16 +61,12 @@
 
 .recorded {
   display: block;
+  margin-top: 2px;
   color: var(--faint);
   font-size: var(--fs-caption);
 }
 
-.pending {
-  color: var(--muted);
-}
-
 .rerun {
-  margin-left: 8px;
   padding: 0;
   border: none;
   background: none;
@@ -81,4 +83,10 @@
   display: block;
   color: var(--status-breach);
   font-size: var(--fs-caption);
+}
+
+.outcome {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }

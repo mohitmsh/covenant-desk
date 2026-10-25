@@ -2,6 +2,7 @@ import type { CertificateComparison, CovenantResult, EbitdaGap, VerifiedCertific
 import { disagreementLevel, hasDisagreement, type DisagreementLevel } from "@/utils/certificate"
 import { formatMetric } from "@/utils/format"
 import { PageTag } from "@/components/ui/PageTag"
+import { StatusChip } from "@/components/ui/StatusChip"
 import styles from "./CertificateBanner.module.css"
 
 interface CertificateBannerProps {
@@ -43,12 +44,16 @@ export function CertificateBanner({ comparisons, covenants, claims, ebitdaGap, o
 
   return (
     <section className={styles.card} aria-labelledby="certificate-title">
-      <h2 id="certificate-title" className={styles.title}>
-        <span className={styles.dot} data-level={worst} aria-hidden />
-        {worst === "compliance"
-          ? "The compliance certificate disagrees with the tested results"
-          : "The compliance certificate reports different figures with the same outcomes"}
-      </h2>
+      <header className={styles.header}>
+        <h2 id="certificate-title" className={styles.title}>
+          {worst === "compliance"
+            ? "The compliance certificate disagrees with the tested results"
+            : "The compliance certificate reports different figures with the same outcomes"}
+        </h2>
+        <StatusChip tone={worst === "compliance" ? "breach" : "watch"}>
+          {disputed.length} of {comparisons.length} disagree
+        </StatusChip>
+      </header>
 
       <table className={styles.table}>
         <thead>

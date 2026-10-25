@@ -1,7 +1,6 @@
 import { RUN_STATUS_LABELS } from "@/constants"
 import type { RunSummary } from "@/types"
 import { formatRunOrigin } from "@/utils/actors"
-import { formatPeriod } from "@/utils/format"
 import { StatusDot } from "@/components/ui/StatusDot"
 import { Button } from "@/components/ui/Button"
 import { Message } from "@/components/ui/Message"
@@ -18,6 +17,15 @@ interface RunListProps {
   readonly isEvalsOpen: boolean
   readonly onOpenEvals: () => void
 }
+
+/** Drops the company suffix, which every borrower shares: `Corella Fresh Foods Pty Ltd` → `Corella Fresh Foods`. */
+const shortName = (name: string) => name.replace(/\s+(Pty\.?\s*Ltd\.?|Limited|Ltd\.?)$/i, "")
+
+/** `2026-09` → `Sep 2026`. */
+const formatShortPeriod = (period: string) =>
+  new Date(`${period}-01T00:00:00Z`)
+    .toLocaleDateString("en-AU", { month: "short", year: "numeric", timeZone: "UTC" })
+    .replace("Sept", "Sep")
 
 const runOutcome = (run: RunSummary) => {
   if (isRunInProgress(run.status) || run.status === "failed") return "neutral"
@@ -57,17 +65,31 @@ export function RunList({
 
   const newRunButton = (
     <>
-      <div className={styles.nav}>
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Workspace</h2>
         <button type="button" className={styles.navItem} aria-current={isPortfolioOpen} onClick={onOpenPortfolio}>
+          <svg className={styles.navIcon} width="16" height="16" viewBox="0 0 16 16" aria-hidden>
+            <rect x="2" y="2" width="5" height="5" rx="1" />
+            <rect x="9" y="2" width="5" height="5" rx="1" />
+            <rect x="2" y="9" width="5" height="5" rx="1" />
+            <rect x="9" y="9" width="5" height="5" rx="1" />
+          </svg>
           Portfolio
         </button>
         <button type="button" className={styles.navItem} aria-current={isEvalsOpen} onClick={onOpenEvals}>
+          <svg className={styles.navIcon} width="16" height="16" viewBox="0 0 16 16" aria-hidden>
+            <circle cx="8" cy="8" r="6" />
+            <path d="M5.5 8.2 7.2 9.8 10.6 6.3" />
+          </svg>
           Test results
         </button>
       </div>
-      <div className={styles.actions}>
-        <span className={styles.actionsTitle}>Monitoring runs</span>
-        <Button variant="primary" onClick={onNewRun}>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>Monitoring runs</h2>
+        <Button variant="primary" className={styles.newRun} onClick={onNewRun}>
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+            <path d="M6 2v8M2 6h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
           New run
         </Button>
       </div>
@@ -97,22 +119,21 @@ export function RunList({
                 type="button"
                 className={styles.item}
                 aria-current={run.id === selectedRunId}
+                title={`${run.borrowerName} · ${formatRunOrigin(run.startedBy, run.createdAt)}`}
                 onClick={() => onSelect(run.id)}
               >
-                <span className={styles.name}>{run.borrowerName}</span>
-                <span className={styles.source}>
-                  {formatRunOrigin(run.startedBy, run.createdAt)}
+                <span className={styles.nameRow}>
+                  <span className={styles.name}>{shortName(run.borrowerName)}</span>
                   {run.openIssues > 0 && (
-                    <span className={styles.issues}>
-                      {" "}
-                      · {run.openIssues} issue{run.openIssues === 1 ? "" : "s"}
+                    <span className={styles.issueCount} aria-label={`${run.openIssues} open issues`}>
+                      {run.openIssues}
                     </span>
                   )}
                 </span>
                 <span className={styles.meta}>
                   <StatusDot status={runOutcome(run)} />
                   {outcomeLabel(run)}
-                  <span className={styles.period}>{formatPeriod(run.period)}</span>
+                  <span className={styles.period}>{formatShortPeriod(run.period)}</span>
                 </span>
               </button>
             </li>

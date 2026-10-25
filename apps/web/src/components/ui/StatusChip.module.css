@@ -1,0 +1,39 @@
+.chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 9px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--chip-tone);
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--chip-tone);
+}
+
+.chip[data-tone="breach"] {
+  --chip-tone: var(--status-breach);
+}
+
+.chip[data-tone="watch"] {
+  --chip-tone: var(--status-watch);
+}
+
+.chip[data-tone="pass"] {
+  --chip-tone: var(--status-pass);
+}
+
+.chip[data-tone="neutral"] {
+  --chip-tone: var(--muted);
+}

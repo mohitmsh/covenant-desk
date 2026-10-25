@@ -1,11 +1,14 @@
+/* The note sits in its own card, apart from the figures around it. */
 .body {
-  padding: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
 }
 
 .text {
   display: grid;
   gap: 10px;
-  max-width: 68ch;
   font-size: var(--fs-body);
   line-height: 1.6;
 }
@@ -79,4 +82,12 @@
 
 .empty {
   color: var(--muted);
+}
+
+/* Inside the note card the summary becomes the card's tinted header. */
+.body .summary {
+  margin: -18px -20px 4px;
+  padding: 14px 20px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--paper-2);
 }

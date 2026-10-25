@@ -210,12 +210,19 @@ export function EvalsView({ report }: EvalsViewProps) {
           <StatTile label="Model cost" value={formatUsd(totals.costUsd)} detail="For every case, as recorded" />
         </div>
 
-        <p className={styles.method}>
-          Each case is a reporting pack run through the same agent loop, verification, covenant tests and review checks
-          as the app. What each case must produce is stored apart from its pack, so the agent never sees it. Recorded
-          model responses are replayed through the current code, so a code change that breaks a case shows up here
-          without calling the model.
-        </p>
+        <div className={styles.method}>
+          <p>
+            <strong>These test the agent, not your clients.</strong> Each case takes one client's reporting pack, often
+            deliberately altered (pages in $ millions, the wrong month, a hidden instruction to the AI), runs the agent
+            on it in a separate scratch database, and compares what came out with answers written down in advance. None
+            of it touches the runs in the sidebar.
+          </p>
+          <p>
+            Open a case to see every check and what the agent actually produced: its covenant results, the issues it
+            raised and the note it wrote. Recorded model responses are replayed through the current code, so a code
+            change that breaks a case shows up here without calling the model.
+          </p>
+        </div>
 
         {failed.length > 0 && (
           <p className={styles.failures}>

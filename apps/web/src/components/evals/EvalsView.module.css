@@ -29,10 +29,17 @@
 }
 
 .method {
-  max-width: 70ch;
+  display: grid;
+  gap: 8px;
+  max-width: 72ch;
   color: var(--muted);
   font-size: var(--fs-small);
   line-height: 1.6;
+}
+
+.method strong {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .failures {

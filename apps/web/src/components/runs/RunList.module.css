@@ -1,13 +1,40 @@
-.nav {
-  padding: 6px 8px 0;
+/* Sections, each with a small label, like the navigation of an enterprise app. */
+.section {
+  display: grid;
+  gap: 2px;
+  padding: 16px 10px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 10px 4px 20px;
+}
+
+.sectionTitle {
+  padding: 0 10px 6px;
+  color: var(--faint);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+}
+
+.sectionHeader .sectionTitle {
+  padding: 0;
 }
 
 .navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  padding: 8px 10px;
+  height: 32px;
+  padding: 0 10px;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: transparent;
+  color: var(--ink);
   font-size: var(--fs-small);
   font-weight: 500;
   text-align: left;
@@ -22,28 +49,38 @@
   box-shadow: inset 0 0 0 1px var(--rule);
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-  padding: 0 10px 0 18px;
+.navIcon {
+  flex: none;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.actionsTitle {
-  font-size: var(--fs-small);
-  font-weight: 500;
+.navItem[aria-current="true"] .navIcon {
+  stroke: var(--accent);
+}
+
+.newRun {
+  height: 26px;
+  padding: 0 10px;
+  font-size: var(--fs-caption);
 }
 
 .group {
-  padding: 14px 8px 4px;
+  padding: 10px 10px 4px;
+}
+
+.group + .group {
+  margin-top: 6px;
 }
 
 .groupTitle {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px 8px;
+  padding: 0 10px 6px;
   color: var(--muted);
   font-size: var(--fs-caption);
   font-weight: 500;
@@ -63,7 +100,7 @@
 
 .item {
   display: grid;
-  gap: 3px;
+  gap: 4px;
   width: 100%;
   padding: 9px 10px;
   border: 1px solid transparent;
@@ -102,12 +139,25 @@
   color: var(--faint);
 }
 
-.source {
-  color: var(--faint);
-  font-size: var(--fs-micro);
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
-.issues {
-  color: var(--status-watch);
-  font-weight: 500;
+.issueCount {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: auto;
+  padding: 0 5px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
