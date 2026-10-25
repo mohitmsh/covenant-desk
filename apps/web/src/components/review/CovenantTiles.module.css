@@ -100,9 +100,14 @@
   font-size: var(--fs-caption);
 }
 
-.certificate[data-disagrees="true"] {
+.certificate[data-disagrees="compliance"] {
   background: var(--status-breach-wash);
   color: var(--status-breach);
+}
+
+.certificate[data-disagrees="value"] {
+  background: var(--status-watch-wash);
+  color: var(--status-watch);
 }
 
 .certificateLabel {

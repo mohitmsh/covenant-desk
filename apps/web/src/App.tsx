@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AppShell } from "@/components/layout/AppShell"
 import { PortfolioView } from "@/components/portfolio/PortfolioView"
 import { RunReview } from "@/components/review/RunReview"
 import { NewRunDialog } from "@/components/runs/NewRunDialog"
 import { RunList } from "@/components/runs/RunList"
 import { Message } from "@/components/ui/Message"
+import { FEATURED_BORROWER_ID } from "@/constants"
 import { useRoute } from "@/hooks/use-route"
 import { usePortfolio, useRun, useRuns } from "@/hooks/use-runs"
 
@@ -17,6 +18,15 @@ export function App() {
   const [isNewRunOpen, setNewRunOpen] = useState(false)
 
   const openRun = (id: string) => navigate({ view: "run", runId: id })
+
+  // A visitor arriving at the bare URL lands on the featured run rather than the portfolio.
+  const isLanding = useRef(route.view === "portfolio" && window.location.search === "")
+  useEffect(() => {
+    if (!isLanding.current || !runs.data) return
+    isLanding.current = false
+    const featured = runs.data.find((r) => r.borrowerId === FEATURED_BORROWER_ID && r.status !== "failed")
+    if (featured) navigate({ view: "run", runId: featured.id }, { replace: true })
+  }, [runs.data, navigate])
 
   const sidebar = runs.isPending ? (
     <Message title="Loading runs" />

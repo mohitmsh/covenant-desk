@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import { API_ROUTES } from "@/constants"
+import { API_ROUTES, FEATURED_BORROWER_ID } from "@/constants"
 import type { Issue, RunDetail, SourceFocus, VerifiedCertificateClaim, VerifiedFigure } from "@/types"
 import { issueTone, nextOpenIssue } from "@/utils/issues"
 import { isRunInProgress } from "@/utils/runs"
@@ -16,6 +16,7 @@ import { IssuesPanel } from "./IssuesPanel"
 import { MonitoringNote } from "./MonitoringNote"
 import { RunHeader } from "./RunHeader"
 import { SignOff } from "./SignOff"
+import { StartHere } from "./StartHere"
 import styles from "./RunReview.module.css"
 
 interface RunReviewProps {
@@ -95,6 +96,8 @@ export function RunReview({ detail }: RunReviewProps) {
           <RunHeader run={run} borrower={borrower} covenants={covenants} events={events} />
 
           {showProgress && <AgentProgress status={run.status} events={events} />}
+
+          {borrower.id === FEATURED_BORROWER_ID && run.status === "awaiting_signoff" && <StartHere />}
 
           <CertificateBanner
             comparisons={certificateComparisons}

@@ -16,3 +16,9 @@ export const RUN_POLL_INTERVAL_MS = 1_000
 export const LIVE_REFRESH_INTERVAL_MS = 10_000
 
 export const AGENT_LABEL = "Claude Haiku 5.5"
+
+/** Borrower whose run a first-time visitor lands on: the certificate mismatch story. */
+export const FEATURED_BORROWER_ID = "wattle-grove"
+
+/** Browser storage key remembering that the visitor dismissed the "Start here" guide. */
+export const START_HERE_DISMISSED_KEY = "covenant-desk:start-here-dismissed"

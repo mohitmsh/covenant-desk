@@ -1,7 +1,7 @@
 import { METRICS } from "@covenant-desk/core/constants"
-import { RUN_STATUS_LABELS } from "@/constants"
+import { FEATURED_BORROWER_ID, RUN_STATUS_LABELS } from "@/constants"
 import type { Metric, Portfolio, PortfolioRow } from "@/types"
-import { comparisonFor, describeCertificateClaim, hasDisagreement } from "@/utils/certificate"
+import { comparisonFor, describeCertificateClaim, disagreementLevel, hasDisagreement } from "@/utils/certificate"
 import { formatCompactDollars, formatMetric, formatPeriod } from "@/utils/format"
 import { isRunInProgress } from "@/utils/runs"
 import { Avatar } from "@/components/ui/Avatar"
@@ -40,7 +40,9 @@ function CovenantCell({ row, metric }: { readonly row: PortfolioRow; readonly me
         {formatMetric(metric, result.actual)}
       </span>
       {comparison && hasDisagreement(comparison) && (
-        <span className={styles.mismatch}>Certificate: {describeCertificateClaim(comparison)}</span>
+        <span className={styles.mismatch} data-level={disagreementLevel(comparison)}>
+          Certificate: {describeCertificateClaim(comparison)}
+        </span>
       )}
     </span>
   )
@@ -107,7 +109,10 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
                   onClick={runId ? () => onOpenRun(runId) : undefined}
                 >
                   <td>
-                    <span className={styles.borrower}>{row.borrower.name}</span>
+                    <span className={styles.borrower}>
+                      {row.borrower.name}
+                      {row.borrower.id === FEATURED_BORROWER_ID && <span className={styles.startHere}>Start here</span>}
+                    </span>
                     <span className={styles.facility}>{formatCompactDollars(row.borrower.facilityLimit)} facility</span>
                   </td>
                   <td>

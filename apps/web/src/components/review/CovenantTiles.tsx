@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { OPERATOR_SYMBOLS } from "@/constants"
 import type { CertificateComparison, CovenantResult, VerifiedCertificateClaim, VerifiedFigure } from "@/types"
-import { comparisonFor, describeCertificateClaim, hasDisagreement } from "@/utils/certificate"
+import { CERTIFICATE_VERDICTS, comparisonFor, describeCertificateClaim, disagreementLevel } from "@/utils/certificate"
 import { sortCovenants } from "@/utils/covenants"
 import { formatMetric, formatPercent } from "@/utils/format"
 import { PageTag } from "@/components/ui/PageTag"
@@ -68,10 +68,8 @@ export function CovenantTiles({
               </span>
             </button>
             {comparison && claim && (
-              <div className={styles.certificate} data-disagrees={hasDisagreement(comparison)}>
-                <span className={styles.certificateLabel}>
-                  {hasDisagreement(comparison) ? "Certificate disagrees" : "Certificate agrees"}
-                </span>
+              <div className={styles.certificate} data-disagrees={disagreementLevel(comparison)}>
+                <span className={styles.certificateLabel}>{CERTIFICATE_VERDICTS[disagreementLevel(comparison)]}</span>
                 <span className={styles.certificateValue}>{describeCertificateClaim(comparison)}</span>
                 <PageTag
                   page={claim.page}

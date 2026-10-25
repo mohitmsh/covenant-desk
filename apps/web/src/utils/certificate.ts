@@ -5,6 +5,25 @@ const COMPLIANCE_WORDS = { true: "complies", false: "does not comply" } as const
 
 export const hasDisagreement = (comparison: CertificateComparison): boolean => comparison.disagreements.length > 0
 
+/**
+ * How seriously the certificate disagrees: `compliance` when it reaches a
+ * different outcome, `value` when only the figure differs.
+ */
+export type DisagreementLevel = "compliance" | "value" | "none"
+
+export const disagreementLevel = (comparison: CertificateComparison): DisagreementLevel =>
+  comparison.disagreements.includes("compliance")
+    ? "compliance"
+    : comparison.disagreements.length > 0
+      ? "value"
+      : "none"
+
+export const CERTIFICATE_VERDICTS = {
+  compliance: "Certificate disagrees",
+  value: "Certificate figure differs",
+  none: "Certificate agrees"
+} as const satisfies Record<DisagreementLevel, string>
+
 export const comparisonFor = (
   comparisons: ReadonlyArray<CertificateComparison>,
   metric: Metric

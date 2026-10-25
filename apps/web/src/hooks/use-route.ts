@@ -23,8 +23,9 @@ export const useRoute = () => {
     return () => window.removeEventListener("popstate", onPopState)
   }, [])
 
-  const navigate = useCallback((next: Route) => {
-    window.history.pushState(null, "", toUrl(next))
+  const navigate = useCallback((next: Route, options: { readonly replace?: boolean } = {}) => {
+    if (options.replace) window.history.replaceState(null, "", toUrl(next))
+    else window.history.pushState(null, "", toUrl(next))
     setRoute(next)
   }, [])
 
