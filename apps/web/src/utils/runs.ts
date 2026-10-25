@@ -77,10 +77,29 @@ export const agentSteps = (events: ReadonlyArray<AuditEvent>): AgentStep[] =>
   })
 
 /** Model spend recorded on the run's latest agent turn, in US dollars. */
-export const agentCostUsd = (events: ReadonlyArray<AuditEvent>): number | null => {
+export interface AgentUsage {
+  readonly costUsd: number
+  readonly toolCalls: number
+  /** Time spent waiting on the model, summed over turns. */
+  readonly modelSeconds: number
+  /** When the run is a replay of a recorded agent run, when it was recorded. */
+  readonly recordedAt: string | null
+}
+
+const numberOr = (value: JsonValue | undefined, fallback: number) => (typeof value === "number" ? value : fallback)
+
+/** Cost, tool calls and model time for an agent run, from its turn events; null for runs without an agent. */
+export const agentUsage = (events: ReadonlyArray<AuditEvent>): AgentUsage | null => {
   const turns = events.filter((event) => event.kind === AUDIT_EVENT_KINDS.AGENT_TURN)
-  const cost = turns.at(-1)?.detail.costUsd
-  return typeof cost === "number" ? cost : null
+  const last = turns.at(-1)
+  if (last === undefined) return null
+  const replay = events.find((event) => event.kind === AUDIT_EVENT_KINDS.AGENT_REPLAYED)?.detail.recordedAt
+  return {
+    costUsd: numberOr(last.detail.costUsd, 0),
+    toolCalls: turns.reduce((sum, turn) => sum + numberOr(turn.detail.toolCalls, 0), 0),
+    modelSeconds: turns.reduce((sum, turn) => sum + numberOr(turn.detail.latencyMs, 0), 0) / 1000,
+    recordedAt: typeof replay === "string" ? replay : null
+  }
 }
 
 export const formatUsd = (value: number): string => `$${value.toFixed(4)}`

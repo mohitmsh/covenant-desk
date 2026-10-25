@@ -53,3 +53,9 @@
   align-items: center;
   gap: 8px;
 }
+
+.recorded {
+  display: block;
+  color: var(--faint);
+  font-size: var(--fs-caption);
+}

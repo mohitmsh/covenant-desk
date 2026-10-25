@@ -2,8 +2,8 @@ import { RUN_STATUS_LABELS } from "@/constants"
 import type { AuditEvent, Borrower, CovenantResult, RunStatus, RunSummary } from "@/types"
 import { formatRunSource } from "@/utils/actors"
 import { worstStatus } from "@/utils/covenants"
-import { agentCostUsd, formatUsd } from "@/utils/runs"
-import { formatCompactDollars, formatPeriod } from "@/utils/format"
+import { agentUsage, formatUsd } from "@/utils/runs"
+import { formatCompactDollars, formatDateTime, formatPeriod } from "@/utils/format"
 import { Avatar } from "@/components/ui/Avatar"
 import { Pill, type PillTone } from "@/components/ui/Pill"
 import { StatusBadge } from "@/components/ui/StatusBadge"
@@ -26,7 +26,7 @@ interface RunHeaderProps {
 
 export function RunHeader({ run, borrower, covenants, events }: RunHeaderProps) {
   const outcome = worstStatus(covenants)
-  const cost = agentCostUsd(events)
+  const usage = agentUsage(events)
 
   return (
     <header className={styles.header}>
@@ -58,12 +58,24 @@ export function RunHeader({ run, borrower, covenants, events }: RunHeaderProps) 
         )}
         <div>
           <dt>Started by</dt>
-          <dd title={run.startedBy}>{formatRunSource(run.startedBy)}</dd>
+          <dd title={run.startedBy}>
+            {formatRunSource(run.startedBy)}
+            {usage?.recordedAt && (
+              <span
+                className={styles.recorded}
+                title="The model's responses were recorded from a real run and replayed"
+              >
+                Recorded {formatDateTime(usage.recordedAt)}
+              </span>
+            )}
+          </dd>
         </div>
-        {cost !== null && (
+        {usage !== null && (
           <div>
-            <dt>Model cost</dt>
-            <dd className="tabular">{formatUsd(cost)}</dd>
+            <dt>Agent run</dt>
+            <dd className="tabular">
+              {formatUsd(usage.costUsd)} · {usage.toolCalls} tool calls · {Math.round(usage.modelSeconds)}s
+            </dd>
           </div>
         )}
       </dl>

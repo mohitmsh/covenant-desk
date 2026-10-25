@@ -30,6 +30,7 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
   "certificate.verified": "Certificate figure verified",
   "certificate.rejected": "Certificate figure rejected",
   "agent.turn": "Agent step",
+  "agent.replayed": "Recorded agent run replayed",
   "checks.completed": "Review checks run",
   "issue.decided": "Issue decided",
   "issue.remembered": "Issue decided from memory",
