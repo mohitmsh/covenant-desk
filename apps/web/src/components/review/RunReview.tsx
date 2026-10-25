@@ -1,6 +1,9 @@
 import { useRef, useState } from "react"
-import { API_ROUTES, FEATURED_BORROWER_ID } from "@/constants"
+import { FIGURE_LABELS } from "@covenant-desk/core/constants"
+import { API_ROUTES, FEATURED_BORROWER_ID, METRIC_LABELS } from "@/constants"
 import type { Issue, RunDetail, SourceFocus, VerifiedCertificateClaim, VerifiedFigure } from "@/types"
+import { formatAsReported } from "@/utils/figures"
+import { formatMetric } from "@/utils/format"
 import { issueTone, nextOpenIssue } from "@/utils/issues"
 import { isRunInProgress } from "@/utils/runs"
 import { DocumentViewer } from "@/components/document/DocumentViewer"
@@ -23,7 +26,7 @@ interface RunReviewProps {
   readonly detail: RunDetail
 }
 
-const INITIAL_FOCUS: SourceFocus = { page: 1, quote: null, reported: null }
+const INITIAL_FOCUS: SourceFocus = { page: 1, quote: null, reported: null, box: null }
 
 export function RunReview({ detail }: RunReviewProps) {
   const {
@@ -52,7 +55,7 @@ export function RunReview({ detail }: RunReviewProps) {
     if (!issue) return
     setActiveIssueKey(key)
     setFocusedKey(null)
-    setFocus({ page: issue.page, quote: null, reported: null })
+    setFocus({ page: issue.page, quote: null, reported: null, box: null })
   }
 
   const startReview = () => {
@@ -65,7 +68,7 @@ export function RunReview({ detail }: RunReviewProps) {
     const next = nextOpenIssue(updated, decidedKey)
     if (next) {
       setActiveIssueKey(next.key)
-      setFocus({ page: next.page, quote: null, reported: null })
+      setFocus({ page: next.page, quote: null, reported: null, box: null })
     } else {
       setActiveIssueKey(null)
       signOffRef.current?.scrollIntoView({ block: "start", behavior: "smooth" })
@@ -75,18 +78,18 @@ export function RunReview({ detail }: RunReviewProps) {
   const focusFigure = (figure: VerifiedFigure) => {
     setActiveIssueKey(null)
     setFocusedKey(figure.key)
-    setFocus({ page: figure.page, quote: figure.quote, reported: figure.reported })
+    setFocus({ page: figure.page, quote: figure.quote, reported: figure.reported, box: figure.box })
   }
 
   const focusClaim = (claim: VerifiedCertificateClaim) => {
     setActiveIssueKey(null)
     setFocusedKey(`certificate:${claim.metric}`)
-    setFocus({ page: claim.page, quote: claim.quote, reported: claim.reported })
+    setFocus({ page: claim.page, quote: claim.quote, reported: claim.reported, box: claim.box })
   }
 
   const changePage = (page: number) => {
     setFocusedKey(null)
-    setFocus({ page, quote: null, reported: null })
+    setFocus({ page, quote: null, reported: null, box: null })
   }
 
   return (
@@ -183,6 +186,42 @@ export function RunReview({ detail }: RunReviewProps) {
               : []
           )}
           onSelectMarker={openIssue}
+          fields={[
+            ...figures.flatMap((figure) =>
+              figure.box
+                ? [
+                    {
+                      key: figure.key,
+                      page: figure.page,
+                      label: FIGURE_LABELS[figure.key],
+                      value: formatAsReported(figure),
+                      box: figure.box,
+                      active: focusedKey === figure.key
+                    }
+                  ]
+                : []
+            ),
+            ...certificateClaims.flatMap((claim) =>
+              claim.box
+                ? [
+                    {
+                      key: `certificate:${claim.metric}`,
+                      page: claim.page,
+                      label: `Certificate · ${METRIC_LABELS[claim.metric]}`,
+                      value: formatMetric(claim.metric, claim.value),
+                      box: claim.box,
+                      active: focusedKey === `certificate:${claim.metric}`
+                    }
+                  ]
+                : []
+            )
+          ]}
+          onSelectField={(key) => {
+            const figure = figures.find((f) => f.key === key)
+            const claim = certificateClaims.find((c) => `certificate:${c.metric}` === key)
+            if (figure) focusFigure(figure)
+            else if (claim) focusClaim(claim)
+          }}
           footer={
             activeIssue && (
               <IssueCard

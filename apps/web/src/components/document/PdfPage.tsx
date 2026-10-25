@@ -16,6 +16,15 @@ export interface PageMarker {
   readonly active: boolean
 }
 
+/** An extracted field outlined where it was read from, like the fields in a document review tool. */
+export interface PageField {
+  readonly key: string
+  readonly label: string
+  readonly value: string
+  readonly box: PageBox
+  readonly active: boolean
+}
+
 interface PdfPageProps {
   readonly pdf: PDFDocumentProxy
   readonly pageNumber: number
@@ -24,6 +33,8 @@ interface PdfPageProps {
   readonly reported: number | null
   readonly markers: ReadonlyArray<PageMarker>
   readonly onSelectMarker: (key: string) => void
+  readonly fields: ReadonlyArray<PageField>
+  readonly onSelectField: (key: string) => void
 }
 
 interface Highlight {
@@ -39,8 +50,20 @@ const HIGHLIGHT_PADDING = 2
 
 const MARKER_PADDING = 4
 
+const FIELD_PADDING = 2
+
 /** Renders one PDF page at the given CSS width and highlights `quote` when present. */
-export function PdfPage({ pdf, pageNumber, width, quote, reported, markers, onSelectMarker }: PdfPageProps) {
+export function PdfPage({
+  pdf,
+  pageNumber,
+  width,
+  quote,
+  reported,
+  markers,
+  onSelectMarker,
+  fields,
+  onSelectField
+}: PdfPageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const primaryRef = useRef<HTMLDivElement>(null)
   const activeMarkerRef = useRef<HTMLButtonElement>(null)
@@ -134,6 +157,29 @@ export function PdfPage({ pdf, pageNumber, width, quote, reported, markers, onSe
           style={{ left: highlight.left, top: highlight.top, width: highlight.width, height: highlight.height }}
         />
       ))}
+      {height > 0 &&
+        fields.map((field) => (
+          <button
+            key={field.key}
+            type="button"
+            className={styles.field}
+            data-active={field.active}
+            data-label-side={field.box.x + field.box.width > 0.6 ? "end" : "start"}
+            aria-label={`${field.label}: ${field.value}`}
+            aria-pressed={field.active}
+            onClick={() => onSelectField(field.key)}
+            style={{
+              left: field.box.x * width - FIELD_PADDING,
+              top: field.box.y * height - FIELD_PADDING,
+              width: field.box.width * width + FIELD_PADDING * 2,
+              height: field.box.height * height + FIELD_PADDING * 2
+            }}
+          >
+            <span className={styles.fieldLabel}>
+              {field.label} <span className={styles.fieldValue}>{field.value}</span>
+            </span>
+          </button>
+        ))}
       {height > 0 &&
         markers.map((marker) => (
           <button

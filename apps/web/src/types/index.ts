@@ -1,3 +1,5 @@
+import type { PageBox } from "@covenant-desk/core/types"
+
 export type {
   Approval,
   CertificateComparison,
@@ -41,4 +43,6 @@ export interface SourceFocus {
   readonly quote: string | null
   /** Reported number to emphasise within the quote. */
   readonly reported: number | null
+  /** Where the quote sits on the page, for the source snippet. */
+  readonly box: PageBox | null
 }

@@ -21,8 +21,12 @@ export const unionBox = (boxes: ReadonlyArray<PageBox>): PageBox | null => {
   return { x: left, y: top, width: right - left, height: bottom - top }
 }
 
-/** Box around the text items covering `quote`, matched like server-side verification ignores whitespace. */
-export const locateQuote = (items: ReadonlyArray<PositionedText>, quote: string): PageBox | null => {
+/**
+ * Box around the text items covering `quote`, matched ignoring whitespace like server-side verification.
+ * With `reported`, the box is narrowed to the item printing that number, e.g. `(1,720)` for 1720,
+ * so a figure is outlined on its own cell rather than the whole row.
+ */
+export const locateQuote = (items: ReadonlyArray<PositionedText>, quote: string, reported?: number): PageBox | null => {
   const target = canonicalText(quote)
   if (target.length === 0) return null
 
@@ -38,7 +42,15 @@ export const locateQuote = (items: ReadonlyArray<PositionedText>, quote: string)
   if (start === -1) return null
   const first = owners[start] ?? 0
   const last = owners[start + target.length - 1] ?? first
-  return unionBox(items.slice(first, last + 1).map((item) => item.box))
+  const matched = items.slice(first, last + 1)
+  const valueItem =
+    reported === undefined
+      ? undefined
+      : matched.findLast((item) => {
+          const amount = parseAmount(item.text.replace(/[x×]$/i, ""))
+          return amount !== null && Math.abs(Math.abs(amount) - Math.abs(reported)) < 1e-9
+        })
+  return valueItem ? valueItem.box : unionBox(matched.map((item) => item.box))
 }
 
 /** Parses a printed amount: `1,310` → 1310, `(1,310)` → −1310, `–` → 0. Null when not an amount. */

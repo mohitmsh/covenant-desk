@@ -88,3 +88,63 @@
   border-left-color: var(--marker-line);
   transform: translateY(-50%);
 }
+
+.field {
+  position: absolute;
+  padding: 0;
+  border: 1px solid var(--field-line);
+  border-radius: var(--radius-marker);
+  background: transparent;
+  cursor: pointer;
+  --field-line: color-mix(in srgb, var(--accent) 45%, transparent);
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.field:hover,
+.field[data-active="true"] {
+  --field-line: var(--accent);
+  background: var(--accent-wash);
+}
+
+.field[data-active="true"] {
+  border-width: 1.5px;
+}
+
+.fieldLabel {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: -1px;
+  z-index: 1;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.field[data-label-side="end"] .fieldLabel {
+  right: -1px;
+  left: auto;
+}
+
+.field:hover .fieldLabel,
+.field[data-active="true"] .fieldLabel {
+  opacity: 1;
+  transform: none;
+}
+
+.fieldValue {
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}

@@ -50,7 +50,8 @@ export const verifySource = (claim: SourceClaim, pdf: PdfText) =>
     }
   })
 
-const sourceBox = (claim: SourceClaim, pdf: PdfText) => locateQuote(pdf.layout[claim.page - 1] ?? [], claim.quote)
+const sourceBox = (claim: SourceClaim, pdf: PdfText) =>
+  locateQuote(pdf.layout[claim.page - 1] ?? [], claim.quote, claim.reported)
 
 /** Verifies a figure claim against the source document, converts it to whole dollars and locates it. */
 export const verifyFigure = (claim: FigureClaim, pdf: PdfText) =>

@@ -5,6 +5,12 @@ export const PDF_RENDER_SCALE_MAX = 2
 
 export const PDF_PAGE_GUTTER = 24
 
+/** Zoom steps for the document viewer, as multiples of fit-to-width. */
+export const PDF_ZOOM_LEVELS = [0.5, 0.75, 1, 1.25, 1.5, 2] as const
+
+/** Width of the source snippet image under the document, in CSS pixels. */
+export const SOURCE_SNIPPET_WIDTH = 420
+
 export const DATE_LOCALE = "en-AU"
 
 /** Run statuses during which the agent is still working. */

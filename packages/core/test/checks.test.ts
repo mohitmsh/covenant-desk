@@ -40,6 +40,9 @@ describe("verifyFigure", () => {
     expect(figure.box).not.toBeNull()
     expect(figure.box?.y).toBeGreaterThan(0)
     expect(figure.box?.y).toBeLessThan(0.5)
+    // Outlined on the 640 cell, not across the whole row.
+    expect(figure.box?.x).toBeGreaterThan(0.5)
+    expect(figure.box?.width).toBeLessThan(0.1)
   })
 })
 
