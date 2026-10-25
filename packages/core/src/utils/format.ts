@@ -10,3 +10,6 @@ export const formatRatio = (value: number): string => `${value.toFixed(2)}x`
 /** Formats a metric value in its unit. */
 export const formatMetricValue = (metric: Metric, value: number): string =>
   METRIC_DEFINITIONS[metric].unit === "ratio" ? formatRatio(value) : formatDollars(value)
+
+/** Model cost in US dollars, to a hundredth of a cent: `$0.0086`. */
+export const formatUsd = (value: number): string => `$${value.toFixed(4)}`

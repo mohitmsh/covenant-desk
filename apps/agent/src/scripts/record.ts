@@ -15,7 +15,7 @@ import { AGENT_MODEL } from "#constants"
 import { liveResponder, runMonitoring } from "#run-monitoring"
 import type { ModelTurn, Responder } from "#types"
 import { packFilename, PACKS, readPack } from "#utils/packs"
-import { formatUsd } from "#utils/pricing"
+import { formatUsd } from "@covenant-desk/core/format"
 import { saveRecording } from "#utils/recordings"
 import { scorePack } from "#utils/scoring"
 

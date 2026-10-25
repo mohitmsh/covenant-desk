@@ -24,5 +24,3 @@ export const costOf = (model: string, usage: Anthropic.Usage): number => {
   const cacheRead = (usage.cache_read_input_tokens ?? 0) * price.cacheRead
   return (usage.input_tokens * price.input + cacheWrite + cacheRead + usage.output_tokens * price.output) / PER_MILLION
 }
-
-export const formatUsd = (value: number): string => `$${value.toFixed(4)}`

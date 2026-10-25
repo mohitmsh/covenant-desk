@@ -6,7 +6,8 @@
     ".": "./src/index.ts",
     "./constants": "./src/constants/index.ts",
     "./types": "./src/types/index.ts",
-    "./text": "./src/utils/text.ts"
+    "./text": "./src/utils/text.ts",
+    "./format": "./src/utils/format.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.11",

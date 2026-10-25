@@ -1,197 +1,27 @@
 import { readdir, readFile, writeFile } from "node:fs/promises"
 import { basename } from "node:path"
 import {
-  compareCertificates,
   fileDocumentStoreLayer,
-  FIGURE_KEYS,
-  FIGURE_LABELS,
-  getCovenantResults,
-  getFigures,
-  getLatestNote,
-  listCertificateClaims,
-  listIssues,
   migrate,
   pgliteLayer,
   readPdfText,
   upsertBorrower,
   type EvalCaseResult,
-  type EvalCheck,
-  type EvalOutput,
-  type EvalReport,
-  type IssueKind,
-  type PdfText
+  type EvalReport
 } from "@covenant-desk/core"
 import { COVENANTS_EFFECTIVE_FROM, EVALS_DIR, FIXTURES_DIR } from "@covenant-desk/fixtures/constants"
 import { EVAL_CASES } from "@covenant-desk/fixtures/evals"
 import type { EvalExpectation } from "@covenant-desk/fixtures/types"
+import { formatUsd } from "@covenant-desk/core/format"
 import { Effect, Layer } from "effect"
 import { AGENT_MODEL } from "#constants"
 import { liveResponder, recordingResponder, runMonitoring } from "#run-monitoring"
 import type { AgentRecording, ModelTurn, Responder } from "#types"
-import { formatUsd } from "#utils/pricing"
+import { check, evaluateCase } from "#utils/eval-checks"
 import { evalRecordingPath, loadRecordingAt, packRecordingPath, saveRecordingAt } from "#utils/recordings"
 
 const live = process.argv.includes("--live")
 const only = process.argv.slice(2).find((arg) => !arg.startsWith("--"))
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-] as const
-
-/** A day and month, spelled out or abbreviated: `2 October`, `30 Jun`. */
-const DAY_MONTH = /\b(\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\b/g
-
-/** Day-and-month dates in some text, as `2/10` style keys so `30 June` and `30 Jun` match. */
-const datesIn = (text: string): Map<string, string> =>
-  new Map(
-    [...text.matchAll(DAY_MONTH)].map((match) => {
-      const month = MONTHS.findIndex((name) => name.startsWith(match[2] ?? "")) + 1
-      return [`${Number(match[1])}/${month}`, match[0]]
-    })
-  )
-
-const check = (
-  group: EvalCheck["group"],
-  name: string,
-  passed: boolean,
-  expected: string,
-  actual: string
-): EvalCheck => ({ group, name, passed, expected, actual })
-
-const ISSUE_NAMES: Readonly<Record<IssueKind, string>> = {
-  certificate_mismatch: "certificate mismatch",
-  subtotal: "subtotal error",
-  variance: "large change",
-  period: "wrong period",
-  conflict: "pages disagree"
-}
-
-const dollars = (value: number) => `$${Math.round(value).toLocaleString("en-AU")}`
-
-/** Checks what the pipeline produced against a case's expectations. */
-const evaluate = (expected: EvalExpectation, pdf: PdfText, runId: Parameters<typeof getFigures>[0]) =>
-  Effect.gen(function* () {
-    const [figures, covenants, claims, issues, note] = yield* Effect.all([
-      getFigures(runId),
-      getCovenantResults(runId),
-      listCertificateClaims(runId),
-      listIssues(runId),
-      getLatestNote(runId)
-    ])
-    const checks: EvalCheck[] = []
-
-    for (const key of FIGURE_KEYS) {
-      const actual = figures[key]?.value
-      const accepted = expected.figureAlternatives?.[key] ?? [expected.figures[key]]
-      const tolerance = expected.figureTolerance ?? 0
-      const passed = actual !== undefined && accepted.some((value) => Math.abs(actual - value) <= tolerance)
-      checks.push(
-        check(
-          "figures",
-          FIGURE_LABELS[key],
-          passed,
-          accepted.map(dollars).join(" or ") + (tolerance ? ` (±${dollars(tolerance)})` : ""),
-          actual === undefined ? "not extracted" : dollars(actual)
-        )
-      )
-    }
-
-    for (const [metric, status] of Object.entries(expected.covenants)) {
-      const actual = covenants.find((c) => c.metric === metric)?.status
-      const name = covenants.find((c) => c.metric === metric)?.name ?? metric
-      checks.push(check("covenants", name, actual === status, status, actual ?? "not tested"))
-    }
-
-    const kinds = new Set(issues.map((issue) => issue.kind))
-    for (const kind of expected.issuesPresent ?? []) {
-      checks.push(
-        check(
-          "issues",
-          `raises ${ISSUE_NAMES[kind]}`,
-          kinds.has(kind),
-          "raised",
-          kinds.has(kind) ? "raised" : "missing"
-        )
-      )
-    }
-    for (const kind of expected.issuesAbsent ?? []) {
-      checks.push(
-        check(
-          "issues",
-          `no ${ISSUE_NAMES[kind]}`,
-          !kinds.has(kind),
-          "not raised",
-          kinds.has(kind) ? "raised" : "not raised"
-        )
-      )
-    }
-
-    if (expected.certificateDisagrees !== undefined) {
-      const disagrees = compareCertificates(covenants, claims).some((c) => c.disagreements.length > 0)
-      checks.push(
-        check(
-          "certificate",
-          "certificate comparison",
-          disagrees === expected.certificateDisagrees,
-          expected.certificateDisagrees ? "disagrees" : "agrees",
-          disagrees ? "disagrees" : "agrees"
-        )
-      )
-    }
-
-    const body = note?.body ?? ""
-    for (const phrase of expected.noteMentions ?? []) {
-      const found = body.toLowerCase().includes(phrase.toLowerCase())
-      checks.push(check("note", `mentions "${phrase}"`, found, "mentioned", found ? "mentioned" : "missing"))
-    }
-    for (const phrase of expected.noteAvoids ?? []) {
-      const found = body.toLowerCase().includes(phrase.toLowerCase())
-      checks.push(check("note", `avoids "${phrase}"`, !found, "absent", found ? "present" : "absent"))
-    }
-
-    const conclusion = (body.split(/\n\s*\n/)[0] ?? "").toLowerCase()
-    for (const phrase of expected.conclusionAvoids ?? []) {
-      const found = conclusion.includes(phrase.toLowerCase())
-      checks.push(check("note", `conclusion avoids "${phrase}"`, !found, "absent", found ? "present" : "absent"))
-    }
-
-    // Any specific date the note gives must come from the pack, not the model.
-    const packDates = datesIn(pdf.pages.join(" "))
-    const unsupported = [...datesIn(body)].flatMap(([key, written]) => (packDates.has(key) ? [] : [written]))
-    checks.push(
-      check(
-        "grounding",
-        "dates in the note appear in the pack",
-        unsupported.length === 0,
-        "every date found in the pack",
-        unsupported.length === 0 ? "all found" : `not in pack: ${unsupported.join(", ")}`
-      )
-    )
-    const output: EvalOutput = {
-      covenants: covenants.map((c) => ({
-        name: c.name,
-        metric: c.metric,
-        actual: c.actual,
-        limit: c.limit,
-        operator: c.operator,
-        status: c.status
-      })),
-      issues: issues.map((issue) => ({ title: issue.title, category: issue.category })),
-      note: note?.body ?? null
-    }
-    return { checks, output }
-  })
 
 const runCase = (expected: EvalExpectation) =>
   Effect.gen(function* () {
@@ -269,7 +99,7 @@ const runCase = (expected: EvalExpectation) =>
         } satisfies EvalCaseResult
       }
       const report = outcome.success
-      const evaluated = yield* evaluate(expected, pdf, report.runId)
+      const evaluated = yield* evaluateCase(expected, pdf, report.runId)
       const checks = [
         check("run", "agent completed", true, "a note awaiting sign-off", "completed"),
         ...evaluated.checks

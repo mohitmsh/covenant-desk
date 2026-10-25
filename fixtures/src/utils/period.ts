@@ -1,3 +1,5 @@
+import { SHORT_MONTH_NAMES } from "@covenant-desk/core/constants"
+
 /** Date wording for a reporting period, given as `YYYY-MM`. Financial years start in July. */
 export interface PeriodDates {
   /** `September 2026` */
@@ -18,10 +20,7 @@ export interface PeriodDates {
 
 const CERTIFICATE_SIGNED_DAY = 14
 
-/** Abbreviations as the packs print them; locales disagree (`Sept`, `June`). */
-const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const
-
-const shortMonth = (date: Date) => SHORT_MONTHS[date.getUTCMonth()] ?? ""
+const shortMonth = (date: Date) => SHORT_MONTH_NAMES[date.getUTCMonth()] ?? ""
 
 const format = (date: Date, options: Intl.DateTimeFormatOptions) =>
   date.toLocaleDateString("en-AU", { ...options, timeZone: "UTC" })

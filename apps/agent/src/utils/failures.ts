@@ -1,4 +1,4 @@
-import { formatUsd } from "#utils/pricing"
+import { formatUsd } from "@covenant-desk/core/format"
 
 interface TaggedFailure {
   readonly _tag: string

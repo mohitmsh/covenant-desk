@@ -4,7 +4,7 @@ import { Effect } from "effect"
 import { AGENT_MODEL } from "#constants"
 import { runMonitoring } from "#run-monitoring"
 import { findPack, packFilename, readPack } from "#utils/packs"
-import { formatUsd } from "#utils/pricing"
+import { formatUsd } from "@covenant-desk/core/format"
 
 const DEFAULT_BORROWER = "wattle-grove"
 
