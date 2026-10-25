@@ -15,14 +15,14 @@ import { listCertificateClaims } from "#repositories/certificate-claims"
 import { getCovenantResults } from "#repositories/covenant-results"
 import { recordIssues } from "#repositories/issues"
 import { getRunSummary } from "#repositories/runs"
-import { compareCertificates } from "#services/certificate"
-import type { VerifiedCertificateClaim } from "#types/certificate"
+import { certificateEbitdaGap, compareCertificates } from "#services/certificate"
+import type { EbitdaGap, VerifiedCertificateClaim } from "#types/certificate"
 import type { CovenantResult, Metric } from "#types/covenants"
 import type { RunId } from "#types/ids"
-import type { IssueFinding } from "#types/issues"
+import type { IssueCategory, IssueFinding, IssueSeverity } from "#types/issues"
 import type { PdfText } from "#types/pdf"
 import { formatMetricValue } from "#utils/format"
-import { locateQuote, readTableRows, type TableCell, type TableRow } from "#utils/layout"
+import { locateQuote, readTableRows, unionBox, type TableCell, type TableRow } from "#utils/layout"
 import { canonicalText } from "#utils/text"
 
 export interface CheckInput {
@@ -32,6 +32,10 @@ export interface CheckInput {
   readonly covenants: ReadonlyArray<CovenantResult>
   readonly claims: ReadonlyArray<VerifiedCertificateClaim>
 }
+
+const CATEGORY_ORDER: Readonly<Record<IssueCategory, number>> = { discrepancy: 0, verify: 1, explanation: 2 }
+
+const SEVERITY_ORDER: Readonly<Record<IssueSeverity, number>> = { high: 0, medium: 1 }
 
 const sameLabel = (a: string, b: string) => canonicalText(a) === canonicalText(b)
 
@@ -46,11 +50,17 @@ const LIMIT_WORDS = { lte: "maximum", gte: "minimum" } as const
 const spokenValue = (metric: Metric, value: number) =>
   metric === "minimum_liquidity" ? `$${(value / 1_000_000).toFixed(2)}m` : formatMetricValue(metric, value)
 
+/** `2.7% headroom`, or `over the limit by 8.3%` once breached. */
+const describeHeadroom = (result: CovenantResult) =>
+  result.headroom < 0
+    ? `over the limit by ${(Math.abs(result.headroom) * 100).toFixed(1)}%`
+    : `${(result.headroom * 100).toFixed(1)}% headroom`
+
 /** `Minimum liquidity $1.54m against a $1.50m minimum (2.7% headroom, watch)`. */
 const describeCovenant = (result: CovenantResult) =>
   `${result.name} ${spokenValue(result.metric, result.actual)} against a ` +
   `${spokenValue(result.metric, result.limit)} ${LIMIT_WORDS[result.operator]} ` +
-  `(${(result.headroom * 100).toFixed(1)}% headroom${result.status === "pass" ? "" : `, ${result.status}`})`
+  `(${describeHeadroom(result)}${result.status === "pass" || result.headroom < 0 ? "" : `, ${result.status}`})`
 
 const impactOn = (metrics: ReadonlyArray<Metric>, covenants: ReadonlyArray<CovenantResult>): string | null => {
   const affected = covenants.filter((c) => metrics.includes(c.metric))
@@ -60,7 +70,84 @@ const impactOn = (metrics: ReadonlyArray<Metric>, covenants: ReadonlyArray<Coven
     .join("; ")}.`
 }
 
-const certificateFindings = ({ covenants, claims }: CheckInput): IssueFinding[] =>
+/** `$470k` from whole dollars. */
+const dollarsInThousands = (value: number) => `$${Math.round(Math.abs(value) / 1000).toLocaleString("en-AU")}k`
+
+/**
+ * One issue for certificate figures that all differ because the certificate
+ * used a different EBITDA, listing what that does to each covenant.
+ */
+const ebitdaGapFinding = (input: CheckInput, gap: EbitdaGap): IssueFinding | null => {
+  const comparisons = compareCertificates(input.covenants, input.claims).filter((c) => gap.metrics.includes(c.metric))
+  const affected = comparisons.flatMap((comparison) => {
+    const claim = input.claims.find((c) => c.metric === comparison.metric)
+    const covenant = input.covenants.find((c) => c.metric === comparison.metric)
+    return claim && covenant ? [{ comparison, claim, covenant }] : []
+  })
+  // The covenant whose outcome changes comes first.
+  affected.sort(
+    (a, b) =>
+      Number(b.comparison.disagreements.includes("compliance")) -
+      Number(a.comparison.disagreements.includes("compliance"))
+  )
+  const [first] = affected
+  if (!first) return null
+  const outcomeDiffers = affected.some((a) => a.comparison.disagreements.includes("compliance"))
+  const effects = affected.map(({ comparison, covenant }) =>
+    comparison.disagreements.includes("compliance")
+      ? `${covenant.name} is a breach (${describeHeadroom(covenant)}) that the certificate reports as compliant`
+      : `${covenant.name} still ${covenant.status === "pass" ? "passes" : `is on ${covenant.status}`} at ` +
+        `${spokenValue(covenant.metric, covenant.actual)}, against ${spokenValue(covenant.metric, comparison.certificateValue)} on the certificate`
+  )
+  const boxes = affected.flatMap(({ claim }) => (claim.box ? [claim.box] : []))
+  return {
+    key: "certificate:ebitda",
+    fingerprint: `certificate:ebitda:${affected.map((a) => a.comparison.disagreements.join("+")).join("/")}`,
+    kind: "certificate_mismatch",
+    category: "discrepancy",
+    severity: outcomeDiffers ? "high" : "medium",
+    title:
+      gap.difference > 0
+        ? `Certificate adds back ${dollarsInThousands(gap.difference)} not shown in the P&L`
+        : `Certificate deducts ${dollarsInThousands(gap.difference)} not shown in the P&L`,
+    detail:
+      `The certificate's ratios use EBITDA of ${dollarsInThousands(gap.certificate)} against ` +
+      `${dollarsInThousands(gap.reported)} in the P&L. ${effects.join(". ")}.`,
+    page: first.claim.page,
+    box: unionBox(boxes),
+    evidence: affected.flatMap(({ comparison, claim, covenant }) => [
+      {
+        label: `${covenant.name}, certificate`,
+        value: `${spokenValue(comparison.metric, comparison.certificateValue)} · ${complianceWord(comparison.claimsCompliance)}`,
+        page: claim.page,
+        box: claim.box
+      },
+      {
+        label: `${covenant.name}, tested`,
+        value: `${spokenValue(comparison.metric, comparison.testedValue)} · ${comparison.testedStatus}`,
+        page: null,
+        box: null
+      }
+    ]),
+    impact: outcomeDiffers
+      ? `${effects.join("; ")}. An undisclosed breach may itself be a default under the facility.`
+      : `${effects.join("; ")}. Compliance does not change.`,
+    checks: [...CERTIFICATE_CHECKS]
+  }
+}
+
+const certificateFindings = (input: CheckInput): IssueFinding[] => {
+  const { covenants, claims } = input
+  const gap = certificateEbitdaGap(covenants, claims)
+  const merged = gap && gap.metrics.length > 1 ? ebitdaGapFinding(input, gap) : null
+  const explained = merged && gap ? gap.metrics : []
+  return [
+    ...(merged ? [merged] : []),
+    ...singleCertificateFindings(input).filter((finding) => !explained.some((m) => finding.key === `certificate:${m}`))
+  ]
+}
+
+const singleCertificateFindings = ({ covenants, claims }: CheckInput): IssueFinding[] =>
   compareCertificates(covenants, claims).flatMap((comparison) => {
     if (comparison.disagreements.length === 0) return []
     const claim = claims.find((c) => c.metric === comparison.metric)
@@ -171,19 +258,44 @@ const subtotalFindings = (rows: ReadonlyArray<TableRow>, page: number): IssueFin
 
 const isDateColumn = (column: string | null): column is string => column !== null && !Number.isNaN(Date.parse(column))
 
+const AVERAGE_MONTH_MS = 30.44 * 24 * 60 * 60 * 1000
+
+/** `prior month`, `prior quarter` or `prior year`, from how far apart two dated columns are. */
+const priorPeriodWord = (current: string, prior: string): string => {
+  const months = Math.round((Date.parse(current) - Date.parse(prior)) / AVERAGE_MONTH_MS)
+  return months === 1
+    ? "prior month"
+    : months === 3
+      ? "prior quarter"
+      : months === 12
+        ? "prior year"
+        : `${months} months earlier`
+}
+
+interface Comparison {
+  readonly current: TableCell
+  readonly prior: TableCell
+  readonly priorWord: string
+}
+
 /** The current and prior cells of a row: a named column pair, or the two latest dated columns. */
-const currentAndPrior = (row: TableRow): readonly [TableCell, TableCell] | null => {
+const currentAndPrior = (row: TableRow): Comparison | null => {
   for (const [current, prior] of VARIANCE_COLUMNS) {
     const a = row.cells.find((c) => c.column === current)
     const b = row.cells.find((c) => c.column === prior)
-    if (a && b) return [a, b]
+    if (a && b) return { current: a, prior: b, priorWord: "prior year" }
   }
   const dated = row.cells
     .filter((c) => isDateColumn(c.column))
     .sort((a, b) => Date.parse(b.column ?? "") - Date.parse(a.column ?? ""))
   const [latest, previous] = dated
-  return latest && previous ? [latest, previous] : null
+  return latest && previous
+    ? { current: latest, prior: previous, priorWord: priorPeriodWord(latest.column ?? "", previous.column ?? "") }
+    : null
 }
+
+/** An amount printed in $'000, in millions: `$1.31m`. */
+const millions = (value: number) => `$${(Math.abs(value) / 1000).toFixed(2)}m`
 
 const varianceFindings = (
   rows: ReadonlyArray<TableRow>,
@@ -194,7 +306,7 @@ const varianceFindings = (
     const row = rows.find((r) => sameLabel(r.label, line))
     const pair = row ? currentAndPrior(row) : null
     if (!row || !pair) return []
-    const [current, prior] = pair
+    const { current, prior, priorWord } = pair
     if (prior.value === 0) return []
     const change = (Math.abs(current.value) - Math.abs(prior.value)) / Math.abs(prior.value)
     if (Math.abs(change) <= VARIANCE_THRESHOLD) return []
@@ -206,7 +318,7 @@ const varianceFindings = (
         kind: "variance",
         category: "explanation",
         severity: "medium",
-        title: `${line} ${change > 0 ? "up" : "down"} ${percent}% on the prior period`,
+        title: `${line} ${change > 0 ? "up" : "down"} ${percent}% on the ${priorWord} (${millions(prior.value)} → ${millions(current.value)})`,
         detail:
           `${thousands(Math.abs(current.value))} (${current.column}) against ${thousands(Math.abs(prior.value))} ` +
           `(${prior.column}). The figures are consistent, but changes of more than ` +
@@ -269,8 +381,9 @@ const periodFindings = ({ pdf, period }: CheckInput): IssueFinding[] => {
 /**
  * Runs the post-extraction checks: a pack for the wrong period, certificate
  * claims that disagree with the tested results, subtotals that do not add up,
- * and large swings against the prior period. Findings are ordered as they
- * appear in the document.
+ * and large swings against the prior period. Findings are ordered worst first:
+ * discrepancies before anything needing explanation or verification, then by
+ * where they appear in the document.
  */
 export const computeIssues = (input: CheckInput): IssueFinding[] => {
   const tableFindings = input.pdf.layout.flatMap((items, index) => {
@@ -278,7 +391,11 @@ export const computeIssues = (input: CheckInput): IssueFinding[] => {
     return [...subtotalFindings(rows, index + 1), ...varianceFindings(rows, index + 1, input.covenants)]
   })
   return [...periodFindings(input), ...tableFindings, ...certificateFindings(input)].sort(
-    (a, b) => a.page - b.page || (a.box?.y ?? 0) - (b.box?.y ?? 0)
+    (a, b) =>
+      CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category] ||
+      SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity] ||
+      a.page - b.page ||
+      (a.box?.y ?? 0) - (b.box?.y ?? 0)
   )
 }
 

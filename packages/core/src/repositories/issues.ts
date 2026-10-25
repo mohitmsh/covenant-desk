@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { ISSUE_ACTION_STATUS } from "#constants/issues"
+import { ISSUE_ACTION_STATUS, REMEMBERABLE_CATEGORIES } from "#constants/issues"
 import { AUDIT_EVENT_KINDS } from "#constants/runs"
 import { Db } from "#db/client"
 import { withTransaction } from "#db/transaction"
@@ -8,7 +8,7 @@ import { NotFound } from "#errors/runs"
 import { appendEvent } from "#repositories/audit-events"
 import { requireRunStatus } from "#repositories/runs"
 import type { BorrowerId, RunId } from "#types/ids"
-import type { Issue, IssueDecision, IssueFinding, IssueResolution, IssueStatus } from "#types/issues"
+import type { Issue, IssueCategory, IssueDecision, IssueFinding, IssueResolution, IssueStatus } from "#types/issues"
 
 const ISSUE_COLUMNS = `key, fingerprint, kind, category, severity, title, detail, page, box, status, resolution`
 
@@ -92,13 +92,14 @@ export const recordIssues = (
     })
   )
 
-/** Lists a run's issues in document order. */
+/** Lists a run's issues worst first: discrepancies, then by severity, then in document order. */
 export const listIssues = (runId: RunId) =>
   Effect.gen(function* () {
     const db = yield* Db
     return yield* db.query<Issue>(
       `select ${ISSUE_SELECT} from review_issues where run_id = $1
-       order by page, (box->>'y')::float8 nulls last, key`,
+       order by case category when 'discrepancy' then 0 when 'verify' then 1 else 2 end,
+         case severity when 'high' then 0 else 1 end, page, (box->>'y')::float8 nulls last, key`,
       [runId]
     )
   })
@@ -133,14 +134,22 @@ export const decideIssue = (runId: RunId, key: string, decision: IssueDecision) 
       if (decision.action === "query" && blank(decision.draft)) {
         return yield* new InvalidDecision({ reason: "A query needs a draft message to the borrower." })
       }
-      const remember = decision.remember === true && (decision.action === "accept" || decision.action === "override")
-
-      const [issue] = yield* db.query<{ fingerprint: string; title: string; borrowerId: BorrowerId }>(
-        `select i.fingerprint, i.title, r.borrower_id as "borrowerId"
+      const [issue] = yield* db.query<{
+        fingerprint: string
+        title: string
+        category: IssueCategory
+        borrowerId: BorrowerId
+      }>(
+        `select i.fingerprint, i.title, i.category, r.borrower_id as "borrowerId"
          from review_issues i join runs r on r.id = i.run_id where i.run_id = $1 and i.key = $2`,
         [runId, key]
       )
       if (issue === undefined) return yield* new NotFound({ entity: "issue", id: key })
+      // Only how to read the pack is worth reapplying next month; a covenant or certificate decision is made afresh.
+      const remember =
+        decision.remember === true &&
+        (decision.action === "accept" || decision.action === "override") &&
+        REMEMBERABLE_CATEGORIES.includes(issue.category)
 
       const status = ISSUE_ACTION_STATUS[decision.action]
       const resolution: IssueResolution | null =

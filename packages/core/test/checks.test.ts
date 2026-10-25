@@ -59,7 +59,7 @@ describe("computeIssues", () => {
   it("flags large changes on the prior period, and accepts bracketed negative totals", () => {
     const issues = computeIssues({ pdf: wattle, period: "2026-09", covenants: [], claims: [] })
     expect(issues.map((i) => i.key)).toEqual(["variance:p4:Cash at bank"])
-    expect(issues[0]?.title).toBe("Cash at bank down 51% on the prior period")
+    expect(issues[0]?.title).toBe("Cash at bank down 51% on the prior quarter ($1.31m → $0.64m)")
   })
 
   it("raises a certificate claim that disagrees with the tested result", () => {

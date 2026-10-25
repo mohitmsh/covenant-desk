@@ -62,8 +62,8 @@ export function CovenantTiles({
                   {OPERATOR_SYMBOLS[covenant.operator]} {formatMetric(covenant.metric, covenant.limit)}
                 </span>
                 <span className={styles.stat} data-align="end" data-negative={covenant.headroom < 0}>
-                  <span className={styles.statLabel}>Headroom</span>
-                  {formatPercent(covenant.headroom)}
+                  <span className={styles.statLabel}>{covenant.headroom < 0 ? "Over limit by" : "Headroom"}</span>
+                  {formatPercent(Math.abs(covenant.headroom))}
                 </span>
               </span>
             </button>

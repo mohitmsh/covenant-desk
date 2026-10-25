@@ -17,6 +17,49 @@
   padding: 32px 36px 64px;
 }
 
+.tabs {
+  display: flex;
+  gap: 20px;
+  margin: -12px 0 -12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.tabs button {
+  padding: 0 0 10px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+.tabs button[aria-selected="true"] {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+}
+
+.tabCount {
+  margin-left: 4px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.auditLink {
+  margin-top: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: var(--fs-small);
+}
+
+.auditLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .document {
   min-height: 0;
 }

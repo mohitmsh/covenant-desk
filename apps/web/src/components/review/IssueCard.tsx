@@ -3,7 +3,7 @@ import { ISSUE_CATEGORY_LABELS, ISSUE_KIND_LABELS, ISSUE_STATUS_LABELS } from "@
 import { useDecideIssue } from "@/hooks/use-runs"
 import type { Issue, IssueDecision, IssueEvidence } from "@/types"
 import { formatDateTime, formatPage } from "@/utils/format"
-import { countOpen, draftQuery, issueTone } from "@/utils/issues"
+import { canRemember, decisionLabels, draftQuery, issueTone } from "@/utils/issues"
 import { Button } from "@/components/ui/Button"
 import { PageTag } from "@/components/ui/PageTag"
 import styles from "./IssueCard.module.css"
@@ -47,8 +47,8 @@ export function IssueCard({
   const index = issues.findIndex((i) => i.key === issue.key)
   const previous = issues[index - 1]
   const next = issues[index + 1]
-  const open = countOpen(issues)
   const hasNote = note.trim() !== ""
+  const labels = decisionLabels(issue)
 
   const submit = (decision: Omit<IssueDecision, "actor">) =>
     decide.mutate(
@@ -62,7 +62,6 @@ export function IssueCard({
         <span className={styles.step}>
           <span className={styles.number}>{index + 1}</span>
           Issue {index + 1} of {issues.length}
-          <span className={styles.remaining}>{open === 0 ? "· all decided" : `· ${open} to review`}</span>
         </span>
         <div className={styles.nav}>
           <Button
@@ -177,17 +176,18 @@ export function IssueCard({
             <textarea
               rows={2}
               value={note}
-              placeholder="e.g. Commentary explains: government funding received 2 October"
+              placeholder="e.g. Reason for the decision"
               onChange={(event) => setNote(event.target.value)}
             />
           </label>
           <div className={styles.buttons}>
             <Button
-              variant="primary"
+              // A discrepancy has no safe default, so nothing is pre-emphasised.
+              variant={issue.category === "discrepancy" ? "secondary" : "primary"}
               disabled={decide.isPending}
               onClick={() => submit({ action: "accept", reason: note, remember })}
             >
-              {hasNote ? "Accept with note" : "Accept"}
+              {labels.confirm}
             </Button>
             <Button disabled={decide.isPending} onClick={() => setDrafting(true)}>
               Draft borrower query…
@@ -197,7 +197,7 @@ export function IssueCard({
               title={hasNote ? undefined : "Add a note explaining the override"}
               onClick={() => submit({ action: "override", reason: note, remember })}
             >
-              Override
+              {labels.override}
             </Button>
             <Button
               variant="ghost"
@@ -207,11 +207,13 @@ export function IssueCard({
               Mark as extraction error
             </Button>
           </div>
-          <label className={styles.remember}>
-            <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
-            Remember for next time
-            <span className={styles.hint}>Accept or override this the same way when it recurs for {borrowerName}</span>
-          </label>
+          {canRemember(issue) && (
+            <label className={styles.remember}>
+              <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
+              Remember for next time
+              <span className={styles.hint}>Read {borrowerName}'s packs the same way when this recurs</span>
+            </label>
+          )}
         </div>
       ) : null}
 

@@ -4,6 +4,9 @@ export const ISSUE_KINDS = ["certificate_mismatch", "subtotal", "variance", "per
 
 export const ISSUE_CATEGORIES = ["discrepancy", "explanation", "verify"] as const
 
+/** Issue categories whose decisions may be remembered for a borrower's later packs: questions of how to read the pack. */
+export const REMEMBERABLE_CATEGORIES: ReadonlyArray<(typeof ISSUE_CATEGORIES)[number]> = ["verify"]
+
 export const ISSUE_STATUSES = ["open", "accepted", "overridden", "queried", "extraction_error"] as const
 
 export const ISSUE_ACTIONS = ["accept", "override", "query", "mark_extraction_error", "reopen"] as const

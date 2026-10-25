@@ -51,3 +51,33 @@
   color: var(--faint);
   font-size: var(--fs-caption);
 }
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: var(--fs-small);
+}
+
+.toggle:hover {
+  color: var(--accent);
+}
+
+.chevron {
+  width: 10px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.turns {
+  display: grid;
+  gap: 2px;
+  margin: 6px 0 0;
+  padding-left: 16px;
+  color: var(--muted);
+  font-size: var(--fs-caption);
+  font-variant-numeric: tabular-nums;
+}

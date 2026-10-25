@@ -35,6 +35,7 @@ export const describeAuditEvent = (event: AuditEvent): string | null => {
     case AUDIT_EVENT_KINDS.AGENT_TURN:
       return [
         typeof detail.turn === "number" ? `Turn ${detail.turn}` : null,
+        Array.isArray(detail.tools) && detail.tools.length > 0 ? detail.tools.join(", ") : null,
         typeof detail.toolCalls === "number"
           ? `${detail.toolCalls} tool call${detail.toolCalls === 1 ? "" : "s"}`
           : null,

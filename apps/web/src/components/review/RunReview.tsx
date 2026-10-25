@@ -45,6 +45,7 @@ export function RunReview({ detail }: RunReviewProps) {
   const [focus, setFocus] = useState<SourceFocus>(INITIAL_FOCUS)
   const [focusedKey, setFocusedKey] = useState<string | null>(null)
   const [activeIssueKey, setActiveIssueKey] = useState<string | null>(null)
+  const [tab, setTab] = useState<"review" | "audit">("review")
   const signOffRef = useRef<HTMLDivElement>(null)
   const showProgress = isRunInProgress(run.status) || run.status === "failed"
   const showIssues = run.status === "awaiting_signoff" || run.status === "approved"
@@ -98,70 +99,86 @@ export function RunReview({ detail }: RunReviewProps) {
         <div className={styles.content}>
           <RunHeader run={run} borrower={borrower} covenants={covenants} events={events} />
 
-          {showProgress && <AgentProgress status={run.status} events={events} />}
-
-          {borrower.id === FEATURED_BORROWER_ID && run.status === "awaiting_signoff" && <StartHere />}
-
-          <CertificateBanner
-            comparisons={certificateComparisons}
-            covenants={covenants}
-            claims={certificateClaims}
-            ebitdaGap={detail.ebitdaGap}
-            onShowClaim={focusClaim}
-          />
-
-          {showIssues && (
-            <IssuesPanel issues={issues} activeKey={activeIssueKey} onStart={startReview} onSelect={openIssue} />
-          )}
-
-          <Section title="Covenants">
-            {covenants.length > 0 ? (
-              <CovenantTiles
-                covenants={covenants}
-                figures={figures}
-                claims={certificateClaims}
-                comparisons={certificateComparisons}
-                focusedKey={focusedKey}
-                onFocusFigure={focusFigure}
-                onFocusClaim={focusClaim}
-              />
-            ) : (
-              <Message title="Not tested yet">Covenants are tested once every figure is verified.</Message>
-            )}
-          </Section>
-
-          <Section title="Figures">
-            {figures.length > 0 ? (
-              <FigureTable figures={figures} focusedFigure={focusedKey} onFocusFigure={focusFigure} />
-            ) : (
-              <Message title="No figures yet">Figures appear as the agent verifies them.</Message>
-            )}
-          </Section>
-
-          <MonitoringNote
-            key={note?.version ?? 0}
-            runId={run.id}
-            note={note}
-            author={borrower.analyst}
-            editable={run.status === "awaiting_signoff"}
-          />
-
-          <div ref={signOffRef}>
-            <SignOff
-              key={run.id}
-              runId={run.id}
-              status={run.status}
-              note={note}
-              approval={approval}
-              defaultApprover={borrower.analyst}
-              openIssues={issues.filter((issue) => issue.status === "open").length}
-              onReviewIssues={startReview}
-            />
+          <div className={styles.tabs} role="tablist" aria-label="Run sections">
+            <button type="button" role="tab" aria-selected={tab === "review"} onClick={() => setTab("review")}>
+              Review
+            </button>
+            <button type="button" role="tab" aria-selected={tab === "audit"} onClick={() => setTab("audit")}>
+              Audit trail <span className={styles.tabCount}>{events.length}</span>
+            </button>
           </div>
 
-          <Section title="Audit trail">
-            <AuditTrail events={events} />
-          </Section>
+          {tab === "review" ? (
+            <>
+              {showProgress && <AgentProgress status={run.status} events={events} />}
+
+              {borrower.id === FEATURED_BORROWER_ID && run.status === "awaiting_signoff" && <StartHere />}
+
+              <CertificateBanner
+                comparisons={certificateComparisons}
+                covenants={covenants}
+                claims={certificateClaims}
+                ebitdaGap={detail.ebitdaGap}
+                onShowClaim={focusClaim}
+              />
+
+              {showIssues && (
+                <IssuesPanel issues={issues} activeKey={activeIssueKey} onStart={startReview} onSelect={openIssue} />
+              )}
+
+              <Section title="Covenants">
+                {covenants.length > 0 ? (
+                  <CovenantTiles
+                    covenants={covenants}
+                    figures={figures}
+                    claims={certificateClaims}
+                    comparisons={certificateComparisons}
+                    focusedKey={focusedKey}
+                    onFocusFigure={focusFigure}
+                    onFocusClaim={focusClaim}
+                  />
+                ) : (
+                  <Message title="Not tested yet">Covenants are tested once every figure is verified.</Message>
+                )}
+              </Section>
+
+              <Section title="Figures">
+                {figures.length > 0 ? (
+                  <FigureTable figures={figures} focusedFigure={focusedKey} onFocusFigure={focusFigure} />
+                ) : (
+                  <Message title="No figures yet">Figures appear as the agent verifies them.</Message>
+                )}
+              </Section>
+
+              <MonitoringNote
+                key={note?.version ?? 0}
+                runId={run.id}
+                note={note}
+                author={borrower.analyst}
+                editable={run.status === "awaiting_signoff"}
+              />
+
+              <div ref={signOffRef}>
+                <SignOff
+                  key={run.id}
+                  runId={run.id}
+                  status={run.status}
+                  note={note}
+                  approval={approval}
+                  defaultApprover={borrower.analyst}
+                  openIssues={issues.filter((issue) => issue.status === "open").length}
+                  onReviewIssues={startReview}
+                />
+                <button type="button" className={styles.auditLink} onClick={() => setTab("audit")}>
+                  View audit trail ({events.length} events)
+                </button>
+              </div>
+            </>
+          ) : (
+            <Section title="Audit trail">
+              <AuditTrail events={events} />
+            </Section>
+          )}
         </div>
       </div>
 

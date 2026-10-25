@@ -130,6 +130,7 @@ const driveLoop = (prepared: PreparedRun, budgetUsd: number, respond: Responder)
         turn,
         stopReason: response.stop_reason ?? "unknown",
         costUsd: Number(costUsd.toFixed(6)),
+        tools: response.content.flatMap((block) => (block.type === "tool_use" ? [block.name] : [])),
         toolCalls: response.content.filter((block) => block.type === "tool_use").length,
         latencyMs
       })

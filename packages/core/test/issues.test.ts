@@ -31,28 +31,38 @@ const finding: IssueFinding = {
   checks: ["Ask the borrower to reissue the page"]
 }
 
+const periodFinding: IssueFinding = {
+  ...finding,
+  key: "period:p1",
+  fingerprint: "period:2026-08",
+  kind: "period",
+  category: "verify",
+  title: "Pack is for August 2026, not the September 2026 period being tested"
+}
+
 /** A run awaiting sign-off, with the finding recorded. */
-const runAwaitingSignoff = Effect.gen(function* () {
-  const runId = yield* startTestRun
-  for (const figure of [
-    verifiedFigure("total_debt", 19_850_000),
-    verifiedFigure("cash", 3_420_000),
-    verifiedFigure("ebitda_ttm", 7_940_000),
-    verifiedFigure("interest_expense_ttm", 1_310_000)
-  ]) {
-    yield* recordFigure(runId, figure, TEST_ACTOR)
-  }
-  yield* recordCovenantResults(runId, yield* testAll(testCovenants, yield* getFigures(runId)), TEST_ACTOR)
-  yield* recordIssues(runId, testBorrower.id, [finding], TEST_ACTOR)
-  yield* saveNote(runId, "All covenants met.", TEST_ACTOR)
-  return runId
-})
+const runAwaitingSignoff = (recorded: IssueFinding = finding) =>
+  Effect.gen(function* () {
+    const runId = yield* startTestRun
+    for (const figure of [
+      verifiedFigure("total_debt", 19_850_000),
+      verifiedFigure("cash", 3_420_000),
+      verifiedFigure("ebitda_ttm", 7_940_000),
+      verifiedFigure("interest_expense_ttm", 1_310_000)
+    ]) {
+      yield* recordFigure(runId, figure, TEST_ACTOR)
+    }
+    yield* recordCovenantResults(runId, yield* testAll(testCovenants, yield* getFigures(runId)), TEST_ACTOR)
+    yield* recordIssues(runId, testBorrower.id, [recorded], TEST_ACTOR)
+    yield* saveNote(runId, "All covenants met.", TEST_ACTOR)
+    return runId
+  })
 
 describe("review issues", () => {
   it("blocks sign-off until every issue is decided, and logs each decision", async () => {
     const { blocked, issues, events } = await runWithDb(
       Effect.gen(function* () {
-        const runId = yield* runAwaitingSignoff
+        const runId = yield* runAwaitingSignoff()
         const blocked = yield* Effect.flip(approveRun(runId, TEST_APPROVER))
         yield* decideIssue(runId, finding.key, { action: "accept", actor: TEST_APPROVER })
         yield* approveRun(runId, TEST_APPROVER)
@@ -68,7 +78,7 @@ describe("review issues", () => {
   it("requires a reason to override and a draft to query the borrower", async () => {
     const errors = await runWithDb(
       Effect.gen(function* () {
-        const runId = yield* runAwaitingSignoff
+        const runId = yield* runAwaitingSignoff()
         return yield* Effect.all([
           Effect.flip(decideIssue(runId, finding.key, { action: "override", actor: TEST_APPROVER, reason: " " })),
           Effect.flip(decideIssue(runId, finding.key, { action: "query", actor: TEST_APPROVER }))
@@ -81,7 +91,7 @@ describe("review issues", () => {
   it("holds a drafted query, and can reopen a decision", async () => {
     const [queried, reopened] = await runWithDb(
       Effect.gen(function* () {
-        const runId = yield* runAwaitingSignoff
+        const runId = yield* runAwaitingSignoff()
         yield* decideIssue(runId, finding.key, {
           action: "query",
           actor: TEST_APPROVER,
@@ -99,17 +109,17 @@ describe("review issues", () => {
     expect(reopened[0]).toMatchObject({ status: "open", resolution: null })
   })
 
-  it("reapplies a remembered decision to the borrower's next pack", async () => {
+  it("reapplies a remembered decision on how to read the pack to the borrower's next pack", async () => {
     const { issues, events } = await runWithDb(
       Effect.gen(function* () {
-        const first = yield* runAwaitingSignoff
-        yield* decideIssue(first, finding.key, {
+        const first = yield* runAwaitingSignoff(periodFinding)
+        yield* decideIssue(first, periodFinding.key, {
           action: "override",
           actor: TEST_APPROVER,
           reason: "Known rounding in the borrower's template.",
           remember: true
         })
-        const next = yield* runAwaitingSignoff
+        const next = yield* runAwaitingSignoff(periodFinding)
         return { issues: yield* listIssues(next), events: yield* listEvents(next) }
       })
     )
@@ -118,5 +128,16 @@ describe("review issues", () => {
       resolution: { remembered: true, reason: "Known rounding in the borrower's template.", by: TEST_APPROVER }
     })
     expect(events.map((e) => e.kind)).toContain("issue.remembered")
+  })
+
+  it("does not remember decisions on discrepancies", async () => {
+    const issues = await runWithDb(
+      Effect.gen(function* () {
+        const first = yield* runAwaitingSignoff()
+        yield* decideIssue(first, finding.key, { action: "accept", actor: TEST_APPROVER, remember: true })
+        return yield* listIssues(yield* runAwaitingSignoff())
+      })
+    )
+    expect(issues[0]).toMatchObject({ status: "open", resolution: null })
   })
 })
