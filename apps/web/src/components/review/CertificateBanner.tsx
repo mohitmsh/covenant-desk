@@ -1,5 +1,12 @@
+import { CERTIFICATE_RESULT_LABELS } from "@/constants"
 import type { CertificateComparison, CovenantResult, EbitdaGap, VerifiedCertificateClaim } from "@/types"
-import { disagreementLevel, hasDisagreement, type DisagreementLevel } from "@/utils/certificate"
+import {
+  describeCompliance,
+  describeEbitdaGap,
+  disagreementLevel,
+  hasDisagreement,
+  sortByDisagreement
+} from "@/utils/certificate"
 import { formatMetric } from "@/utils/format"
 import { PageTag } from "@/components/ui/PageTag"
 import { StatusChip } from "@/components/ui/StatusChip"
@@ -13,33 +20,11 @@ interface CertificateBannerProps {
   readonly onShowClaim: (claim: VerifiedCertificateClaim) => void
 }
 
-const LEVEL_ORDER: Readonly<Record<DisagreementLevel, number>> = { compliance: 0, value: 1, none: 2 }
-
-const RESULT_LABELS = {
-  compliance: "Different outcome",
-  value: "Same outcome, different figure",
-  none: "Agrees"
-} as const satisfies Record<DisagreementLevel, string>
-
-const COMPLIANCE_WORDS = { true: "complies", false: "does not comply" } as const
-
-/** `$470k`, from whole dollars. */
-const thousands = (value: number) => `$${Math.round(Math.abs(value) / 1000).toLocaleString("en-AU")}k`
-
-/** `4,350`, in the $'000 the pack prints. */
-const printed = (value: number) => Math.round(value / 1000).toLocaleString("en-AU")
-
-/** One sentence tracing the differences to the EBITDA the certificate used. */
-const describeCause = (gap: EbitdaGap, disputed: number) =>
-  `${disputed > 1 ? "Both differences come" : "The difference comes"} from ${thousands(gap.difference)} of ` +
-  `${gap.difference > 0 ? "add-backs in" : "deductions from"} the certificate's EBITDA ` +
-  `(${printed(gap.certificate)} vs ${printed(gap.reported)} in the P&L).`
-
 /** The borrower's certificate against the tested results, one row per covenant, worst first. */
 export function CertificateBanner({ comparisons, covenants, claims, ebitdaGap, onShowClaim }: CertificateBannerProps) {
   const disputed = comparisons.filter(hasDisagreement)
   if (disputed.length === 0) return null
-  const rows = [...comparisons].sort((a, b) => LEVEL_ORDER[disagreementLevel(a)] - LEVEL_ORDER[disagreementLevel(b)])
+  const rows = sortByDisagreement(comparisons)
   const worst = rows[0] ? disagreementLevel(rows[0]) : "none"
 
   return (
@@ -74,7 +59,7 @@ export function CertificateBanner({ comparisons, covenants, claims, ebitdaGap, o
                 <td>{covenant?.name ?? comparison.metric}</td>
                 <td className={styles.numeric}>
                   {formatMetric(comparison.metric, comparison.certificateValue)}
-                  <span className={styles.claim}> · {COMPLIANCE_WORDS[`${comparison.claimsCompliance}`]}</span>
+                  <span className={styles.claim}> · {describeCompliance(comparison.claimsCompliance)}</span>
                 </td>
                 <td className={styles.numeric}>
                   <strong>{formatMetric(comparison.metric, comparison.testedValue)}</strong>
@@ -83,7 +68,7 @@ export function CertificateBanner({ comparisons, covenants, claims, ebitdaGap, o
                 <td>
                   <span className={styles.result} data-level={level}>
                     <span className={styles.dot} data-level={level} aria-hidden />
-                    {RESULT_LABELS[level]}
+                    {CERTIFICATE_RESULT_LABELS[level]}
                     {claim && <PageTag page={claim.page} onClick={() => onShowClaim(claim)} />}
                   </span>
                 </td>
@@ -93,7 +78,7 @@ export function CertificateBanner({ comparisons, covenants, claims, ebitdaGap, o
         </tbody>
       </table>
 
-      {ebitdaGap && <p className={styles.cause}>{describeCause(ebitdaGap, disputed.length)}</p>}
+      {ebitdaGap && <p className={styles.cause}>{describeEbitdaGap(ebitdaGap, disputed.length)}</p>}
     </section>
   )
 }

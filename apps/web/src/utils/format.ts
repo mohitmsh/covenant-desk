@@ -1,5 +1,5 @@
 import { METRIC_DEFINITIONS } from "@covenant-desk/core/constants"
-import { DATE_LOCALE } from "@/constants"
+import { COMPANY_SUFFIX_PATTERN, DATE_LOCALE } from "@/constants"
 import type { Metric } from "@/types"
 
 const MILLION = 1_000_000
@@ -45,3 +45,27 @@ export const initials = (name: string): string =>
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("")
+
+const monthYearShort = new Intl.DateTimeFormat(DATE_LOCALE, { month: "short", year: "numeric", timeZone: "UTC" })
+const time = new Intl.DateTimeFormat(DATE_LOCALE, { hour: "numeric", minute: "2-digit" })
+
+/** Formats a `YYYY-MM` period briefly, e.g. `Sep 2026`. */
+export const formatShortPeriod = (period: string): string =>
+  monthYearShort.format(new Date(`${period}-01T00:00:00Z`)).replace("Sept", "Sep")
+
+/** A borrower's name without its company suffix: `Corella Fresh Foods Pty Ltd` → `Corella Fresh Foods`. */
+export const formatBorrowerName = (name: string): string => name.replace(COMPANY_SUFFIX_PATTERN, "")
+
+/** `9:10 pm` for today, otherwise `25 Oct 2026, 9:10 pm`. */
+export const formatRecentTime = (iso: string): string =>
+  new Date(iso).toDateString() === new Date().toDateString() ? time.format(new Date(iso)) : formatDateTime(iso)
+
+/** Whole dollars in thousands: `$470k`. */
+export const formatThousands = (value: number): string =>
+  `$${Math.round(Math.abs(value) / THOUSAND).toLocaleString(DATE_LOCALE)}k`
+
+/** Whole dollars as the pack prints them in $'000: `4,350`. */
+export const formatPrintedThousands = (value: number): string =>
+  Math.round(value / THOUSAND).toLocaleString(DATE_LOCALE)
+
+export { formatUsd } from "@covenant-desk/core/format"

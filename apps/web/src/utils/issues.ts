@@ -1,9 +1,7 @@
-import type { Issue } from "@/types"
+import type { Issue, IssueTone } from "@/types"
 import { formatPeriod } from "./format"
 
-/** Colour an issue is drawn in: red for a discrepancy, amber otherwise, settled once decided. */
-export type IssueTone = "breach" | "watch" | "decided"
-
+/** Red for a discrepancy, amber otherwise, settled once decided. */
 export const issueTone = (issue: Issue): IssueTone =>
   issue.status !== "open" ? "decided" : issue.category === "discrepancy" ? "breach" : "watch"
 

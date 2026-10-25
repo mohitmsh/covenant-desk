@@ -1,29 +1,9 @@
 import type { PDFDocumentProxy } from "pdfjs-dist"
 import { useEffect, useRef, useState } from "react"
-import { PDF_RENDER_SCALE_MAX } from "@/constants"
-import type { PageBox } from "@/types"
-import type { IssueTone } from "@/utils/issues"
+import { PDF_OVERLAY_PADDING, PDF_RENDER_SCALE_MAX } from "@/constants"
+import type { PageBox, PageField, PageMarker } from "@/types"
 import { findQuoteRuns, isReportedValue, type TextRun } from "@/utils/text-layer"
 import styles from "./PdfPage.module.css"
-
-/** A numbered box drawn over the page, like a field in a signing app. */
-export interface PageMarker {
-  readonly key: string
-  readonly number: number
-  readonly label: string
-  readonly box: PageBox
-  readonly tone: IssueTone
-  readonly active: boolean
-}
-
-/** An extracted field outlined where it was read from, like the fields in a document review tool. */
-export interface PageField {
-  readonly key: string
-  readonly label: string
-  readonly value: string
-  readonly box: PageBox
-  readonly active: boolean
-}
 
 interface PdfPageProps {
   readonly pdf: PDFDocumentProxy
@@ -48,11 +28,7 @@ interface Highlight {
   readonly primary: boolean
 }
 
-const HIGHLIGHT_PADDING = 2
-
-const MARKER_PADDING = 4
-
-const FIELD_PADDING = 2
+const { highlight: HIGHLIGHT_PADDING, marker: MARKER_PADDING, field: FIELD_PADDING } = PDF_OVERLAY_PADDING
 
 /** Renders one PDF page at the given CSS width and highlights `quote` when present. */
 export function PdfPage({

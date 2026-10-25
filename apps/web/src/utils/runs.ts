@@ -1,25 +1,23 @@
-import { AUDIT_EVENT_KINDS, FIGURE_LABELS, METRICS } from "@covenant-desk/core/constants"
+import { AUDIT_EVENT_KINDS, FIGURE_LABELS } from "@covenant-desk/core/constants"
 import { IN_PROGRESS_RUN_STATUSES, METRIC_LABELS } from "@/constants"
-import type { AuditEvent, JsonValue, Metric, RunStatus } from "@/types"
-import { isFigureKey } from "./figures"
+import type {
+  AgentStep,
+  AgentUsage,
+  AuditEvent,
+  JsonObject,
+  JsonValue,
+  RunDetail,
+  RunGroups,
+  RunStatus,
+  RunSummary
+} from "@/types"
 import { formatPage } from "./format"
+import { isFigureKey, isMetric } from "./guards"
 
 export const isRunInProgress = (status: RunStatus): boolean => IN_PROGRESS_RUN_STATUSES.some((s) => s === status)
 
-export interface AgentStep {
-  readonly id: number
-  readonly label: string
-  readonly detail: string | null
-  readonly tone: "neutral" | "positive" | "negative"
-}
-
-type JsonObject = { readonly [key: string]: JsonValue }
-
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
   typeof value === "object" && value !== null && !Array.isArray(value)
-
-const isMetric = (value: JsonValue | undefined): value is Metric =>
-  typeof value === "string" && METRICS.some((metric) => metric === value)
 
 const metricLabel = (metric: JsonValue | undefined) => (isMetric(metric) ? METRIC_LABELS[metric] : "Covenant")
 
@@ -77,15 +75,6 @@ export const agentSteps = (events: ReadonlyArray<AuditEvent>): AgentStep[] =>
   })
 
 /** Model spend recorded on the run's latest agent turn, in US dollars. */
-export interface AgentUsage {
-  readonly costUsd: number
-  readonly toolCalls: number
-  /** Time spent waiting on the model, summed over turns. */
-  readonly modelSeconds: number
-  /** When the run is a replay of a recorded agent run, when it was recorded. */
-  readonly recordedAt: string | null
-}
-
 const numberOr = (value: JsonValue | undefined, fallback: number) => (typeof value === "number" ? value : fallback)
 
 /** Cost, tool calls and model time for an agent run, from its turn events; null for runs without an agent. */
@@ -102,4 +91,29 @@ export const agentUsage = (events: ReadonlyArray<AuditEvent>): AgentUsage | null
   }
 }
 
-export const formatUsd = (value: number): string => `$${value.toFixed(4)}`
+/**
+ * Splits runs, newest first, into those awaiting a decision, those approved,
+ * and older runs for a borrower and period that a later run replaced.
+ */
+export const groupRuns = (runs: ReadonlyArray<RunSummary>): RunGroups<RunSummary> => {
+  const seen = new Set<string>()
+  const replaced = new Set<string>()
+  for (const run of runs) {
+    if (run.status === "failed") continue
+    const slot = `${run.borrowerId}/${run.period}`
+    if (seen.has(slot)) replaced.add(run.id)
+    seen.add(slot)
+  }
+  const current = runs.filter((run) => !replaced.has(run.id))
+  return {
+    pending: current.filter((run) => run.status !== "approved"),
+    approved: current.filter((run) => run.status === "approved"),
+    superseded: runs.filter((run) => replaced.has(run.id))
+  }
+}
+
+/** Whether the run's breach rests on certificate add-backs the analyst has not yet decided on. */
+export const isAwaitingAddBackDecision = ({ ebitdaGap, covenants, issues }: RunDetail): boolean =>
+  ebitdaGap !== null &&
+  covenants.some((c) => c.status === "breach" && ebitdaGap.metrics.includes(c.metric)) &&
+  issues.some((issue) => issue.kind === "certificate_mismatch" && issue.status === "open")

@@ -1,11 +1,17 @@
-import { AUDIT_EVENT_KINDS, FIGURE_LABELS, ISSUE_STATUSES } from "@covenant-desk/core/constants"
+import { AUDIT_EVENT_KINDS, FIGURE_LABELS } from "@covenant-desk/core/constants"
 import { ISSUE_STATUS_LABELS } from "@/constants"
-import { isFigureKey } from "@/utils/figures"
-import type { AuditEvent, IssueStatus, JsonValue } from "@/types"
+import type { AuditEntry, AuditEvent } from "@/types"
 import { formatDateTime, formatPage } from "./format"
+import { isFigureKey, isIssueStatus } from "./guards"
 
-const isIssueStatus = (value: JsonValue | undefined): value is IssueStatus =>
-  ISSUE_STATUSES.some((status) => status === value)
+/** Folds each run of consecutive agent steps into one entry, so the analyst's own actions stand out. */
+export const groupAgentTurns = (events: ReadonlyArray<AuditEvent>): AuditEntry[] =>
+  events.reduce<AuditEntry[]>((entries, event) => {
+    const last = entries.at(-1)
+    if (event.kind !== AUDIT_EVENT_KINDS.AGENT_TURN) return [...entries, { type: "event", event }]
+    if (last?.type === "agent") return [...entries.slice(0, -1), { type: "agent", turns: [...last.turns, event] }]
+    return [...entries, { type: "agent", turns: [event] }]
+  }, [])
 
 /** One-line summary of an audit event's detail. */
 export const describeAuditEvent = (event: AuditEvent): string | null => {

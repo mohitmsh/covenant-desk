@@ -1,27 +1,13 @@
 import { useState } from "react"
-import { AUDIT_EVENT_KINDS } from "@covenant-desk/core/constants"
 import { AUDIT_EVENT_LABELS } from "@/constants"
 import type { AuditEvent } from "@/types"
-import { describeAuditEvent } from "@/utils/audit"
+import { describeAuditEvent, groupAgentTurns } from "@/utils/audit"
 import { formatDateTime } from "@/utils/format"
 import styles from "./AuditTrail.module.css"
 
 interface AuditTrailProps {
   readonly events: ReadonlyArray<AuditEvent>
 }
-
-type Entry =
-  | { readonly type: "event"; readonly event: AuditEvent }
-  | { readonly type: "agent"; readonly turns: ReadonlyArray<AuditEvent> }
-
-/** Folds each run of consecutive agent steps into one entry, so the analyst's own actions stand out. */
-const groupAgentTurns = (events: ReadonlyArray<AuditEvent>): Entry[] =>
-  events.reduce<Entry[]>((entries, event) => {
-    const last = entries.at(-1)
-    if (event.kind !== AUDIT_EVENT_KINDS.AGENT_TURN) return [...entries, { type: "event", event }]
-    if (last?.type === "agent") return [...entries.slice(0, -1), { type: "agent", turns: [...last.turns, event] }]
-    return [...entries, { type: "agent", turns: [event] }]
-  }, [])
 
 function EventRow({ event }: { readonly event: AuditEvent }) {
   const summary = describeAuditEvent(event)

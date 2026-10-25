@@ -1,5 +1,7 @@
 import type { PageBox } from "@covenant-desk/core/types"
 
+export type * from "./ui"
+
 export type {
   Approval,
   CertificateComparison,

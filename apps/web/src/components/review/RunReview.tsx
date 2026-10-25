@@ -1,11 +1,8 @@
-import { useRef, useState } from "react"
-import { FIGURE_LABELS } from "@covenant-desk/core/constants"
-import { API_ROUTES, FEATURED_BORROWER_ID, METRIC_LABELS } from "@/constants"
-import type { Issue, RunDetail, SourceFocus, VerifiedCertificateClaim, VerifiedFigure } from "@/types"
-import { formatAsReported } from "@/utils/figures"
-import { formatMetric } from "@/utils/format"
-import { issueTone, nextOpenIssue } from "@/utils/issues"
-import { isRunInProgress } from "@/utils/runs"
+import { API_ROUTES, FEATURED_BORROWER_ID } from "@/constants"
+import { useRunReview } from "@/hooks/use-run-review"
+import type { RunDetail } from "@/types"
+import { extractedFields, issueMarkers } from "@/utils/overlays"
+import { isAwaitingAddBackDecision, isRunInProgress } from "@/utils/runs"
 import { DocumentViewer } from "@/components/document/DocumentViewer"
 import { Message } from "@/components/ui/Message"
 import { Section } from "@/components/ui/Section"
@@ -27,8 +24,6 @@ interface RunReviewProps {
   readonly onOpenRun: (runId: string) => void
 }
 
-const INITIAL_FOCUS: SourceFocus = { page: 1, quote: null, reported: null, box: null }
-
 export function RunReview({ detail, onOpenRun }: RunReviewProps) {
   const {
     run,
@@ -43,62 +38,10 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
     approval,
     events
   } = detail
-  // Open the document where the most serious issue is, rather than on its cover.
-  const [focus, setFocus] = useState<SourceFocus>(() => ({ ...INITIAL_FOCUS, page: issues[0]?.page ?? 1 }))
-  const [focusedKey, setFocusedKey] = useState<string | null>(null)
-  const [activeIssueKey, setActiveIssueKey] = useState<string | null>(null)
-  const [tab, setTab] = useState<"review" | "audit">("review")
-  const signOffRef = useRef<HTMLDivElement>(null)
+  const review = useRunReview(detail)
+  const { focus, focusedKey, activeIssue, activeIssueKey, tab, setTab, signOffRef } = review
   const showProgress = isRunInProgress(run.status) || run.status === "failed"
   const showIssues = run.status === "awaiting_signoff" || run.status === "approved"
-  const activeIssue = issues.find((issue) => issue.key === activeIssueKey) ?? null
-  const { ebitdaGap } = detail
-  const pendingAddBacks =
-    ebitdaGap !== null &&
-    covenants.some((c) => c.status === "breach" && ebitdaGap.metrics.includes(c.metric)) &&
-    issues.some((issue) => issue.kind === "certificate_mismatch" && issue.status === "open")
-
-  const openIssue = (key: string) => {
-    const issue = issues.find((i) => i.key === key)
-    if (!issue) return
-    setActiveIssueKey(key)
-    setFocusedKey(null)
-    setFocus({ page: issue.page, quote: null, reported: null, box: null })
-  }
-
-  const startReview = () => {
-    const first = nextOpenIssue(issues, null) ?? issues[0]
-    if (first) openIssue(first.key)
-  }
-
-  /** Moves to the next open issue, or on to sign-off once every issue is decided. */
-  const advance = (decidedKey: string, updated: ReadonlyArray<Issue>) => {
-    const next = nextOpenIssue(updated, decidedKey)
-    if (next) {
-      setActiveIssueKey(next.key)
-      setFocus({ page: next.page, quote: null, reported: null, box: null })
-    } else {
-      setActiveIssueKey(null)
-      signOffRef.current?.scrollIntoView({ block: "start", behavior: "smooth" })
-    }
-  }
-
-  const focusFigure = (figure: VerifiedFigure) => {
-    setActiveIssueKey(null)
-    setFocusedKey(figure.key)
-    setFocus({ page: figure.page, quote: figure.quote, reported: figure.reported, box: figure.box })
-  }
-
-  const focusClaim = (claim: VerifiedCertificateClaim) => {
-    setActiveIssueKey(null)
-    setFocusedKey(`certificate:${claim.metric}`)
-    setFocus({ page: claim.page, quote: claim.quote, reported: claim.reported, box: claim.box })
-  }
-
-  const changePage = (page: number) => {
-    setFocusedKey(null)
-    setFocus({ page, quote: null, reported: null, box: null })
-  }
 
   return (
     <div className={styles.review}>
@@ -109,7 +52,7 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
             borrower={borrower}
             covenants={covenants}
             events={events}
-            pendingAddBacks={pendingAddBacks}
+            pendingAddBacks={isAwaitingAddBackDecision(detail)}
             onOpenRun={onOpenRun}
           />
 
@@ -133,11 +76,16 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
                 covenants={covenants}
                 claims={certificateClaims}
                 ebitdaGap={detail.ebitdaGap}
-                onShowClaim={focusClaim}
+                onShowClaim={review.focusClaim}
               />
 
               {showIssues && (
-                <IssuesPanel issues={issues} activeKey={activeIssueKey} onStart={startReview} onSelect={openIssue} />
+                <IssuesPanel
+                  issues={issues}
+                  activeKey={activeIssueKey}
+                  onStart={review.startReview}
+                  onSelect={review.openIssue}
+                />
               )}
 
               <Section title="Covenants">
@@ -148,8 +96,8 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
                     claims={certificateClaims}
                     comparisons={certificateComparisons}
                     focusedKey={focusedKey}
-                    onFocusFigure={focusFigure}
-                    onFocusClaim={focusClaim}
+                    onFocusFigure={review.focusFigure}
+                    onFocusClaim={review.focusClaim}
                   />
                 ) : (
                   <Message title="Not tested yet">Covenants are tested once every figure is verified.</Message>
@@ -158,7 +106,7 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
 
               <Section title="Figures">
                 {figures.length > 0 ? (
-                  <FigureTable figures={figures} focusedFigure={focusedKey} onFocusFigure={focusFigure} />
+                  <FigureTable figures={figures} focusedFigure={focusedKey} onFocusFigure={review.focusFigure} />
                 ) : (
                   <Message title="No figures yet">Figures appear as the agent verifies them.</Message>
                 )}
@@ -170,7 +118,7 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
                 note={note}
                 author={borrower.analyst}
                 editable={run.status === "awaiting_signoff"}
-                onShowPage={changePage}
+                onShowPage={review.changePage}
               />
 
               <div ref={signOffRef}>
@@ -182,7 +130,7 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
                   approval={approval}
                   analyst={borrower.analyst}
                   openIssues={issues.filter((issue) => issue.status === "open").length}
-                  onReviewIssues={startReview}
+                  onReviewIssues={review.startReview}
                 />
                 <button type="button" className={styles.auditLink} onClick={() => setTab("audit")}>
                   View audit trail ({events.length} events)
@@ -202,59 +150,11 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
           url={API_ROUTES.runDocument(run.id)}
           document={document}
           focus={focus}
-          onPageChange={changePage}
-          markers={issues.flatMap((issue, index) =>
-            issue.box
-              ? [
-                  {
-                    key: issue.key,
-                    page: issue.page,
-                    number: index + 1,
-                    label: issue.title,
-                    box: issue.box,
-                    tone: issueTone(issue),
-                    active: issue.key === activeIssueKey
-                  }
-                ]
-              : []
-          )}
-          onSelectMarker={openIssue}
-          fields={[
-            ...figures.flatMap((figure) =>
-              figure.box
-                ? [
-                    {
-                      key: figure.key,
-                      page: figure.page,
-                      label: FIGURE_LABELS[figure.key],
-                      value: formatAsReported(figure),
-                      box: figure.box,
-                      active: focusedKey === figure.key
-                    }
-                  ]
-                : []
-            ),
-            ...certificateClaims.flatMap((claim) =>
-              claim.box
-                ? [
-                    {
-                      key: `certificate:${claim.metric}`,
-                      page: claim.page,
-                      label: `Certificate · ${METRIC_LABELS[claim.metric]}`,
-                      value: formatMetric(claim.metric, claim.value),
-                      box: claim.box,
-                      active: focusedKey === `certificate:${claim.metric}`
-                    }
-                  ]
-                : []
-            )
-          ]}
-          onSelectField={(key) => {
-            const figure = figures.find((f) => f.key === key)
-            const claim = certificateClaims.find((c) => `certificate:${c.metric}` === key)
-            if (figure) focusFigure(figure)
-            else if (claim) focusClaim(claim)
-          }}
+          onPageChange={review.changePage}
+          markers={issueMarkers(issues, activeIssueKey)}
+          onSelectMarker={review.openIssue}
+          fields={extractedFields(figures, certificateClaims, focusedKey)}
+          onSelectField={review.selectField}
           footer={
             activeIssue && (
               <IssueCard
@@ -266,13 +166,10 @@ export function RunReview({ detail, onOpenRun }: RunReviewProps) {
                 actor={borrower.analyst}
                 borrowerName={borrower.name}
                 period={run.period}
-                onSelect={openIssue}
-                onShowEvidence={(evidence) =>
-                  evidence.page !== null &&
-                  setFocus({ page: evidence.page, quote: null, reported: null, box: evidence.box })
-                }
-                onDecided={advance}
-                onClose={() => setActiveIssueKey(null)}
+                onSelect={review.openIssue}
+                onShowEvidence={review.showEvidence}
+                onDecided={review.advance}
+                onClose={review.closeIssue}
               />
             )
           }

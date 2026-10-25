@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { OPERATOR_SYMBOLS } from "@/constants"
+import { CERTIFICATE_MARKS, CERTIFICATE_VERDICTS, OPERATOR_SYMBOLS } from "@/constants"
 import type { CertificateComparison, CovenantResult, VerifiedCertificateClaim, VerifiedFigure } from "@/types"
-import { CERTIFICATE_VERDICTS, comparisonFor, disagreementLevel, type DisagreementLevel } from "@/utils/certificate"
+import { comparisonFor, disagreementLevel } from "@/utils/certificate"
 import { sortCovenants } from "@/utils/covenants"
 import { formatMetric, formatPercent } from "@/utils/format"
 import { PageTag } from "@/components/ui/PageTag"
@@ -9,9 +9,6 @@ import { StatusBadge } from "@/components/ui/StatusBadge"
 import { CalculationPopover } from "./CalculationPopover"
 import { HeadroomMeter } from "./HeadroomMeter"
 import styles from "./CovenantTiles.module.css"
-
-/** ✕ the certificate reaches a different outcome, ≠ a different figure, ✓ it agrees. */
-const VERDICT_MARKS = { compliance: "✕", value: "≠", none: "✓" } as const satisfies Record<DisagreementLevel, string>
 
 interface CovenantTilesProps {
   readonly covenants: ReadonlyArray<CovenantResult>
@@ -75,7 +72,7 @@ export function CovenantTiles({
               <p className={styles.certificate} title={CERTIFICATE_VERDICTS[disagreementLevel(comparison)]}>
                 Certificate {formatMetric(comparison.metric, comparison.certificateValue)}{" "}
                 <span className={styles.verdict} data-level={disagreementLevel(comparison)}>
-                  {VERDICT_MARKS[disagreementLevel(comparison)]}
+                  {CERTIFICATE_MARKS[disagreementLevel(comparison)]}
                 </span>
                 <span className={styles.srOnly}>{CERTIFICATE_VERDICTS[disagreementLevel(comparison)]}</span>
                 {" · "}

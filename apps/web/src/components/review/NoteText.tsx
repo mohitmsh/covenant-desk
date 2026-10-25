@@ -1,4 +1,6 @@
 import type { ReactNode } from "react"
+import { NOTE_INLINE_PATTERN } from "@/constants"
+import { parseNoteBlocks } from "@/utils/note"
 import styles from "./MonitoringNote.module.css"
 
 interface NoteTextProps {
@@ -7,37 +9,10 @@ interface NoteTextProps {
   readonly onShowPage?: (page: number) => void
 }
 
-type Block = { readonly type: "paragraph"; readonly text: string } | { readonly type: "list"; readonly items: string[] }
-
-const LIST_ITEM = /^\s*[-*•]\s+/
-
-/** Splits a note into paragraphs and bullet lists. Only this small subset of markdown is understood. */
-const parseBlocks = (body: string): Block[] =>
-  body.split(/\n\s*\n/).flatMap((chunk): Block[] => {
-    const lines = chunk.split("\n").filter((line) => line.trim() !== "")
-    const blocks: Block[] = []
-    for (const line of lines) {
-      const last = blocks.at(-1)
-      if (LIST_ITEM.test(line)) {
-        const item = line.replace(LIST_ITEM, "")
-        if (last?.type === "list") last.items.push(item)
-        else blocks.push({ type: "list", items: [item] })
-      } else if (last?.type === "paragraph") {
-        blocks[blocks.length - 1] = { type: "paragraph", text: `${last.text} ${line.trim()}` }
-      } else {
-        blocks.push({ type: "paragraph", text: line.trim() })
-      }
-    }
-    return blocks
-  })
-
-/** `**bold**`, and page references such as `page 6`, `(p. 4)` or `pages 3`, which become links into the PDF. */
-const INLINE = /\*\*(.+?)\*\*|\b(pages?|p\.)\s?(\d{1,2})\b/gi
-
 const renderInline = (text: string, onShowPage: ((page: number) => void) | undefined): ReactNode[] => {
   const nodes: ReactNode[] = []
   let last = 0
-  for (const match of text.matchAll(INLINE)) {
+  for (const match of text.matchAll(NOTE_INLINE_PATTERN)) {
     const index = match.index ?? 0
     if (index > last) nodes.push(text.slice(last, index))
     const [whole, bold, , page] = match
@@ -65,7 +40,7 @@ const renderInline = (text: string, onShowPage: ((page: number) => void) | undef
  * paragraph, the conclusion, is set apart as a summary.
  */
 export function NoteText({ body, onShowPage }: NoteTextProps) {
-  const [summary, ...rest] = parseBlocks(body)
+  const [summary, ...rest] = parseNoteBlocks(body)
   return (
     <div className={styles.text}>
       {summary?.type === "paragraph" && <p className={styles.summary}>{renderInline(summary.text, onShowPage)}</p>}

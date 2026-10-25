@@ -1,7 +1,6 @@
 import type { ReactNode } from "react"
+import type { ChipTone } from "@/types"
 import styles from "./StatusChip.module.css"
-
-export type ChipTone = "breach" | "watch" | "pass" | "neutral"
 
 interface StatusChipProps {
   readonly tone: ChipTone

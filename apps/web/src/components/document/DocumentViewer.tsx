@@ -1,15 +1,13 @@
 import { useRef, useState, type ReactNode } from "react"
-import { PDF_PAGE_GUTTER, PDF_ZOOM_LEVELS } from "@/constants"
+import { PDF_FIT_ZOOM, PDF_PAGE_GUTTER, PDF_ZOOM_LEVELS } from "@/constants"
 import { useElementWidth } from "@/hooks/use-element-width"
 import { usePdfDocument } from "@/hooks/use-pdf-document"
-import type { DocumentRecord, SourceFocus } from "@/types"
+import type { DocumentRecord, OnPage, PageField, PageMarker, SourceFocus } from "@/types"
 import { Button } from "@/components/ui/Button"
 import { Message } from "@/components/ui/Message"
-import { PdfPage, type PageField, type PageMarker } from "./PdfPage"
+import { PdfPage } from "./PdfPage"
 import { SourceSnippet } from "./SourceSnippet"
 import styles from "./DocumentViewer.module.css"
-
-type OnPage<T> = T & { readonly page: number }
 
 interface DocumentViewerProps {
   readonly url: string
@@ -26,8 +24,6 @@ interface DocumentViewerProps {
   readonly footer?: ReactNode
 }
 
-const FIT_ZOOM = 1
-
 export function DocumentViewer({
   url,
   document,
@@ -42,7 +38,7 @@ export function DocumentViewer({
   const bodyRef = useRef<HTMLDivElement>(null)
   const bodyWidth = useElementWidth(bodyRef)
   const state = usePdfDocument(url)
-  const [zoom, setZoom] = useState<number>(FIT_ZOOM)
+  const [zoom, setZoom] = useState<number>(PDF_FIT_ZOOM)
   const pageWidth = Math.max(0, bodyWidth - PDF_PAGE_GUTTER * 2) * zoom
   const zoomIndex = PDF_ZOOM_LEVELS.findIndex((level) => level === zoom)
   const pageFields = fields.filter((field) => field.page === focus.page)
@@ -95,7 +91,7 @@ export function DocumentViewer({
               type="button"
               className={`${styles.readout} ${styles.zoomReset} tabular`}
               title="Fit to width"
-              onClick={() => setZoom(FIT_ZOOM)}
+              onClick={() => setZoom(PDF_FIT_ZOOM)}
             >
               {Math.round(zoom * 100)}%
             </button>

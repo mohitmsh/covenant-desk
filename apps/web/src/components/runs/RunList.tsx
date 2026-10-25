@@ -4,7 +4,8 @@ import { formatRunOrigin } from "@/utils/actors"
 import { StatusDot } from "@/components/ui/StatusDot"
 import { Button } from "@/components/ui/Button"
 import { Message } from "@/components/ui/Message"
-import { isRunInProgress } from "@/utils/runs"
+import { formatBorrowerName, formatShortPeriod } from "@/utils/format"
+import { groupRuns, isRunInProgress } from "@/utils/runs"
 import styles from "./RunList.module.css"
 
 interface RunListProps {
@@ -17,15 +18,6 @@ interface RunListProps {
   readonly isEvalsOpen: boolean
   readonly onOpenEvals: () => void
 }
-
-/** Drops the company suffix, which every borrower shares: `Corella Fresh Foods Pty Ltd` → `Corella Fresh Foods`. */
-const shortName = (name: string) => name.replace(/\s+(Pty\.?\s*Ltd\.?|Limited|Ltd\.?)$/i, "")
-
-/** `2026-09` → `Sep 2026`. */
-const formatShortPeriod = (period: string) =>
-  new Date(`${period}-01T00:00:00Z`)
-    .toLocaleDateString("en-AU", { month: "short", year: "numeric", timeZone: "UTC" })
-    .replace("Sept", "Sep")
 
 const runOutcome = (run: RunSummary) => {
   if (isRunInProgress(run.status) || run.status === "failed") return "neutral"
@@ -50,18 +42,7 @@ export function RunList({
   isEvalsOpen,
   onOpenEvals
 }: RunListProps) {
-  // Runs arrive newest first, so the first per borrower and period is current and the rest are superseded.
-  const seen = new Set<string>()
-  const superseded = new Set<string>()
-  for (const run of runs) {
-    const slot = `${run.borrowerId}/${run.period}`
-    if (seen.has(slot) && run.status !== "failed") superseded.add(run.id)
-    if (run.status !== "failed") seen.add(slot)
-  }
-  const current = runs.filter((run) => !superseded.has(run.id))
-  const pending = current.filter((run) => run.status !== "approved")
-  const approved = current.filter((run) => run.status === "approved")
-  const older = runs.filter((run) => superseded.has(run.id))
+  const { pending, approved, superseded } = groupRuns(runs)
 
   const newRunButton = (
     <>
@@ -123,7 +104,7 @@ export function RunList({
                 onClick={() => onSelect(run.id)}
               >
                 <span className={styles.nameRow}>
-                  <span className={styles.name}>{shortName(run.borrowerName)}</span>
+                  <span className={styles.name}>{formatBorrowerName(run.borrowerName)}</span>
                   {run.openIssues > 0 && (
                     <span className={styles.issueCount} aria-label={`${run.openIssues} open issues`}>
                       {run.openIssues}
@@ -147,7 +128,7 @@ export function RunList({
       {newRunButton}
       {renderGroup(RUN_STATUS_LABELS.awaiting_signoff, pending)}
       {renderGroup(RUN_STATUS_LABELS.approved, approved)}
-      {renderGroup("Superseded by a later run", older)}
+      {renderGroup("Superseded by a later run", superseded)}
     </nav>
   )
 }

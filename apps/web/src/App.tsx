@@ -7,7 +7,8 @@ import { RunList } from "@/components/runs/RunList"
 import { Message } from "@/components/ui/Message"
 import { FEATURED_BORROWER_ID } from "@/constants"
 import { useRoute } from "@/hooks/use-route"
-import { useEvals, usePortfolio, useRun, useRuns } from "@/hooks/use-runs"
+import { useEvals } from "@/hooks/use-evals"
+import { usePortfolio, useRun, useRuns } from "@/hooks/use-runs"
 import { EvalsView } from "@/components/evals/EvalsView"
 
 export function App() {

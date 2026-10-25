@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query"
 import { fetchBorrowers } from "@/api/borrowers"
-import { fetchEvals } from "@/api/evals"
 import { fetchPortfolio } from "@/api/portfolio"
 import { approveRun, decideIssue, fetchRun, fetchRuns, saveRunNote, startAgentRun } from "@/api/runs"
 import { LIVE_REFRESH_INTERVAL_MS, QUERY_KEYS, RUN_POLL_INTERVAL_MS } from "@/constants"
@@ -88,5 +87,3 @@ export const useDecideIssue = (runId: string) => {
     }
   })
 }
-
-export const useEvals = () => useQuery({ queryKey: QUERY_KEYS.evals, queryFn: fetchEvals })

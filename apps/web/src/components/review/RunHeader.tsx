@@ -1,22 +1,14 @@
-import { COVENANT_STATUS_LABELS, DATE_LOCALE, RUN_STATUS_LABELS } from "@/constants"
+import { COVENANT_STATUS_LABELS, RUN_STATUS_LABELS, RUN_STATUS_PILL_TONES } from "@/constants"
 import { useStartAgentRun } from "@/hooks/use-runs"
-import type { AuditEvent, Borrower, CovenantResult, RunStatus, RunSummary } from "@/types"
+import type { AuditEvent, Borrower, CovenantResult, RunSummary } from "@/types"
 import { formatRunSource } from "@/utils/actors"
 import { worstStatus } from "@/utils/covenants"
-import { agentUsage, formatUsd } from "@/utils/runs"
-import { formatCompactDollars, formatDateTime, formatPeriod } from "@/utils/format"
+import { agentUsage } from "@/utils/runs"
+import { formatCompactDollars, formatPeriod, formatRecentTime, formatUsd } from "@/utils/format"
 import { Avatar } from "@/components/ui/Avatar"
-import { Pill, type PillTone } from "@/components/ui/Pill"
+import { Pill } from "@/components/ui/Pill"
 import { StatusChip } from "@/components/ui/StatusChip"
 import styles from "./RunHeader.module.css"
-
-const STATUS_TONES = {
-  extracting: "neutral",
-  tested: "neutral",
-  awaiting_signoff: "accent",
-  approved: "positive",
-  failed: "negative"
-} as const satisfies Record<RunStatus, PillTone>
 
 interface RunHeaderProps {
   readonly run: RunSummary
@@ -27,12 +19,6 @@ interface RunHeaderProps {
   readonly pendingAddBacks: boolean
   readonly onOpenRun: (runId: string) => void
 }
-
-/** `9:10 pm` today, otherwise `25 Oct 2026, 9:10 pm`. */
-const recordedWhen = (iso: string) =>
-  new Date(iso).toDateString() === new Date().toDateString()
-    ? new Date(iso).toLocaleTimeString(DATE_LOCALE, { hour: "numeric", minute: "2-digit" })
-    : formatDateTime(iso)
 
 export function RunHeader({ run, borrower, covenants, events, pendingAddBacks, onOpenRun }: RunHeaderProps) {
   const outcome = worstStatus(covenants)
@@ -49,7 +35,7 @@ export function RunHeader({ run, borrower, covenants, events, pendingAddBacks, o
             {borrower.facilityName} · {formatCompactDollars(borrower.facilityLimit)}
           </p>
         </div>
-        <Pill tone={STATUS_TONES[run.status]}>{RUN_STATUS_LABELS[run.status]}</Pill>
+        <Pill tone={RUN_STATUS_PILL_TONES[run.status]}>{RUN_STATUS_LABELS[run.status]}</Pill>
       </div>
       <dl className={styles.facts}>
         <dt>Analyst</dt>
@@ -88,7 +74,7 @@ export function RunHeader({ run, borrower, covenants, events, pendingAddBacks, o
               className={styles.recorded}
               title="The model's responses were recorded from a real run and replayed through the current code"
             >
-              Replay of a run recorded {recordedWhen(usage.recordedAt)} ·{" "}
+              Replay of a run recorded {formatRecentTime(usage.recordedAt)} ·{" "}
               <button
                 type="button"
                 className={styles.rerun}

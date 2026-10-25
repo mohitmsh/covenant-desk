@@ -1,7 +1,5 @@
 import { FIGURE_KEYS } from "@covenant-desk/core/constants"
-import type { FigureKey, VerifiedFigure } from "@/types"
-
-export const isFigureKey = (value: string): value is FigureKey => FIGURE_KEYS.some((key) => key === value)
+import type { VerifiedFigure } from "@/types"
 
 /** Orders figures as they appear in a reporting pack. */
 export const sortFigures = (figures: ReadonlyArray<VerifiedFigure>): VerifiedFigure[] =>

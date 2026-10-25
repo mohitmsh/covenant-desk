@@ -1,10 +1,10 @@
 import { METRICS } from "@covenant-desk/core/constants"
-import { FEATURED_BORROWER_ID, RUN_STATUS_LABELS } from "@/constants"
-import type { Metric, Portfolio, PortfolioRow } from "@/types"
-import { comparisonFor, disagreementLevel, type DisagreementLevel } from "@/utils/certificate"
-import { formatCompactDollars, formatMetric, formatPeriod } from "@/utils/format"
-import { isRunInProgress } from "@/utils/runs"
-import { StatusChip, type ChipTone } from "@/components/ui/StatusChip"
+import { CERTIFICATE_MARKS, FEATURED_BORROWER_ID, METRIC_SHORT_LABELS } from "@/constants"
+import type { ChipTone, Metric, Portfolio, PortfolioRow } from "@/types"
+import { comparisonFor, disagreementLevel } from "@/utils/certificate"
+import { formatBorrowerName, formatCompactDollars, formatMetric, formatPeriod } from "@/utils/format"
+import { borrowerStanding, describeReview } from "@/utils/portfolio"
+import { StatusChip } from "@/components/ui/StatusChip"
 import { StatusDot } from "@/components/ui/StatusDot"
 import styles from "./PortfolioView.module.css"
 
@@ -13,34 +13,11 @@ interface PortfolioViewProps {
   readonly onOpenRun: (runId: string) => void
 }
 
-const METRIC_HEADINGS = {
-  net_leverage: "Net leverage",
-  interest_cover: "Interest cover",
-  minimum_liquidity: "Liquidity"
-} as const satisfies Record<Metric, string>
-
-/** ✕ the certificate reaches a different outcome, ≠ a different figure. */
-const VERDICT_MARKS = { compliance: "✕", value: "≠", none: "" } as const satisfies Record<DisagreementLevel, string>
-
-const shortName = (name: string) => name.replace(/\s+(Pty\.?\s*Ltd\.?|Limited|Ltd\.?)$/i, "")
-
-/** The borrower's position in one word: its worst covenant, or where the run is. */
-const standing = (row: PortfolioRow): { readonly tone: ChipTone; readonly label: string } => {
-  if (row.run === null) return { tone: "neutral", label: "No run yet" }
-  if (isRunInProgress(row.run.status)) return { tone: "neutral", label: "Agent working" }
-  if (row.covenants.some((c) => c.status === "breach")) return { tone: "breach", label: "Breach" }
-  if (row.covenants.some((c) => c.status === "watch")) return { tone: "watch", label: "On watch" }
-  return { tone: "pass", label: "All met" }
-}
-
-/** `2 open issues · awaiting sign-off`, or `approved`. */
-const reviewLine = (row: PortfolioRow) => {
-  if (row.run === null) return null
-  const parts = [
-    row.run.openIssues > 0 ? `${row.run.openIssues} open issue${row.run.openIssues === 1 ? "" : "s"}` : null,
-    RUN_STATUS_LABELS[row.run.status].toLowerCase()
-  ]
-  return parts.filter(Boolean).join(" · ")
+interface SummaryFigure {
+  readonly label: string
+  readonly value: string
+  readonly tone?: ChipTone | undefined
+  readonly hint?: string
 }
 
 function CovenantCell({ row, metric }: { readonly row: PortfolioRow; readonly metric: Metric }) {
@@ -58,7 +35,7 @@ function CovenantCell({ row, metric }: { readonly row: PortfolioRow; readonly me
         <span className={styles.certificate}>
           cert {formatMetric(metric, comparison.certificateValue)}{" "}
           <span className={styles.verdict} data-level={level}>
-            {VERDICT_MARKS[level]}
+            {CERTIFICATE_MARKS[level]}
           </span>
         </span>
       )}
@@ -70,12 +47,7 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
   const { rows, totals } = portfolio
   const period = rows.find((row) => row.run !== null)?.run?.period
 
-  const summary: ReadonlyArray<{
-    readonly label: string
-    readonly value: string
-    readonly tone?: ChipTone | undefined
-    readonly hint?: string
-  }> = [
+  const summary: ReadonlyArray<SummaryFigure> = [
     { label: "Facility limits", value: formatCompactDollars(totals.facilityLimit) },
     { label: "Breaches", value: String(totals.breaches), tone: totals.breaches > 0 ? "breach" : undefined },
     { label: "On watch", value: String(totals.watches), tone: totals.watches > 0 ? "watch" : undefined },
@@ -122,7 +94,7 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
               <th>Status</th>
               {METRICS.map((metric) => (
                 <th key={metric} className={styles.numericHead}>
-                  {METRIC_HEADINGS[metric]}
+                  {METRIC_SHORT_LABELS[metric]}
                 </th>
               ))}
               <th>Review</th>
@@ -131,7 +103,7 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
           <tbody>
             {rows.map((row) => {
               const runId = row.run?.id
-              const { tone, label } = standing(row)
+              const standing = borrowerStanding(row)
               return (
                 <tr
                   key={row.borrower.id}
@@ -140,7 +112,7 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
                 >
                   <td>
                     <span className={styles.borrower}>
-                      {shortName(row.borrower.name)}
+                      {formatBorrowerName(row.borrower.name)}
                       {row.borrower.id === FEATURED_BORROWER_ID && <span className={styles.startHere}>Start here</span>}
                     </span>
                     <span className={styles.facility}>
@@ -148,7 +120,7 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
                     </span>
                   </td>
                   <td>
-                    <StatusChip tone={tone}>{label}</StatusChip>
+                    <StatusChip tone={standing.tone}>{standing.label}</StatusChip>
                   </td>
                   {METRICS.map((metric) => (
                     <td key={metric} className={styles.numeric}>
@@ -156,7 +128,7 @@ export function PortfolioView({ portfolio, onOpenRun }: PortfolioViewProps) {
                     </td>
                   ))}
                   <td className={styles.review} data-open={(row.run?.openIssues ?? 0) > 0}>
-                    {reviewLine(row)}
+                    {describeReview(row)}
                   </td>
                 </tr>
               )

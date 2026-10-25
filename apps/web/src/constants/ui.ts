@@ -1,3 +1,5 @@
+import type { SourceFocus } from "@/types"
+
 /** Query string parameter holding the selected run. */
 export const RUN_QUERY_PARAM = "run"
 
@@ -31,3 +33,27 @@ export const FEATURED_BORROWER_ID = "wattle-grove"
 
 /** Browser storage key remembering that the visitor dismissed the "Start here" guide. */
 export const START_HERE_DISMISSED_KEY = "covenant-desk:start-here-dismissed"
+
+/** Certificate rows are listed worst first. */
+export const DISAGREEMENT_ORDER = { compliance: 0, value: 1, none: 2 } as const
+
+/** Space around boxes drawn on a PDF page, in CSS pixels. */
+export const PDF_OVERLAY_PADDING = { highlight: 2, marker: 4, field: 2 } as const
+
+/** Zoom level that fits the page to the viewer's width. */
+export const PDF_FIT_ZOOM = 1
+
+/** The source snippet shows the full line across the page, with this much space above and below. */
+export const SOURCE_SNIPPET_LINE_BAND = { left: 0.06, right: 0.94, margin: 0.004 } as const
+
+/** A bullet in a monitoring note. */
+export const NOTE_LIST_ITEM_PATTERN = /^\s*[-*•]\s+/
+
+/** `**bold**`, and page references such as `page 6`, `(p. 4)` or `pages 3`. */
+export const NOTE_INLINE_PATTERN = /\*\*(.+?)\*\*|\b(pages?|p\.)\s?(\d{1,2})\b/gi
+
+/** Company suffixes dropped where space is short. */
+export const COMPANY_SUFFIX_PATTERN = /\s+(Pty\.?\s*Ltd\.?|Limited|Ltd\.?)$/i
+
+/** Where the document viewer looks before anything is selected. */
+export const EMPTY_SOURCE_FOCUS = { page: 1, quote: null, reported: null, box: null } as const satisfies SourceFocus

@@ -1,7 +1,6 @@
 import type { ReactNode } from "react"
+import type { PillTone } from "@/types"
 import styles from "./Pill.module.css"
-
-export type PillTone = "neutral" | "accent" | "positive" | "negative"
 
 interface PillProps {
   readonly tone: PillTone

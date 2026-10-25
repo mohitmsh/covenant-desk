@@ -1,6 +1,6 @@
 import type { PDFDocumentProxy } from "pdfjs-dist"
 import { useEffect, useRef } from "react"
-import { PDF_RENDER_SCALE_MAX, SOURCE_SNIPPET_WIDTH } from "@/constants"
+import { PDF_RENDER_SCALE_MAX, SOURCE_SNIPPET_LINE_BAND as LINE_BAND, SOURCE_SNIPPET_WIDTH } from "@/constants"
 import type { PageBox } from "@/types"
 
 interface SourceSnippetProps {
@@ -8,9 +8,6 @@ interface SourceSnippetProps {
   readonly page: number
   readonly box: PageBox
 }
-
-/** The snippet shows the full line across the page, with this much space above and below. */
-const LINE_BAND = { left: 0.06, right: 0.94, margin: 0.004 }
 
 /** A crop of the page around a verified quote, so the source can be read at a glance. */
 export function SourceSnippet({ pdf, page, box }: SourceSnippetProps) {
