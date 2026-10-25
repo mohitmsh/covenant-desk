@@ -1,0 +1,333 @@
+{
+  "model": "claude-haiku-5-5",
+  "recordedAt": "2026-10-25T10:10:56.367Z",
+  "pack": "harbourline-2026-09.pdf",
+  "sha256": "cb95ad7a7a3f3e4e044c83feb4e4da9a00c069dbbbd79d33235ad7a504b0ccfd",
+  "turns": [
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNms681bnjYCbjTEUfda",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_012d8yh7abiTC3tggSd9iXcG",
+            "name": "get_monitoring_context",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 66,
+          "cache_creation_input_tokens": 13360,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 13360,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 31,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1670
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmsCspCcMQ1F48SXr8e",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQStgoKEAgTGAI4AUIIdGhpbmtpbmcSDH5IQEqvnnVgrD0KxBoM+NPlpVf5WkMQohoaIjDY69dFIDcUFuwMn+M5LUCBoAEoQVTUC74itWIQymfQGxoNXIJdyA6S6EmqFSG3ZIQq0wmS1CqWgSGZcOoeIuk957elFgu0+taqM9eaQj2w3ceeIFF391i0vKaMTs1JQWcXc/lIdFs7YQYnegX2WXFzoAtDIT12O5Ijk3TYV1d9oDjTS8YXkXVbuJ1VmPIu7jOOsQ2+x6o5lX86gqk4/+bbVvdX5GCFwO0ZX1OWnnITqv2b61tS87hJ/FdMZh55vQnx7blnJ4aE3GwX75XXCYHPCA9shnJjxZmfjRhH4/e0GNISOCpTO5af29zj1Aa1JIgtRDIJKBwn8c4j4U4LQ8OEzWWcVYbVX5S/AvpqsHfYM9ccyImjWaLMeCW3CD/PqHFb+4h/T8Xy31h14t4d241lOjCVmompmKrbp1zWWI/4Agan4DIYXkll452dwpHTS2McOt7/+1l9D7PDldFzpGsxXb4C232nMFBcnWNUCzUrvU8TBSQ9r+OqRFPwbcll6VHvT+R2RgPrHy3MSnSCcmaYlV5jUs6cTO6I24rwwHditjwl/eyAbTtuKXEk55/TYTNerZKM5V4aOTNVRH32kVAHuHkdIBkNJ9tP6lmaC8B/Rv/b5mtnDAulGb3818+2KQCMyfb5rycFNsPgk/3lUjZU9DAftlDdcA5Eyf26pdD6fytuPnxhRYj+qp/LSZE761TPdgfRrUQ56REV3UKYOICWnrK4dATlTc1oHMqJPho6mC4Y66DRumGq3xceB4MKzjAV8fwMWOd8iEx63zaUEbkS57yCfR64JRnY/p2odC9xHr8M1W4i5ZiAFnJ23i5iVRc+wnq7PoepiHQbzPnbFo7rzYdRdpDgeJ/JCALjWw+lQzNnpGM1GzQDEmhztpljFRAAdLhZkO8Jb+gKww/Gqg/SmLnKBeDYb+ja9zwuGxx6aNRyv1H0FICPLk/CZDwEpBXAFeNAZC691ukexOsLzhk4T+6HliA6Vj9oZVZt9+6Qgmf4KR96/MtTbYwGdo9p9J4X68ERwrY0lH/MblW0CVe0SJLsQFr25QxHbYbXoHnucxd8nartkYauJAeUv/FOz/EHA5m1oCQ5X1YNvPAqxg88Z/vxr6Z2rTdPQKUTiRkptzw8gYSSw1nQP8Bk07KjHjuxSGmG1RLMpQ144oGKAeGSsiMZilgylwo199gt1SfbZ3/TYoLE4uQHkq20ep6QFWfYVzGWQLoL+TIqUAjUBqT7r6QCIgnh3fDhoVIbCuO4g9iA2X5bYCCpL3nOPAYnJS9wvDB1/v2H+/FM0Niwc2pHacQNybyHQsXDDoZPBA+V3ZbmQoMX0rcMcVQ4GCLaR86ZS9Jq3Ed2+aNwrjZWNpo5Bi8FY6QuzWLB4Zxs64SJQMq3ZcDYk8iECbnsV/1KBbnXC7j4kiOJiFeIhHwT2xdAm7z8+LIRc7cqGCxHJ7pHBI6ZtBkdq5u8wbFRwZSpyZyIxOP5CNzeGam9tr8UdIri3HaHH++oVdEdZRqa4o/bNNIt6CXRMpQEStkw+oEuC7mD5KhVVBiq/lvwwztQlHzx9IjRwGWpl9AFeyPaqL+kjo3bDB4xkc5W5wgaI7aSf0V2Qvi9JPpIDYIAfOX44hqFLiawnniup3GZMPqMQXXGLcrpxeMfNLsh5r6MfCVYaJgi8U9/xUknNxFxVABBF+yIS9vSsFgLoQ5LoW8QqgdT/MfdSsyl9xgB"
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01A6wv83ipe8e7uXh4kDp3c5",
+            "name": "submit_figures",
+            "input": {
+              "figures": [
+                {
+                  "key": "revenue_ttm",
+                  "reported": 48620,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Revenue 4,173 4,335 12,398 48,620 45,217"
+                },
+                {
+                  "key": "ebitda_ttm",
+                  "reported": 7940,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "EBITDA 622 715 1,906 7,940 7,702"
+                },
+                {
+                  "key": "interest_expense_ttm",
+                  "reported": 1310,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Interest expense (111) (107) (331) (1,310) (1,179)"
+                },
+                {
+                  "key": "total_debt",
+                  "reported": 19850,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Total debt 23,850 19,850 4,000"
+                },
+                {
+                  "key": "cash",
+                  "reported": 3420,
+                  "scale": 1000,
+                  "page": 4,
+                  "quote": "Cash at bank 3,420 2,980"
+                },
+                {
+                  "key": "undrawn_facility",
+                  "reported": 4000,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Undrawn revolving credit facility 4,000"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 536,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13360,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 753,
+          "output_tokens_details": {
+            "thinking_tokens": 363
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3635
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmsURxKLcUxTPCjMXBY",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_013T5rTqog1KhfbRSQj9AQjT",
+            "name": "submit_certificate",
+            "input": {
+              "claims": [
+                {
+                  "metric": "net_leverage",
+                  "reported": 2.07,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Net leverage ratio 2.07x max 3.50x Complies"
+                },
+                {
+                  "metric": "interest_cover",
+                  "reported": 6.06,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Interest cover ratio 6.06x min 2.00x Complies"
+                },
+                {
+                  "metric": "minimum_liquidity",
+                  "reported": 7420,
+                  "scale": 1000,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Minimum liquidity ($'000) 7,420 min 2,500 Complies"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1390,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13360,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 284,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1722
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmsbuAegUHNzYLQEWG4",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01M88fxM6LXe1yuY28GPi8oJ",
+            "name": "test_covenants",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1716,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13360,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 28,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1080
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmsgcvNnoXnfv5JBLtF",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "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"
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_011yc68vrY7Cg5MMt1Y9hhLE",
+            "name": "submit_note",
+            "input": {
+              "body": "Harbourline Freight Pty Ltd passes all three covenants for the test period ending 30 September 2026 on the pack figures, and no covenant is on watch.\n\nNet leverage: 2.07x tested against a 3.50x maximum, headroom 40.9%. Calculated as (total debt 19,850 less cash 3,420) divided by TTM EBITDA 7,940.\n\nInterest cover: 6.06x tested against a 2.00x minimum, headroom 203.1%. Calculated as TTM EBITDA 7,940 divided by TTM interest expense 1,310.\n\nMinimum liquidity: 7,420 tested against a 2,500 minimum ($'000), headroom 196.8%. Calculated as cash 3,420 plus undrawn revolver 4,000.\n\nThe compliance certificate agrees with the tested results on all three covenants; no disagreements were found.\n\nReview issues:\n- Balance sheet total assets at 30 Sep 2026 is printed as 34,050, but its lines add to 34,140 (difference 90).\n- Commentary says no new borrowings were drawn, yet borrowings rose from 19,250 at 30 June to 19,850 at 30 September (up 600).\n\nRecommended action: Analyst to confirm the total assets figure with the borrower and to reconcile the 600 increase in borrowings against the commentary before sign-off. No covenant action is indicated on the reported figures."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2334,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13360,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 927,
+          "output_tokens_details": {
+            "thinking_tokens": 412
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 4627
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmt2QZHH46bhp5tBgwL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "The September 2026 monitoring run for Harbourline Freight is saved as a note awaiting analyst sign-off. On the pack figures, all three covenants pass.\n\n| Covenant | Tested | Limit | Headroom | Certificate |\n|---|---|---|---|---|\n| Net leverage | 2.07x | max 3.50x | 40.9% | Agrees |\n| Interest cover | 6.06x | min 2.00x | 203.1% | Agrees |\n| Minimum liquidity | $7,420k | min $2,500k | 196.8% | Agrees |\n\nAll six required figures were accepted on the first submission, and the three certificate claims were accepted as well.\n\nThe test returned two review issues, both included in the note:\n- **Total assets:** the balance sheet prints $34,050k at 30 September, but its lines add to $34,140k, a $90k difference.\n- **Borrowings:** the commentary says no new borrowings were drawn, yet total borrowings rose by $600k from 30 June to 30 September. The system did not flag this, so I added it from my own comparison of the balance sheet with the commentary.\n\nThe note recommends the analyst confirm the total assets figure and reconcile the borrowings increase before sign-off."
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 3303,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13360,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 403,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2617
+    }
+  ]
+}

@@ -17,7 +17,7 @@ import { AgentStopped, BudgetExceeded, ModelRequestFailed } from "#errors"
 import { SYSTEM_PROMPT } from "#prompts"
 import { TOOLS } from "#tools/definitions"
 import { handleToolCall } from "#tools/handlers"
-import type { RunContext, RunReport } from "#types"
+import type { ModelTurn, Responder, RunContext, RunReport } from "#types"
 import { describeAgentFailure } from "#utils/failures"
 import { costOf } from "#utils/pricing"
 
@@ -37,24 +37,38 @@ export interface PreparedRun {
   readonly bytes: Uint8Array
 }
 
-const client = new Anthropic()
+let client: Anthropic | undefined
 
-const createMessage = (messages: ReadonlyArray<Anthropic.MessageParam>) =>
+/** Calls the model. The client is created on first use, so replaying a recording needs no API key. */
+export const liveResponder: Responder = (messages) =>
   Effect.tryPromise({
-    try: () =>
-      client.messages.create({
+    try: async (): Promise<ModelTurn> => {
+      client ??= new Anthropic()
+      const started = performance.now()
+      const response = await client.messages.create({
         model: AGENT_MODEL,
         max_tokens: AGENT_MAX_TOKENS,
         system: SYSTEM_PROMPT,
         tools: TOOLS,
         messages: [...messages]
-      }),
+      })
+      return { response, latencyMs: Math.round(performance.now() - started) }
+    },
     catch: (cause) =>
       new ModelRequestFailed({
         status: cause instanceof Anthropic.APIError ? cause.status : null,
         cause: toError(cause)
       })
   })
+
+/** Returns recorded responses in order, as if the model were answering again. */
+export const recordingResponder = (turns: ReadonlyArray<ModelTurn>): Responder => {
+  let next = 0
+  return () => {
+    const turn = turns[next++]
+    return turn ? Effect.succeed(turn) : Effect.fail(new AgentStopped({ reason: "The recording ended early" }))
+  }
+}
 
 const openingMessage = ({ ctx, filename, bytes }: PreparedRun): Anthropic.MessageParam => ({
   role: "user",
@@ -101,7 +115,7 @@ export const prepareRun = (request: MonitoringRequest) =>
     } satisfies PreparedRun
   })
 
-const driveLoop = (prepared: PreparedRun, budgetUsd: number) =>
+const driveLoop = (prepared: PreparedRun, budgetUsd: number, respond: Responder) =>
   Effect.gen(function* () {
     const { ctx } = prepared
     const messages: Anthropic.MessageParam[] = [openingMessage(prepared)]
@@ -110,12 +124,14 @@ const driveLoop = (prepared: PreparedRun, budgetUsd: number) =>
     let noteSaved = false
 
     for (let turn = 1; turn <= AGENT_MAX_TURNS; turn++) {
-      const response = yield* createMessage(messages)
+      const { response, latencyMs } = yield* respond(messages)
       costUsd += costOf(AGENT_MODEL, response.usage)
       yield* appendEvent(ctx.runId, AGENT_ACTOR, AUDIT_EVENT_KINDS.AGENT_TURN, {
         turn,
         stopReason: response.stop_reason ?? "unknown",
-        costUsd: Number(costUsd.toFixed(6))
+        costUsd: Number(costUsd.toFixed(6)),
+        toolCalls: response.content.filter((block) => block.type === "tool_use").length,
+        latencyMs
       })
       if (costUsd > budgetUsd) return yield* new BudgetExceeded({ spentUsd: costUsd, budgetUsd })
 
@@ -154,11 +170,11 @@ const driveLoop = (prepared: PreparedRun, budgetUsd: number) =>
   })
 
 /** Drives the model through extraction, testing and the note. Failures are recorded on the run. */
-export const driveAgent = (prepared: PreparedRun, budgetUsd = RUN_BUDGET_USD) =>
-  driveLoop(prepared, budgetUsd).pipe(
+export const driveAgent = (prepared: PreparedRun, budgetUsd = RUN_BUDGET_USD, respond = liveResponder) =>
+  driveLoop(prepared, budgetUsd, respond).pipe(
     Effect.tapError((error) => markRunFailed(prepared.ctx.runId, AGENT_ACTOR, describeAgentFailure(error)))
   )
 
 /** Prepares a run and drives the agent to completion. */
-export const runMonitoring = (request: MonitoringRequest, budgetUsd = RUN_BUDGET_USD) =>
-  Effect.flatMap(prepareRun(request), (prepared) => driveAgent(prepared, budgetUsd))
+export const runMonitoring = (request: MonitoringRequest, budgetUsd = RUN_BUDGET_USD, respond = liveResponder) =>
+  Effect.flatMap(prepareRun(request), (prepared) => driveAgent(prepared, budgetUsd, respond))

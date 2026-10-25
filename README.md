@@ -22,18 +22,23 @@ Requires Node 25.
 ```sh
 npm install
 echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
-npm run demo:reset   # seed three borrowers and their September 2026 runs
+npm run demo:reset   # replay the recorded agent runs on the three September 2026 packs
 npm run dev          # http://localhost:5173
 ```
 
 `fixtures/uploads/corella-2026-09-resubmitted.pdf` is a pack the app has never seen. Upload it under Corella Fresh Foods to watch the agent find a breach that the certificate claims is compliant.
 
-| Command                             | What it does                                                   |
-| ----------------------------------- | -------------------------------------------------------------- |
-| `npm test`                          | Unit and integration tests                                     |
-| `npm run eval`                      | Runs the agent on every pack and scores it against answer keys |
-| `npm run fixtures`                  | Regenerates the sample packs and their answer keys             |
-| `npm run build:uploads -w fixtures` | Regenerates the unseen demo upload                             |
+| Command                             | What it does                                                        |
+| ----------------------------------- | ------------------------------------------------------------------- |
+| `npm test`                          | Unit and integration tests                                          |
+| `npm run record`                    | Runs the real agent on each pack and saves its responses for replay |
+| `npm run eval`                      | Runs the agent on every pack and scores it against answer keys      |
+| `npm run fixtures`                  | Regenerates the sample packs and their answer keys                  |
+| `npm run build:uploads -w fixtures` | Regenerates the unseen demo upload                                  |
+
+## Demo runs are real agent runs
+
+The runs you land on were produced by the agent, not typed in. `npm run record` runs Claude on each pack and saves the model's responses to `fixtures/recordings/`. Seeding replays those responses through the same agent loop, so figure verification, covenant tests, review checks and the note all run through the current code, at no API cost and with the same result on every reset. Each replayed run is labelled with when it was recorded. **New run** always calls the model live.
 
 ## How it's built
 

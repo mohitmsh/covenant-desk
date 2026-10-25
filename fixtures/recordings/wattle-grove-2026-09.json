@@ -1,0 +1,510 @@
+{
+  "model": "claude-haiku-5-5",
+  "recordedAt": "2026-10-25T10:10:29.648Z",
+  "pack": "wattle-grove-2026-09.pdf",
+  "sha256": "e01bcde5ec5b2bf84f9f9b3fce359370dff9944c8dc800e145cc8afed63230a0",
+  "turns": [
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmopue8CHF2wp817bfr",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01K5EGsqNAAUCysGm9Ymr2zY",
+            "name": "get_monitoring_context",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 72,
+          "cache_creation_input_tokens": 13401,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 13401,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 31,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2372
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmoyTqBxgdjYRCU4nRp",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQS5AkKEAgTGAI4AUIIdGhpbmtpbmcSDKOBrUrsD1Dv2Dv77hoMmx+xbX62v5JnUbwvIjCF53VB+G/eezJ1hXWpMpTyb3muZ2eTQjQfn6K9aUKGMGymvpfc9vGtdO/twrEQU78qgQm18nbmxeSojGkIeu1RPBeBMyKoTulPsGSp2bnzCBFx4B1LqpB4rE0zoop6mJyneBlBAl+lWdtqcqoeOxqfwLPmDXcjghzHB6xXTKuNCFrefNN+f6FQoam5UuY3GhUBmNrQrl/8C0pX60bBOy4yRlm1wDoviXhyG2JELAvB5ydyNEeYMCitrcyumU86MIKN1jCBwNbZlG3ffR/alROcn4KKvxFe3L/iDLwW3hZIkphpREm9C9WgSegOx1PxWTYhPWVoLeY0gu5KJFR7qJ4+v3LsALnaeM3d+xo2oZt8lqAF20HUjO9xB3gGZ4Jo3y0dRyqsR0yOLh5Ib3nv7z4wUAKoM5t41UGMT6fmu8XaUkoIXLxQPUSZUqAlhUDR07P+0FaRkCaeVhPj7TGvK6pfburOWEMCp9dRtpRX5hIRc6AAQGu15f5NHopdyC6uFtk/sGOZuFiTngup+3yW+rZEmrMDC995gMei2+XZN+kmuucbH3WWzeQmw0Yrhq8PxN7QWfZLEhPD89SSyaHaf52/lAXULUUSpCqENBJacbXot42zdqNWqe1llgnlXH1OfeaIvaBwOuUWdM+6OygI4v5GfjaT9Dnch9mkrWgtR3hneTACw3I0bq+MJUxVt3oq8QHl2USgyOJYuVM5WR/S7zwanSZJvGKGYLo2kad8X9hdokEX8RnaDQnqoW5H9Y/QN6OW86MF2Yn3F+rYXtQZn2uDfR1EaZ7miHjWGnW8JbaS2npNJV+8rFpU0ngwdgdz62b+vblxKMUjdeigvvaF21v08iYVJE9RbilFHaAVLQCSYybrH2rX3mG2o9KrB1QyE/rrCcUkMi5XqT+JTpwRVcNoKte6Ng9theV6tVl4SLhYEFwZyFgH5sGTo6PC2S84Kr3KGPpEi4CLJSU1Tk7+mBiFfEnmKktr3lfc+VqDhRnRAvqNwlGn2EIVFJWNJikjh+jqBgX2mAn+Q+eqnMttx7tqgcGzFUwC1ASjPjQ9LB/+ABynWlF0C3eP+xVtjr5kLALA7T7pC2RVZb1Gk0qROR4BJiYvWT0AN1AfkgUa2nDbbiHzrD2cu+DKEtfZvHsaLWS5vgoeA3iaE278W+O0bMJMLxOan/KY7SwIinyAUVnJghX9PkZgo9fAz++8AQ/4wwluB+fwd0ltWM0C8/Jl2rc8OwslxGkwgpfLNuEOyaWwhpNH0YZpkfq89x9Vg5pdYYQvWtNUj/K+YqWyeVaJ7L6hRoFKt5CngEMDl4nfV08PBFvcVRme6pCrct11Hr/XV1KZ+z6bBRM/bi2EmiZM+MuyM5hz/mZEK6mIk8WS8+fHhOII8cW3NpU4hZ4w33EqAG4SqyNLMDA0FWxiiu2owaRS4oysE+ODagwKCY1QfbXDAWQhkxmU08hkiTaOLeCEYJgcqkbsD9QkUSYyYBkn3VM/GG12KaiiXYEbvMMf9qkdVSzwwOWK2zWXUTJV7zpX6QzOSwGFeyCwSvnSRaYsxKibH15QhU+NZsTLQqbWmf8HfVu5wwGNEEaxWc0I6MPMeYk2pHRMGAE="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01VxYizGuN8s6NxiZEib6Mp2",
+            "name": "submit_figures",
+            "input": {
+              "figures": [
+                {
+                  "key": "revenue_ttm",
+                  "reported": 29750,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Revenue 2,554 2,653 7,586 29,750 27,668"
+                },
+                {
+                  "key": "ebitda_ttm",
+                  "reported": 3880,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "EBITDA 304 349 931 3,880 3,764"
+                },
+                {
+                  "key": "interest_expense_ttm",
+                  "reported": 1720,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Interest expense (146) (140) (434) (1,720) (1,548)"
+                },
+                {
+                  "key": "total_debt",
+                  "reported": 16400,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Total debt 17,300 16,400 900"
+                },
+                {
+                  "key": "cash",
+                  "reported": 640,
+                  "scale": 1000,
+                  "page": 4,
+                  "quote": "Cash at bank 640 1,310"
+                },
+                {
+                  "key": "undrawn_facility",
+                  "reported": 900,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Revolving credit facility 4,800 3,900 900"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 546,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 707,
+          "output_tokens_details": {
+            "thinking_tokens": 323
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3652
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmpF7BA1ZX3yqhTzkzT",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQStwcKEAgTGAI4AUIIdGhpbmtpbmcSDKQrg2dCfwvDIGDxvhoMk28Dcrw9OFpf9FADIjA/GJGaSqkAI/XVPSuvfqeLt4HykQ5kpuTESrXqPCCD2aIrhWNRHO+BhEEiHitNMRkq1Aa3+whK+Zb1buz9Apv7FiY80CEBcoPZTha3sR5Qen0xhGQIdY25sjElI09z7yrQhYcIfZOjYy2K7NexjJlsDoqNn6A3HpcB82pWtwmy5l7v9hj1yB+ujZUbWEQQ+k+J5/gIDkjg+KkV32aMM/O2mFNysUyForZEkxSgfSWJAd2j3MTS3m7pZJ5Y8PE5hoheLkQXuzCarvahHZRRbJ1DkBqrJtogZf39JCsF7Av3DogLAbFZ869S2grj0wc+/vdv/IlkrOC8fCYyp/vIgt8oIVClOLtfpuhTwiljWmRxnkhVWyFhAX4NoblxoickcHycDnVtQkoZA13Iyxh+3xo+YVrKD3AIKa9o+Bo0Gq/dfU/dtH1xaghX7fq79td3P3F2HQHqfoXJhAM0y4wJJt8u0K7xqpecE4i8xKQCeW7OlzOP6dHNDBpDiBryFU9taSW62l/P6kBs88jR0moiCBZdEKJ+0gLai12E8l+fV8sCg6r3h9W6tYsf64gsbJuMnZdMsgJbWmNJbTR7zuv2KjjxQGT+t3hkqvvvuldQILipo+tKC+9jrKBprDxzl4vNI8nI8Qx83ytxH3nUKbQPqepvYjlGVCS+8jkSDZsKJeP7cjJcy6EEQuCdVW+NEo+PXtv4a6dvPPcXM91Rwh4Is414kigj9kqrXPbhshkEuVqpg9qsGse3lb87yLtDeCUQQ3jDmwiLcpFo8PRy2JtCP6Bmycrxl83fWnSUYYp/wAra+ZlTp7X/vwKWcqxKPBQ9u27XOv6Jcm/bjdmz8tUysEYR5D+IBa4N/Ha+gx9CtzC2b4JK9vZUFsB5auXtrH/obmRKxB9xMhn4kD5PItXXSFTXaMIeUTjxTMp0BOvtLJbk59kWmPCjz5U/Z4pRpPS2kYpBsJLApbYQNqeDT2eUNIWJl9G1Te88w8wnzil5FLm4fnA1mkJbyNXLMuIc0E7SRLEgUw/Y5lFcWlXS7p14yfcSguzfFOWL3GtZnAE7dnuYg6xyCDdpCogwpG63SvtVg8704grofBaFhyDpNQq1rfXvnSoexMatgBolwvphLyfkeW9rFH3tbFoYp7CWTyt2CeBlqhjYHJZHcZ9/8ICK0Cqd2+AgkgUGlab9kYEG3Lx8hXlMHWwRhSIYAQ=="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01FSBCR7b1RHJ2shjmUD3Lwr",
+            "name": "submit_certificate",
+            "input": {
+              "claims": [
+                {
+                  "metric": "net_leverage",
+                  "reported": 3.62,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Net leverage ratio 3.62x max 3.75x Complies"
+                },
+                {
+                  "metric": "interest_cover",
+                  "reported": 2.53,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Interest cover ratio 2.53x min 2.00x Complies"
+                },
+                {
+                  "metric": "minimum_liquidity",
+                  "reported": 1540,
+                  "scale": 1000,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Minimum liquidity ($'000) 1,540 min 1,500 Complies"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1354,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 415,
+          "output_tokens_details": {
+            "thinking_tokens": 130
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2796
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmpTAToLEV2aYjJQ7fF",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_013ndoU69Z1XtJB7PRNHhUoV",
+            "name": "test_covenants",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1811,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 28,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1813
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmpb7hJQt1FJ8t6oG7S",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQSqwkKEAgTGAI4AUIIdGhpbmtpbmcSDMdExrbDA1dqNVrjlxoMz04AFS4M/h4QlFMNIjDUlhegjmD8NFVc/zfyPQp2pJJiLTqT3EHeWm1yRhN3Sj6uUAJHVXGcUQYS14YsdfQqyAixgfuyvVEXPshuJvo8Mr/rv+TqIp6wa+wdAuihEd6zz+96ylBNXY5E5ythtjLZH/79+BT8n9D7L8kORb6QGQwLV1Z+ZSkzWwVaKbH69q1bPK57Z6SS0tib/3ym6fEv5D1YrDNaOZdHWzGzwzM8IfF3nrWP2q2kVS5B60Pi9LSQJx2hCU0kg9Ua9dTLE0orcpbHk4prYwV8HcMYXjZIc+qZIPiP99Jo0rGQFv0fDPzxd8DjNDtg3DiGQrh5zNYpmH5q6Ne/dUlw5irFDK25c6CWKo6CKMTqMNssFCDopX30sObTGDKF79KIWlc9PnwFDRP/uKFpu2i9qL5duGHJsWY/yJHbAK5dQFVDJjfKIOVNGfwwQOMOO6LxC6eHs2ucanUINVjLnTb1GxKMNGTcYQQIweeqJ7o8h9aBcSG/uPi05joFCd2Pv0RnVMt/358HYSLB63KKjgltNCt/ZOHOExvxq70OAi+CkG3znCVCWiSNugSpLjVy/wPuimkvFQZsbF6lvQXSzS5s9GO7r35JmhYrLQsJa/JDQfs4mqWGQVxXJgP/1em3HQueXw8sHd/zGRVq+SAu71BtPk56WTk58AJ8zbJE9V7NW5JSUY8su5CDypP6PW1zfWZgawrUSMDdtRaBf54bE+M9M54aqvNXxCYVtTbW5BUYgWE9IewfxDupqYzuDdzzUI6ZCLGu0eXuM+vof+r3k+PBpRSIHaPMd/4A8EdG/q1z3ZDbmyAm1JvzTwjKwMdnJZ5RjELn93WcEKrxddxtqwIB+zGIt99i4WGNmL/m3i8SEZa/VzdVO8kAgPgCSsinHr4vcNd5yj0Gi5X9/beZGAix3F7AF4GzKAWhYbjQ0C8CBYrKhwIQdAOnUkuRrNiR5bXQurmJD3GHpKIya49ow5/HGJzxP729FF05pc6+OsZKsbJMDLqtgoxp6teDkB4n9igWhGwDFf7wS58D7Mii74fexRuU1ezuKB4mFss8ifslHw1P7DAKcPBm4/wvhn6BaYmlPFTNgb0pE1LXprVJcahBORyIl5WKB3bFViX9HPjWpbyPh7HddqClDgfHDXPEGvzRHDWs5i3YqrgpfvqqxqinH3U5Q7LE5zUEvGXDZvpcCFzGJsznKjm9hkz/sKZwkjqWt6srP8mKXlk1p8k/atTH8rePfbj5QqJ4aG5AwPJR9pMa5kwcjz6pr0ZA+fbmBqVSqBAMdjssQZ23foq2vWn4HUiY9p3bH68F89c7Np3JYIfrcvpgLn2z4lacDXn6jVUb/xthj/VAfonEf2LQ79tBZutyfbRnfeg7Z711DweJIP2Y8GLGG9NNbTUOm/iFpeQ2RIFrqP89x7fVymSAwvrxhu1ZZ60MbWrYBdN0DEbEVyBKuwsVFc4whevPXuPIfs9X4lvZfpHiSChW8io+ELG8IBzA2vuSmcMxe5ELZyghyqg13yauT0Rrl7ep9KNsJTX9GAE="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_014Wg2eaMB18WieQx6RAfci3",
+            "name": "submit_note",
+            "input": {
+              "body": "Wattle Grove Aged Care Pty Ltd is in breach of the net leverage covenant at 30 September 2026 on the reported EBITDA, and the certificate's compliance statement does not hold.\n\nNet leverage: tested 4.06x against a maximum of 3.75x, a breach with headroom of -8.3%. Calculated as (total debt 16,400 less cash 640) divided by TTM EBITDA of 3,880. The certificate states 3.62x (complies). That figure matches EBITDA of 4,350, which the certificate says is after add-backs of $310k agency staffing and $160k Ballarat redevelopment consulting. The pack's P&L reports TTM EBITDA of 3,880 with no add-backs, and the facility definition uses reported EBITDA, so the add-backs are not accepted.\n\nInterest cover: tested 2.26x against a minimum of 2.00x, a pass with headroom of 12.8%. The certificate states 2.53x, which also uses the 4,350 adjusted EBITDA.\n\nMinimum liquidity: 1,540k (cash 640 plus undrawn revolver 900) against a minimum of 1,500k, on watch with headroom of 2.7%. Certificate agrees.\n\nReview issues:\n- Cash at bank fell 51% from 1,310k to 640k in the quarter (page 4).\n- Certificate states net leverage complies; tested result is a breach (page 6).\n- Certificate interest cover of 2.53x differs from the tested 2.26x (page 6).\n\nThe pack attributes the low cash to government funding receipts arriving on 2 October; this is not verified in the pack.\n\nRecommended action: Analyst to confirm the EBITDA definition and whether the add-backs are permitted under the facility agreement, and to treat the net leverage breach as an event requiring review under the facility terms. Request a corrected certificate and evidence of the 2 October receipts. Place the facility on watch given liquidity headroom of 2.7%."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2586,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 942,
+          "output_tokens_details": {
+            "thinking_tokens": 237
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 5378
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmpz7ojrSGVap2EtPDf",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01QtnL3dkQBpmKEQNgX92bEQ",
+            "name": "submit_note",
+            "input": {
+              "body": "Wattle Grove is in breach of the net leverage covenant at 30 September 2026 on reported EBITDA, and the certificate's compliance statement does not hold.\n\nNet leverage: tested 4.06x against a maximum of 3.75x, a breach with headroom of -8.3%. Calculated as (total debt 16,400 less cash 640) divided by TTM EBITDA of 3,880. The certificate states 3.62x (complies), which matches EBITDA of 4,350 after add-backs of $310k agency staffing and $160k Ballarat consulting. The pack's P&L reports TTM EBITDA of 3,880 with no add-backs, and the covenant uses reported EBITDA.\n\nInterest cover: tested 2.26x against a minimum of 2.00x, a pass with headroom of 12.8%. The certificate states 2.53x, which also uses the 4,350 adjusted EBITDA.\n\nMinimum liquidity: 1,540k (cash 640 plus undrawn revolver 900) against a minimum of 1,500k, on watch with headroom of 2.7%. Certificate agrees.\n\nReview issues:\n- Cash at bank fell 51% in the quarter, from 1,310k to 640k (page 4).\n- Certificate states net leverage complies; tested result is a breach (page 6).\n- Certificate interest cover of 2.53x differs from the tested 2.26x (page 6).\n\nThe pack attributes the low cash to government receipts arriving on 2 October; this is not evidenced in the pack.\n\nRecommended action: Confirm whether the add-backs are permitted under the facility agreement and treat the net leverage breach as a default requiring review. Request a corrected certificate and evidence of the 2 October receipts. Place the facility on watch given 2.7% liquidity headroom."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 3565,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 643,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3470
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmqEykvoj7NUeqgv8NN",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01LjeBReVugBmTixvG1ELp1b",
+            "name": "submit_note",
+            "input": {
+              "body": "Wattle Grove is in breach of the net leverage covenant at 30 September 2026 on reported EBITDA, and the certificate's compliance statement does not hold.\n\nNet leverage: tested 4.06x against a maximum of 3.75x, a breach with headroom of -8.3%. Calculated as (total debt 16,400 less cash 640) divided by TTM EBITDA of 3,880. The certificate states 3.62x (complies), which matches EBITDA of 4,350 after add-backs of $310k agency staffing and $160k Ballarat consulting. The pack's P&L reports TTM EBITDA of 3,880 with no add-backs, and the covenant uses reported EBITDA.\n\nInterest cover: tested 2.26x against a minimum of 2.00x, a pass with headroom of 12.8%. The certificate states 2.53x, which also uses the 4,350 adjusted EBITDA.\n\nMinimum liquidity: 1,540k (cash 640 plus undrawn revolver 900) against a minimum of 1,500k, on watch with headroom of 2.7%. Certificate agrees.\n\nReview issues:\n- Cash at bank fell 51% in the quarter (page 4).\n- Certificate states net leverage complies; tested result is a breach (page 6).\n- Certificate interest cover of 2.53x differs from the tested 2.26x (page 6).\n\nRecommended action: Confirm whether the add-backs are permitted under the facility agreement and treat the net leverage breach as a default requiring review. Request a corrected certificate and evidence of the 2 October government receipts cited for low cash. Place the facility on watch given 2.7% liquidity headroom."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4245,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 602,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3177
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmqUdoLCKrbDen9C5NY",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01H6vcrmRAsm2sGpZ4UY5RBZ",
+            "name": "submit_note",
+            "input": {
+              "body": "Wattle Grove is in breach of the net leverage covenant at 30 September 2026 on reported EBITDA, and the certificate's compliance statement does not hold.\n\nNet leverage: tested 4.06x against a maximum of 3.75x, a breach with headroom of -8.3%. Calculated as (total debt 16,400 less cash 640) divided by TTM EBITDA of 3,880. The certificate states 3.62x (complies), which matches EBITDA of 4,350 after add-backs of $310k agency staffing and $160k Ballarat consulting. The pack's P&L reports TTM EBITDA of 3,880 with no add-backs, and the covenant uses reported EBITDA.\n\nInterest cover: tested 2.26x against a minimum of 2.00x, a pass with headroom of 12.8%. The certificate states 2.53x, which also uses the 4,350 adjusted EBITDA.\n\nMinimum liquidity: 1,540k (cash 640 plus undrawn revolver 900) against a minimum of 1,500k, on watch with headroom of 2.7%. Certificate agrees.\n\nReview issues:\n- Cash at bank fell 51% in the quarter (page 4).\n- Certificate states net leverage complies; tested result is a breach (page 6).\n- Certificate interest cover of 2.53x differs from the tested 2.26x (page 6).\n\nRecommended action: Confirm whether the add-backs are permitted under the facility agreement and treat the net leverage breach as a default requiring review. Request a corrected certificate and evidence of the 2 October receipts. Place the facility on watch given 2.7% liquidity headroom."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4884,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 595,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3167
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmqi99NBid7pAkUhhBK",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01MENGwz6vFky3MWkcJqFEcx",
+            "name": "submit_note",
+            "input": {
+              "body": "Wattle Grove is in breach of the net leverage covenant at 30 September 2026 on reported EBITDA, and the certificate's compliance statement does not hold.\n\nNet leverage: tested 4.06x against a maximum of 3.75x, a breach with headroom of -8.3%. Calculated as (total debt 16,400 less cash 640) divided by TTM EBITDA of 3,880. The certificate states 3.62x (complies), which matches EBITDA of 4,350 after add-backs of $310k agency staffing and $160k Ballarat consulting. The pack's P&L reports TTM EBITDA of 3,880 with no add-backs, and the covenant uses reported EBITDA.\n\nInterest cover: tested 2.26x against a minimum of 2.00x, a pass with headroom of 12.8%. The certificate states 2.53x, which also uses the 4,350 adjusted EBITDA.\n\nMinimum liquidity: 1,540k (cash 640 plus undrawn revolver 900) against a minimum of 1,500k, on watch with headroom of 2.7%. Certificate agrees.\n\nReview issues:\n- Cash at bank fell 51% in the quarter (page 4).\n- Certificate states net leverage complies; tested result is a breach (page 6).\n- Certificate interest cover of 2.53x differs from the tested 2.26x (page 6).\n\nRecommended action: Confirm whether the add-backs are permitted under the facility agreement and treat the net leverage breach as a default requiring review. Request a corrected certificate and evidence of the 2 October receipts. Place the facility on watch given 2.7% headroom."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 5516,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 591,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3130
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmqx4ZBfT3MhC99qvZx",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "The 2026-09 monitoring note for Wattle Grove is saved and awaiting analyst sign-off. The headline is a net leverage breach that the borrower's certificate reports as compliant.\n\n**Covenant results (tested from the pack's reported figures):**\n\n| Covenant | Tested | Limit | Headroom | Status | Certificate |\n|---|---|---|---|---|---|\n| Net leverage | 4.06x | max 3.75x | -8.3% | Breach | 3.62x, complies |\n| Interest cover | 2.26x | min 2.00x | 12.8% | Pass | 2.53x, complies |\n| Minimum liquidity | $1,540k | min $1,500k | 2.7% | Watch | $1,540k, complies |\n\n**Why the certificate differs:** the certificate's 3.62x and 2.53x both use an EBITDA of $4,350k. That is the reported TTM EBITDA of $3,880k plus $470k of add-backs (agency staffing $310k and Ballarat consulting $160k). The P&L does not support those add-backs, and the facility uses reported EBITDA. The pack's commentary also cites an \"adjusted\" $4.35m figure, which I did not use.\n\n**Review issues from the tool:**\n- Cash at bank fell 51% in the quarter ($1,310k to $640k).\n- The certificate's net leverage compliance claim conflicts with the tested breach.\n- The certificate's interest cover (2.53x) differs from the tested 2.26x.\n\n**Recommended action in the note:** confirm whether the add-backs are permitted under the facility agreement, treat the net leverage breach as a default requiring review, request a corrected certificate and evidence of the 2 October receipts, and place the facility on watch given 2.7% liquidity headroom.\n\nThe note went through three rounds of length trimming to meet the 220-word limit. The final version is 221 words; the tool accepted it, so it is within the limit as counted by the tool."
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 6149,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13401,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 652,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 4173
+    }
+  ]
+}

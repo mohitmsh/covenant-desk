@@ -24,6 +24,9 @@ export const COVENANTS_EFFECTIVE_FROM = "2025-07-01"
 
 export const PACKS_DIR = fileURLToPath(new URL("../packs/", import.meta.url))
 
+/** Real agent runs on the packs, saved for replay when seeding the demo. */
+export const RECORDINGS_DIR = fileURLToPath(new URL("../recordings/", import.meta.url))
+
 /** Factors applied to TTM values to derive the other P&L columns. */
 export const PNL_COLUMN_FACTORS = {
   month: { revenue: 1.03, ebitda: 0.94, interest: 1.02 },

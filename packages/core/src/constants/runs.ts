@@ -13,6 +13,7 @@ export const AUDIT_EVENT_KINDS = {
   CERTIFICATE_VERIFIED: "certificate.verified",
   CERTIFICATE_REJECTED: "certificate.rejected",
   AGENT_TURN: "agent.turn",
+  AGENT_REPLAYED: "agent.replayed",
   CHECKS_COMPLETED: "checks.completed",
   ISSUE_DECIDED: "issue.decided",
   ISSUE_REMEMBERED: "issue.remembered",

@@ -1,0 +1,462 @@
+{
+  "model": "claude-haiku-5-5",
+  "recordedAt": "2026-10-25T10:11:28.241Z",
+  "pack": "corella-2026-09.pdf",
+  "sha256": "6362aeab08265144b4e9ae2656f890d40a8e9f70ee0ecec438f4e913e1c65484",
+  "turns": [
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmtkNg78p9GzzuZbQZQ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01VXujKZseRNtccBNyGvftQV",
+            "name": "get_monitoring_context",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 66,
+          "cache_creation_input_tokens": 13355,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 13355,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 31,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1525
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmtrKs3jTCcxrdAhhAL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQSwQoKEAgTGAI4AUIIdGhpbmtpbmcSDEqeXpLQv6NRbp1HRBoMBBvObxXVvVdqt2dwIjCBHHX/7DQlyFLL/gzItDqXNizGDxeeGiYBzw4t1456KhQQnm1apjl216ro58VQL58q3gnJTN2e2q3o2Hs2vOz3tjwGb4r+s3DBCzZeRGM6ZKZ/3srum5pQCtlWMFnssihdvUH4AFTuDqIfbZNtgRIHpux++BJ2wQPSShgZdj2+62DObSSVlRCJIhh+KsmnLPzaUdM7oKoMCE0E7hCq5l2phLdgPmW6DDwKfrRQDmdYhnjUxhYplt7ppnwfXk2dbmsh2+EPMiuWo598CveG4Ahs84o9nycTIrHaiGHFkWvbNC5FHwZ+i2bCE5QlnxELyUzfVBSBKC8pCywYbl6F/8XrdoM+Wd6BV+m1DFbaS5esF9VqnPTeIS2i6Vba/WnZuPtZGHDREX5Sy7kXaZXcohPvSYUCkfZIrRI6u6AuMVutfmlh76tBfJO7hADjbVNnW1qxCH/rbaay06r4Ay7wZkJSQXj2bo1iG52tndA2QRqunPXXjgICViuxSXBEoJHrAfmZznf+/QJDKnXcYTOp8R6sqCuS8KZs+h7bJyVRYLyByjLqKqb5AJCoB9Yn3cPg2+6XeS/2Xk4TnLnotZ5CWc51g1a1dtPeLbbaP2oJ5Ej/9f/dvh25m50XWoWOXYCGsyqPDwxJ5o7t8qqQmUFjUtPfl8e2YUQZpdxZlCjefetGuLlMhQ88aIAj5DRoOTCgdd2TxC57Z3A+zGfs4YpfOlasqbIwsQ4JYo6f/9rOWIXoQOWbGB6N8RDxQd7tp0zqCfbof95vztI6x0ZZJetLf+KgANuZ36eGAStHNYBiDN8QgbfLgWHMLktcOFeqtECRM/UhNEj475dOADkNMXKeh5uRaK4e8wBUT38O9Zj6xi49XHwDbgI2uH3kg1U4tmmQGx/ONYZuhzbzYfOif+pDkPjXPdWanQHPDtdB/abLeEmirqzgFfk4rL60DQJhc0jj/h9T0sRjv8j9BJo3Wo2dHCpAkdOc3jX4a3ZdbiUoIqkAdyLD98jTQMDPEdWgZl3u7giQcPOklXpQNoJ1txpjtm2xZkRtO68oQILzFlkHKuIaXwtDkWvg0tCnFH1XAteBQBu5+89uiNDFndNR0IuXIdId1cHmW7cLPdsP5jDusHTvuxr5RfvAev1IONM4IT1hTUsYST/aE1J51mzI3/l1+XWfFtLpGq9mNUWuOiFOoZRuA34AH6KoIE6ejT8d43Ybolbe94rsXOaiIqfJWJTAGvKgu1JNV31vuMn3dFheXfs3Glsn6aRI1CNV1RZGE7/z4ra0JOKQKjNG9czzmEmtmpyfuD6fW+WYAoxv79dXJnOuwxNwlMfQ2dMatW3r1TSJ8AwN4OWeHlxOBjvwUmYUd2gQXTE86AsHw2L+Pt8kXqn3OWfWIpOf0CVqToDsUt/AirQEGKcaSLwtWQby+nn+Y7KNK+3ydpP88R2Jwb3NYXQMA/ciIBYV8pC8PGePhaZLBpIEYPQxgi1jKFvHs/UxlZYLKZtijraNlVtsNBiJeQS844saGVhjhGdaRHrQ1f3yHW/hGA747UYjntcm5wO/K7nohwifrWaBCS4u39AdRVwch0Bg6ETx1J7e++H1dJ8hrkGIJMw3Ivark608JHuxfh9ib9boZXGjaNbaMQYBg5EHyGM8sYqEwROP9h0rh3pv/daVcxuilabKe9YCWNSAEcTtRD6rzNM4vs5oXsuq3etkgVxWX/Yoh+9BNm5Gp+kaLNn0GAE="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01QeGED6G8KpRd7rbGcmkRX2",
+            "name": "submit_figures",
+            "input": {
+              "figures": [
+                {
+                  "key": "revenue_ttm",
+                  "reported": 61300,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Revenue 5,262 5,466 15,632 61,300 57,009"
+                },
+                {
+                  "key": "ebitda_ttm",
+                  "reported": 5210,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "EBITDA 408 469 1,250 5,210 5,054"
+                },
+                {
+                  "key": "interest_expense_ttm",
+                  "reported": 2140,
+                  "scale": 1000,
+                  "page": 3,
+                  "quote": "Interest expense (182) (175) (540) (2,140) (1,926)"
+                },
+                {
+                  "key": "total_debt",
+                  "reported": 18900,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Total debt 21,200 18,900 2,300"
+                },
+                {
+                  "key": "cash",
+                  "reported": 1150,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Cash at bank 1,150"
+                },
+                {
+                  "key": "undrawn_facility",
+                  "reported": 2300,
+                  "scale": 1000,
+                  "page": 5,
+                  "quote": "Undrawn revolving credit facility 2,300"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 540,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 764,
+          "output_tokens_details": {
+            "thinking_tokens": 378
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3368
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmu7CoeXUKFUNnKJA5X",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_0145b3emTY7YMmjYm84LqaSi",
+            "name": "submit_certificate",
+            "input": {
+              "claims": [
+                {
+                  "metric": "net_leverage",
+                  "reported": 3.41,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Net leverage ratio 3.41x max 3.50x Complies"
+                },
+                {
+                  "metric": "interest_cover",
+                  "reported": 2.43,
+                  "scale": 1,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Interest cover ratio 2.43x min 2.25x Complies"
+                },
+                {
+                  "metric": "minimum_liquidity",
+                  "reported": 3450,
+                  "scale": 1000,
+                  "claimsCompliance": true,
+                  "page": 6,
+                  "quote": "Minimum liquidity ($'000) 3,450 min 3,000 Complies"
+                }
+              ]
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1405,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 284,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1855
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmuEweLN5KUH4bSuXJX",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01AKjQSTyvBauSFX3pBFvSk5",
+            "name": "test_covenants",
+            "input": {},
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 1731,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 28,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 1901
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmuP9zzwkfrZYVhqU8U",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "CAQSiBMKEAgTGAI4AUIIdGhpbmtpbmcSDJc8FCSzZN7wTQq1RxoMChREwPdneDqXwNA+IjCYDkkERtTFeoFUTMoZMODk7pvk8N/nZCOZM3k70/3E/09MET6QdjdmmpdZIhw/HHYqpRK1jP5HLst2PeU3aAJj5mIX34NixLzit7Cg1mN30fuMGHCpaEfQyFNeM0EjzP/ltz5qhACXz1vq9O1Xm7elyhpR0Ha5QGE1NVw8j7Ek8psL2Ai+zAYB8wF9Fc+H1oagJdX4h4q1aFIxQ8BE/rg4Xx4C4mCL2M4oLU77bm4kyhtcZnrN2eAzNdiBoRdB+nozwkFiZorHH8h6ZCOUnX1tC5lrR9Oq3rVfVDDqO0o58vdqqgMwXBD9YSwXLnu92DR/e6CiWZKlAg9j7KGwcTiYcmw5DztJE0gEDk4MwUqZ55b47Y6Ws+1KVqKjxUVYlCVYpPkHYkT54UrKwJAqRzWgq+pY1pLFrk9oN6zqMSuOBP8L4Y0M9OqPd5LHNZD3rt7PikMoUN6YG0JoMme9kkO1mKRh6mwqRVgt1IUvtAKSW3TBgi3yHujzh0GtGaZav4hJVIC5InSVhLRMsU0iCXzGB5XXwttBNLp0LTIhTWyqRPzryQ0veiAllXYZCHasGFC073zOnp9r4CFD0Ehzcwxve5hU2sZVndzIQtyAlu1SQaVWUoE9bMFHp4GviXu8ZrBfigx4H9US3IIJzILensrfYEp3jdFhZ7GCsPKagRwQ016i2Jtf1L0WNfNB2kC/u7AaihpDCX3ZTRSM6t/vzJtOwZ2ZoNLAPpLJU+uT/2VO7iOa1e41htmrWWM++5HuiIAYE1hRYf3MnADgqjji8WyGaZI+vcHfZKrZyLecs+w2UXBQETwR1XkTGZ3M6CbUHrujRKeYBIL8sMYvW3d5alJDo0mM73ZObF+U+RRdVi3NZWk29DPNdVwgqOcAhXKG6E7m+5TUoUs2hyKZfW+KerOpA8Yc+8nyuBMq66qQWPyMIq1TQwS8OtdHLiwRdxYFCVQFMwBjjm+yFVITHHcTfZaNXIAbeEaWRMohi19rZDnGbRplyXqsUbrEtAe4GHXm8qzV98r1d8n6ge+ziG8IXBVJMuvEP7azEeV9TV5cAn5E58NP8A8+FqCD6iJUfn0nGwOFomEX5kiiliSnMeczJJBdphuh5HT5Wzgn09PXZbmA4+rsBMF8YpiVxm+pwCDr2o7iP+hLoWBxnYLps6R4vrCkGtbd7oZ+pJeRFutKKJ9KWe4PnzQ2NoHg5wGHZ0ogtum0DQQaEcGGUGXZcxO1jxUyxdT4vjMZeDh2rDBWRjCs4CFmcKZvSHxW9cJYghLu8vt9CAcx952Z8hHbSTZ1s1H8whkNC/64RsMQy0x2FAE21iLaEue/v2nCRPcMIPcm/uJOnn7RNpDpJ72u6dWwi5THLBioDvz7DeERh2CeKyVtr5ZJ/gOxXPGAXsrPIAdABrz3NgWwx6inddTxEeM1gYMrv6N9sWlaqMB/ivlGtuazEP4AKXLLrSEdzJriQ6aSQD7hrYpiOPjAwGHWRxxfh6qRgF/j8AJ3mJt2yqW3OceOD2ipzIhnWi3ZEa8FC68wsR0bDXhpkgRhNm0LnKX/D5gkZPZ/XOcSft+NaIl+/OFDBpiCFSjOFtaSRR7ChscXlK9vveZjpnRIAOYg0NQWHxRzMZU8YwFFwarl6XJKW55B4aw5fk0H4FP83tNwMSM0zZOHKMFP1YQlln3OH4PAQ3ocXqtZtu9o7EbAq1FRImI4yW+FzGL16Z9z0r074IOWwRHxkSWQHHxTb9kkFElCiwLAjYTy3y19wzuAS88d3MRI9lrime75Bj7vEkzT7e8qfl/q6puLe0HPkQGGOqbaHrETQquyqS5lXeH1QtdohYQk8+Ivmkp0LP1NXoNSWR5hKeaDmBsS6F8JCYeMojp7KywosdfjNnjbQQ8DuEJPyFAQOGLJ1VLP5y+a0sujNJhf6AQYnHlrUH/41cPzgX8IAABs/qN1n1vVQiTW9C1oiQCC2P0vMkUVass8uk4JowMf1THmkTRTzAbHw+uSoSdHLnHH9PBhY4PXBGSGNay21g12rskV4j4YFSmW7pkc05MGPlTxHE7tTcORBNI7+h67zKJOeRp9WAgR9s3caN3QAg16G4mmARI1pdf2ihR5AmJ8D8kpfO3QJO6bMEeo9WzhY3Xoo3GivTFo6GQQOA+OnANtSfJUp9NVDYRrvcvr2XLq9Q+7TIsX3VapsgUJEJ16wSr7wG4bydhrQPiygNvxJaVafxCC4B3Wt2e+cJM3SkaRIjqSwwpIVI1LpY9llcrw/FteyX2EsYk6GcySin7N5TUqjqWsY9fs0z39s9OcwfCyori9AdPAUjRy7RRjwrHLqTJsjngKwc2+PRcuF5WuzYAX+1/cbI3dOT2yF0JPyjwKcy6YB2ih/zHY8rgazJqM1p+oKTSl9hGFKJ1foHR7xyCO6VVAoBIN3oVqo/0fATj2sOtF6jlAg5zsqLSOWOL9F+Lt1J3QJpA3aVkMcBdTvIHteaAC9V34drB2sdmPXs2vF/cjP/SFJOKbWa7NKpDxYjpn1eiG94PURICvAkfDXhguXR2pztsmwefUCXtEE9KuMYZgZ0Oic9ZLE5iVFVaDLikLsdM15POEhixsFwWS+4+2vImcyayGdfl/8WHYGpwqXqNiVrlUVQMmqqZBcQyFOxGr5kgoyBvkK1jr/vRAIfPPrK0ioy/yTzxBmYE0uCJ4admnfIv09aPq9abOVpEm2CSEpdxH7aRodwa2PtQeDrEKRgF+4khXlQUmC0SpZ0/9SrdAKOll1Cn0FQow3roRmfBc7QwEjNPX/hXxvOSDcGMD8q1q/elZER1BYH0nwPJUe9zIx17AWCYb17sb2owSZwcJ76q5MEjinL984rUVMtPKMI2yRV9THVmu9YYqQ4y6qmRnyo57kXWC0mko4u+5S9fgGRHogMCBX7ENnVZWev/hav5yY+RDVJMyty7oFQbwiiqn8uyZ6XKUKeHnoKiZeG1lZMBxYZat5QebYE7hYHkxdCBZRcbjN0oBy8dl7zE+0O1iU4a1SmRckGy/wWEckIoMU6+vFQkAUX9LTHzK8mKrZdf5Xa2W0uj1NyoN+7auK8ZfVfaqEWXNvNIeqErhMWHF38HA2M2b+IRuZYA0NhM7SACOi0cftJcnS+MQoxYLBUMliMnAAdZCQsMnuk1rJjweGALCN7AIeFry4PqFElTwJK/MXypY31LCGAE="
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01BCAM5j8Vz2vbfZuRraKQ9k",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd is compliant with all three covenants at 30 September 2026, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: tested at 3.41x against a 3.50x maximum, headroom 2.7%. Status: watch. The certificate's 3.41x agrees with the tested result.\n\nInterest cover: tested at 2.43x against a 2.25x minimum, headroom 8.2%. Status: watch. The certificate's 2.43x agrees with the tested result.\n\nMinimum liquidity: tested at $3,450k against a $3,000k minimum, headroom 15%. Status: pass. The certificate's $3,450k agrees with the tested result.\n\nThe certificate states all three covenants are met and that no Default is continuing. Each claim agrees with the tested result, so there is no disagreement to explain.\n\nReview issue: cash at bank fell 39%, from $1,870k at 30 June 2026 to $1,150k at 30 September 2026 (page 4).\n\nContext from the pack: TTM EBITDA is $5,210k, up from $5,054k in the prior TTM, but September EBITDA of $408k was below the $469k budget. Management says the revolver was drawn a further $1.2m in August to fund working capital and expects a partial repayment in November (page 2). Total drawn debt is $18,900k.\n\nRecommended action: the analyst should review the cash decline and the August revolver draw, request evidence of the November repayment and the monthly EBITDA trend, and keep net leverage and interest cover under close monitoring in the October pack."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2366,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 1253,
+          "output_tokens_details": {
+            "thinking_tokens": 679
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 5817
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmuoxkWzwmbmb77PBPg",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_015VLb55Z1ifmn6HxKpfZtSw",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd is compliant with all three covenants at 30 September 2026, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: tested at 3.41x against a 3.50x maximum, headroom 2.7%. Status: watch. The certificate's 3.41x agrees with the tested result.\n\nInterest cover: tested at 2.43x against a 2.25x minimum, headroom 8.2%. Status: watch. The certificate's 2.43x agrees with the tested result.\n\nMinimum liquidity: tested at $3,450k against a $3,000k minimum, headroom 15%. Status: pass. The certificate's $3,450k agrees with the tested result.\n\nThe certificate states all three covenants are met and that no Default is continuing. Each claim agrees with the tested result.\n\nReview issue: cash at bank fell 39%, from $1,870k at 30 June 2026 to $1,150k at 30 September 2026 (page 4).\n\nContext from the pack: TTM EBITDA is $5,210k, up from $5,054k in the prior TTM, but September EBITDA of $408k was below the $469k budget. Management says the revolver was drawn a further $1.2m in August for working capital and expects a partial repayment in November (page 2). Total drawn debt is $18,900k.\n\nRecommended action: the analyst should review the cash decline and the August revolver draw, request evidence of the November repayment and the monthly EBITDA trend, and monitor net leverage and interest cover closely in the October pack."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 3656,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 556,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2329
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmuz3ypr8PGCSXccMW4",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01XctNE4Bwt6kPUxeaP1dDnA",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd is compliant with all three covenants at 30 September 2026, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: tested at 3.41x against a 3.50x maximum, headroom 2.7%. Status: watch. The certificate's 3.41x agrees with the tested result.\n\nInterest cover: tested at 2.43x against a 2.25x minimum, headroom 8.2%. Status: watch. The certificate's 2.43x agrees with the tested result.\n\nMinimum liquidity: tested at $3,450k against a $3,000k minimum, headroom 15%. Status: pass. The certificate's $3,450k agrees with the tested result.\n\nThe certificate states all three covenants are met and that no Default is continuing. Each claim agrees with the tested result.\n\nReview issue: cash at bank fell 39%, from $1,870k at 30 June 2026 to $1,150k at 30 September 2026 (page 4).\n\nContext from the pack: TTM EBITDA is $5,210k, up from $5,054k in the prior TTM, but September EBITDA of $408k was below the $469k budget. Management says the revolver was drawn a further $1.2m in August for working capital and expects a partial repayment in November (page 2). Total drawn debt is $18,900k.\n\nRecommended action: the analyst should review the cash decline and the August revolver draw, request evidence of the November repayment and the monthly EBITDA trend, and monitor net leverage and interest cover closely in the October pack."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4249,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 556,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2465
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmvAaFGv3WKPwFVSgwL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01SRwPNCBLmiFNRiD4jhCECH",
+            "name": "submit_note",
+            "input": {
+              "body": "Corella Fresh Foods Pty Ltd is compliant with all three covenants at 30 September 2026, but net leverage and interest cover are on watch with thin headroom.\n\nNet leverage: tested at 3.41x against a 3.50x maximum, headroom 2.7%. Status: watch. The certificate's 3.41x agrees with the tested result.\n\nInterest cover: tested at 2.43x against a 2.25x minimum, headroom 8.2%. Status: watch. The certificate's 2.43x agrees with the tested result.\n\nMinimum liquidity: tested at $3,450k against a $3,000k minimum, headroom 15%. Status: pass. The certificate's $3,450k agrees with the tested result.\n\nThe certificate states all three covenants are met and that no Default is continuing. Each claim agrees with the tested result.\n\nReview issue: cash at bank fell 39%, from $1,870k at 30 June 2026 to $1,150k at 30 September 2026 (page 4).\n\nContext from the pack: TTM EBITDA is $5,210k, up from $5,054k in the prior TTM, but September EBITDA of $408k was below the $469k budget. Management says the revolver was drawn a further $1.2m in August for working capital and expects a partial repayment in November (page 2). Total drawn debt is $18,900k.\n\nRecommended action: the analyst should review the cash decline and the August revolver draw, request evidence of the November repayment and the monthly EBITDA trend, and monitor net leverage and interest cover closely in October."
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4842,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 553,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 2440
+    },
+    {
+      "response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgNmvLyZj4yjuS1PugefQ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "The September 2026 monitoring note for Corella Fresh Foods is saved and awaiting analyst sign-off.\n\n**Covenant results (tested, all agree with the borrower's certificate):**\n- **Net leverage:** 3.41x against a 3.50x maximum, headroom 2.7%. Status: watch.\n- **Interest cover:** 2.43x against a 2.25x minimum, headroom 8.2%. Status: watch.\n- **Minimum liquidity:** $3,450k against a $3,000k minimum, headroom 15%. Status: pass.\n\nNo covenant is in breach. Net leverage and interest cover are both on watch with thin headroom.\n\n**Review issue:** cash at bank fell 39%, from $1,870k at 30 June to $1,150k at 30 September, which is above the 25% review threshold.\n\n**Other points from the pack:** September EBITDA was $408k against a $469k budget. The revolver was drawn a further $1.2m in August, and management expects a partial repayment in November.\n\n**Figures:** all six required figures were accepted on the first submission, and all three certificate claims were accepted.\n\nThe note needed three rewrites to get under the 220-word limit, and the saved version is 220 words or fewer."
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 5437,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 13355,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 406,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "latencyMs": 3021
+    }
+  ]
+}
