@@ -1,0 +1,16 @@
+# Visits the demo every 10 minutes so Render's free plan does not put it to sleep.
+# It requests the home page, a static file, so the database can still scale to zero.
+name: Keep demo awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Request the demo home page
+        run: curl --fail --silent --show-error --max-time 120 --output /dev/null --write-out "HTTP %{http_code} in %{time_total}s\n" https://covenant-desk.onrender.com/
