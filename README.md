@@ -4,6 +4,8 @@
 
 Covenant Desk checks the monthly reporting pack that a borrower sends to its lender. An AI agent reads the PDF and finds the figures. Code then tests the loan covenants and compares the results with the borrower's compliance certificate. An analyst reviews each issue on the document and signs off.
 
+Start with **Wattle Grove Aged Care**. Its certificate says that net leverage complies. The P&L figures show a breach, because the certificate adds back $470k of costs. Click a number to see where it comes from in the PDF.
+
 All borrowers, lenders and documents are fictional.
 
 > The demo runs on a free server. If nobody has used it for 15 minutes, the first page can take up to one minute to open.
