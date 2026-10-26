@@ -40,43 +40,45 @@ export function CertificateBanner({ comparisons, covenants, claims, ebitdaGap, o
         </StatusChip>
       </header>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Covenant</th>
-            <th className={styles.numeric}>Certificate</th>
-            <th className={styles.numeric}>Tested</th>
-            <th>Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((comparison) => {
-            const level = disagreementLevel(comparison)
-            const covenant = covenants.find((c) => c.metric === comparison.metric)
-            const claim = claims.find((c) => c.metric === comparison.metric)
-            return (
-              <tr key={comparison.metric}>
-                <td>{covenant?.name ?? comparison.metric}</td>
-                <td className={styles.numeric}>
-                  {formatMetric(comparison.metric, comparison.certificateValue)}
-                  <span className={styles.claim}> · {describeCompliance(comparison.claimsCompliance)}</span>
-                </td>
-                <td className={styles.numeric}>
-                  <strong>{formatMetric(comparison.metric, comparison.testedValue)}</strong>
-                  <span className={styles.claim}> · {comparison.testedStatus}</span>
-                </td>
-                <td>
-                  <span className={styles.result} data-level={level}>
-                    <span className={styles.dot} data-level={level} aria-hidden />
-                    {CERTIFICATE_RESULT_LABELS[level]}
-                    {claim && <PageTag page={claim.page} onClick={() => onShowClaim(claim)} />}
-                  </span>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <div className={styles.tableScroll}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Covenant</th>
+              <th className={styles.numeric}>Certificate</th>
+              <th className={styles.numeric}>Tested</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((comparison) => {
+              const level = disagreementLevel(comparison)
+              const covenant = covenants.find((c) => c.metric === comparison.metric)
+              const claim = claims.find((c) => c.metric === comparison.metric)
+              return (
+                <tr key={comparison.metric}>
+                  <td>{covenant?.name ?? comparison.metric}</td>
+                  <td className={styles.numeric}>
+                    {formatMetric(comparison.metric, comparison.certificateValue)}
+                    <span className={styles.claim}> · {describeCompliance(comparison.claimsCompliance)}</span>
+                  </td>
+                  <td className={styles.numeric}>
+                    <strong>{formatMetric(comparison.metric, comparison.testedValue)}</strong>
+                    <span className={styles.claim}> · {comparison.testedStatus}</span>
+                  </td>
+                  <td>
+                    <span className={styles.result} data-level={level}>
+                      <span className={styles.dot} data-level={level} aria-hidden />
+                      {CERTIFICATE_RESULT_LABELS[level]}
+                      {claim && <PageTag page={claim.page} onClick={() => onShowClaim(claim)} />}
+                    </span>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
 
       {ebitdaGap && <p className={styles.cause}>{describeEbitdaGap(ebitdaGap, disputed.length)}</p>}
     </section>
