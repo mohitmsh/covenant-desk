@@ -102,11 +102,11 @@ On your computer, the app keeps its data in PGlite in `.data/`. If you set `DATA
 
 [`render.yaml`](render.yaml) deploys the Dockerfile to Render as one web service. Set these values:
 
-| Variable                | Value                                                                     |
-| ----------------------- | ------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`     | Your Anthropic API key.                                                   |
-| `DATABASE_URL`          | A Postgres connection string, for example from Neon.                      |
-| `DAILY_AGENT_RUN_LIMIT` | The number of agent runs allowed each day. The default is 20.             |
-| `RESET_DEMO_ON_START`   | Set to `true` to reset the demo data when the recordings or packs change. |
+| Variable                | Value                                                                                               |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`     | Your Anthropic API key.                                                                             |
+| `DATABASE_URL`          | A Postgres connection string, for example from Neon.                                                |
+| `DAILY_AGENT_RUN_LIMIT` | The number of agent runs allowed each day. The default is 20.                                       |
+| `RESET_DEMO_ON_START`   | Set to `true` to reset the demo data when the recordings, the packs or `DEMO_DATA_REVISION` change. |
 
 When the server starts, it updates the database and adds the demo runs. A database lock stops two servers from doing this at the same time.
