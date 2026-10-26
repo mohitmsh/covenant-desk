@@ -16,7 +16,7 @@ import { readdir, readFile } from "node:fs/promises"
 import { COVENANTS_EFFECTIVE_FROM, PACKS_DIR, RECORDINGS_DIR } from "@covenant-desk/fixtures/constants"
 import type { PackSpec } from "@covenant-desk/fixtures/types"
 import { Effect } from "effect"
-import { AGENT_ACTOR } from "#constants"
+import { AGENT_ACTOR, DEMO_DATA_REVISION } from "#constants"
 import { driveAgent, prepareRun, recordingResponder } from "#run-monitoring"
 import { packFilename, PACKS, readPack } from "#utils/packs"
 import { formatUsd } from "@covenant-desk/core/format"
@@ -53,14 +53,14 @@ const replayPack = (spec: PackSpec) =>
     console.log(`Replayed agent run for ${spec.borrower.name}: ${report.turns} turns · ${formatUsd(report.costUsd)}`)
   })
 
-/** Fingerprint of the recordings and packs the demo is seeded from. */
+/** Fingerprint of the recordings and packs the demo is seeded from, and its revision. */
 const demoDataVersion = Effect.promise(async () => {
   const files = [
     ...(await readdir(RECORDINGS_DIR)).filter((f) => f.endsWith(".json")).map((f) => RECORDINGS_DIR + f),
     ...PACKS.map((spec) => PACKS_DIR + packFilename(spec))
   ].sort()
   const contents = await Promise.all(files.map((file) => readFile(file)))
-  return sha256(new Uint8Array(Buffer.concat(contents)))
+  return `${DEMO_DATA_REVISION}:${sha256(new Uint8Array(Buffer.concat(contents)))}`
 })
 
 /**

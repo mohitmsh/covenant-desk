@@ -28,3 +28,9 @@ export const MAX_NOTE_LENGTH = 4_000
 
 /** Longest monitoring note the agent may save, in words. */
 export const MAX_NOTE_WORDS = 220
+
+/**
+ * Part of the hosted demo's data fingerprint. Increase it to reset the demo on
+ * the next deploy, for example to clear runs visitors have added.
+ */
+export const DEMO_DATA_REVISION = 2
